@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+
+  firebaseUid    String   @unique
+
+  email          String   @unique
+
+  name           String?
+
+  avatar         String?
+
+  githubUsername String?
+
+  createdAt      DateTime @default(now())
+
+  repositories   Repository[]
+}
+
+model Repository {
+
+  id             String   @id @default(cuid())
+
+  githubRepoId   Int
+
+  name           String
+
+  owner          String
+
+  description    String?
+
+  language       String?
+
+  stars          Int      @default(0)
+
+  private        Boolean
+
+  repoUrl        String
+
+  defaultBranch  String
+
+  userId         String
+
+  user           User @relation(fields: [userId], references: [id])
+
+  createdAt      DateTime @default(now())
+}

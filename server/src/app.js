@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const authRoutes = require("./routes/auth.routes");
+const repositoryRoutes = require("./routes/repository.routes");
 
 const app = express();
 
@@ -14,6 +15,8 @@ app.get("/", (req, res) => {
     message: "DevLens API Running",
   });
 });
+
+app.use("/api/repositories", repositoryRoutes);
 
 app.use("/api/auth", authRoutes);
 

@@ -20,6 +20,8 @@ model User {
 
   githubUsername String?
 
+  githubToken    String?
+
   createdAt      DateTime @default(now())
 
   repositories   Repository[]
@@ -29,7 +31,7 @@ model Repository {
 
   id             String   @id @default(cuid())
 
-  githubRepoId   Int
+  githubRepoId   Int      @unique
 
   name           String
 

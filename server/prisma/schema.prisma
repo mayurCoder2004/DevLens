@@ -8,50 +8,75 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  firebaseUid    String   @unique
+  firebaseUid String @unique
 
-  email          String   @unique
+  email String @unique
 
-  name           String?
+  name String?
 
-  avatar         String?
+  avatar String?
 
   githubUsername String?
 
-  githubToken    String?
+  githubToken String?
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  repositories   Repository[]
+  repositories Repository[]
 }
 
 model Repository {
+  id String @id @default(cuid())
 
-  id             String   @id @default(cuid())
+  githubRepoId Int @unique
 
-  githubRepoId   Int      @unique
+  name String
 
-  name           String
+  owner String
 
-  owner          String
+  description String?
 
-  description    String?
+  language String?
 
-  language       String?
+  stars Int @default(0)
 
-  stars          Int      @default(0)
+  private Boolean
 
-  private        Boolean
+  repoUrl String
 
-  repoUrl        String
+  defaultBranch String
 
-  defaultBranch  String
+  userId String
 
-  userId         String
+  user User @relation(fields: [userId], references: [id])
 
-  user           User @relation(fields: [userId], references: [id])
+  analytics RepositoryAnalytics?
 
-  createdAt      DateTime @default(now())
+  createdAt DateTime @default(now())
+}
+
+model RepositoryAnalytics {
+  id String @id @default(cuid())
+
+  repositoryId String @unique
+
+  stars      Int @default(0)
+  forks      Int @default(0)
+  watchers   Int @default(0)
+  openIssues Int @default(0)
+
+  primaryLanguage String?
+
+  languages Json?
+
+  contributors Int @default(0)
+
+  lastCommitDate DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }

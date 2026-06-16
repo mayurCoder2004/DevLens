@@ -1,0 +1,13 @@
+const express = require("express");
+
+const router = express.Router();
+
+const profileController =
+require("../controllers/profile.controller");
+
+router.get(
+  "/stats",
+  profileController.getStats
+);
+
+module.exports = router;

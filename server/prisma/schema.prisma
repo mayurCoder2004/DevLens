@@ -8,23 +8,15 @@ datasource db {
 }
 
 model User {
-  id String @id @default(cuid())
-
-  firebaseUid String @unique
-
-  email String @unique
-
-  name String?
-
-  avatar String?
-
+  id             String       @id @default(cuid())
+  firebaseUid    String       @unique
+  email          String       @unique
+  name           String?
+  avatar         String?
   githubUsername String?
-
-  githubToken String?
-
-  createdAt DateTime @default(now())
-
-  repositories Repository[]
+  createdAt      DateTime     @default(now())
+  githubToken    String?
+  repositories   Repository[]
 }
 
 model Repository {
@@ -54,26 +46,33 @@ model Repository {
 
   analytics RepositoryAnalytics?
 
+  techStack RepositoryTechStack?
+
   createdAt DateTime @default(now())
 }
 
 model RepositoryAnalytics {
+  id              String     @id @default(cuid())
+  repositoryId    String     @unique
+  stars           Int        @default(0)
+  forks           Int        @default(0)
+  watchers        Int        @default(0)
+  openIssues      Int        @default(0)
+  primaryLanguage String?
+  languages       Json?
+  contributors    Int        @default(0)
+  lastCommitDate  DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  repository      Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+}
+
+model RepositoryTechStack {
   id String @id @default(cuid())
 
   repositoryId String @unique
 
-  stars      Int @default(0)
-  forks      Int @default(0)
-  watchers   Int @default(0)
-  openIssues Int @default(0)
-
-  primaryLanguage String?
-
-  languages Json?
-
-  contributors Int @default(0)
-
-  lastCommitDate DateTime?
+  technologies Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

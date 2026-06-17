@@ -29,47 +29,42 @@ const analyzeRepositoryHealth = async (req, res) => {
       },
     });
 
-    let analytics =
-      await prisma.repositoryAnalytics.findUnique({
-        where: {
-          repositoryId: repository.id,
-        },
-      });
+    let analytics = await prisma.repositoryAnalytics.findUnique({
+      where: {
+        repositoryId: repository.id,
+      },
+    });
 
     if (!analytics) {
-      const analyticsData =
-        await analyticsService.getRepositoryAnalytics(
-          repository,
-          user.githubToken
-        );
-
-      analytics =
-        await prisma.repositoryAnalytics.create({
-          data: {
-            repositoryId: repository.id,
-            ...analyticsData,
-          },
-        });
-    }
-
-    const report =
-      await generateRepositoryHealth(
+      const analyticsData = await analyticsService.getRepositoryAnalytics(
         repository,
-        analytics,
-        user.githubToken
+        user.githubToken,
       );
 
-    const health =
-      await prisma.repositoryHealth.upsert({
-        where: {
+      analytics = await prisma.repositoryAnalytics.create({
+        data: {
           repositoryId: repository.id,
-        },
-        update: report,
-        create: {
-          repositoryId: repository.id,
-          ...report,
+          ...analyticsData,
         },
       });
+    }
+
+    const report = await generateRepositoryHealth(
+      repository,
+      analytics,
+      user.githubToken,
+    );
+
+    const health = await prisma.repositoryHealth.upsert({
+      where: {
+        repositoryId: repository.id,
+      },
+      update: report,
+      create: {
+        repositoryId: repository.id,
+        ...report,
+      },
+    });
 
     return res.json({
       success: true,
@@ -85,24 +80,18 @@ const analyzeRepositoryHealth = async (req, res) => {
   }
 };
 
-const getRepositoryHealth = async (
-  req,
-  res
-) => {
+const getRepositoryHealth = async (req, res) => {
   try {
-    const health =
-      await prisma.repositoryHealth.findUnique({
-        where: {
-          repositoryId:
-            req.params.repositoryId,
-        },
-      });
+    const health = await prisma.repositoryHealth.findUnique({
+      where: {
+        repositoryId: req.params.repositoryId,
+      },
+    });
 
     if (!health) {
       return res.status(404).json({
         success: false,
-        message:
-          "Health report not found",
+        message: "Health report not found",
       });
     }
 
@@ -115,13 +104,12 @@ const getRepositoryHealth = async (
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to fetch health report",
+      message: "Failed to fetch health report",
     });
   }
 };
 
 module.exports = {
   analyzeRepositoryHealth,
-  getRepositoryHealth
+  getRepositoryHealth,
 };

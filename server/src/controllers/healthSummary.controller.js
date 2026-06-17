@@ -1,12 +1,12 @@
-const { analyzeAllRepositories } = require("../services/bulkHealth.service");
+const { getHealthSummary } = require("../services/healthSummary.service");
 
-const analyzeAllHealth = async (req, res) => {
+const getSummary = async (req, res) => {
   try {
-    const result = await analyzeAllRepositories(req.user.userId);
+    const summary = await getHealthSummary(req.user.userId);
 
     return res.json({
       success: true,
-      data: result,
+      data: summary,
     });
   } catch (error) {
     console.error(error);
@@ -19,5 +19,5 @@ const analyzeAllHealth = async (req, res) => {
 };
 
 module.exports = {
-  analyzeAllHealth,
+  getSummary,
 };

@@ -1,7 +1,7 @@
 const calculateActivityScore = (analytics) => {
-    if (!analytics) {
-  return 0;
-}
+  if (!analytics) {
+    return 0;
+  }
   let score = 0;
 
   const lastCommit = new Date(analytics.lastCommitDate);

@@ -48,6 +48,8 @@ model Repository {
 
   techStack RepositoryTechStack?
 
+  health RepositoryHealth?
+
   createdAt DateTime @default(now())
 }
 
@@ -78,4 +80,22 @@ model RepositoryTechStack {
   updatedAt DateTime @updatedAt
 
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+}
+
+model RepositoryHealth {
+  id                 String   @id @default(cuid())
+
+  repositoryId       String   @unique
+  repository         Repository @relation(fields: [repositoryId], references: [id])
+
+  healthScore        Int
+  activityScore      Int
+  documentationScore Int
+  maintenanceScore   Int
+  openSourceScore    Int
+
+  recommendations    Json
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

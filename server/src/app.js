@@ -7,6 +7,7 @@ const analyticsRoutes = require("./routes/analytics.routes");
 const techStackRoutes = require("./routes/techStack.routes");
 const profileRoutes = require("./routes/profile.routes");
 const healthRoutes = require("./routes/health.routes");
+const portfolioRoutes = require("./routes/portfolio.routes");
 
 const app = express();
 
@@ -31,5 +32,7 @@ app.use("/api/tech-stack", techStackRoutes);
 app.use("/api/profile", profileRoutes);
 
 app.use("/api/health", healthRoutes);
+
+app.use("/api/portfolio", portfolioRoutes);
 
 module.exports = app;

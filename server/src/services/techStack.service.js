@@ -8,7 +8,7 @@ class TechStackService {
 
     const response = await axios.get(
       `https://api.github.com/repos/${repo.owner}/${repo.name}/contents`,
-      { headers }
+      { headers },
     );
 
     const files = response.data;
@@ -42,18 +42,15 @@ class TechStackService {
 
     // Find ALL package.json files
     const packageFiles = allFiles.filter(
-      (file) => file.name === "package.json"
+      (file) => file.name === "package.json",
     );
 
     for (const packageFile of packageFiles) {
-      const packageResponse = await axios.get(
-        packageFile.url,
-        { headers }
-      );
+      const packageResponse = await axios.get(packageFile.url, { headers });
 
       const content = Buffer.from(
         packageResponse.data.content,
-        "base64"
+        "base64",
       ).toString("utf8");
 
       const packageJson = JSON.parse(content);

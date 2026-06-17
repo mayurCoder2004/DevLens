@@ -1,9 +1,7 @@
 import { useParams } from "react-router-dom";
 
 const RepositoryDetails = () => {
-
-  const { id } =
-    useParams();
+  const { id } = useParams();
 
   return (
     <div>

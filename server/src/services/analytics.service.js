@@ -50,7 +50,7 @@ class AnalyticsService {
       primaryLanguage: repoData.language,
       languages,
       contributors,
-      lastCommitDate
+      lastCommitDate,
     };
   }
 }

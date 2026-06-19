@@ -6,6 +6,10 @@ const architectureAnalyzer = require(
   "./src/services/architecture/architectureAnalyzer"
 );
 
+const circularDependencyDetector = require(
+  "./src/services/architecture/circularDependencyDetector"
+);
+
 (async () => {
   const repository =
     await prisma.repository.findFirst({
@@ -22,6 +26,6 @@ const architectureAnalyzer = require(
     );
 
   console.log(
-    JSON.stringify(graph, null, 2)
+    circularDependencyDetector.detect(graph)
   );
 })();

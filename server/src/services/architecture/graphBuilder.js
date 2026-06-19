@@ -1,12 +1,10 @@
 class GraphBuilder {
   buildGraph(filesWithImports) {
-    const nodes = [];
+    const nodeSet = new Set();
     const edges = [];
 
     for (const file of filesWithImports) {
-      nodes.push({
-        id: file.name,
-      });
+      nodeSet.add(file.name);
 
       for (const importedFile of file.imports) {
         edges.push({
@@ -17,7 +15,9 @@ class GraphBuilder {
     }
 
     return {
-      nodes,
+      nodes: [...nodeSet].map((node) => ({
+        id: node,
+      })),
       edges,
     };
   }

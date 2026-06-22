@@ -1,40 +1,48 @@
-const prisma = require("../config/prisma");
+const architecturePersistenceService = require("../services/architecture/architecturePersistence.service");
 
-const repositoryScanner = require("../services/architecture/repositoryScanner");
-
-const testScanner = async (req, res) => {
+const analyzeRepositoryArchitecture = async (req, res) => {
   try {
-    const repository = await prisma.repository.findFirst({
-      include: {
-        user: true,
-      },
-    });
+    const { repositoryId } = req.params;
 
-    if (!repository) {
-      return res.status(404).json({
-        message: "No repository found",
-      });
-    }
-
-    const files = await repositoryScanner.getAllRepositoryFiles(
-      repository.owner,
-      repository.name,
-      repository.user.githubToken,
-    );
+    const result =
+      await architecturePersistenceService.analyzeAndStore(repositoryId);
 
     return res.json({
-      totalFiles: files.length,
-      files,
+      success: true,
+      data: result,
     });
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getRepositoryArchitecture = async (req, res) => {
+  try {
+    const { repositoryId } = req.params;
+
+    const architecture =
+      await architecturePersistenceService.getArchitecture(repositoryId);
+
+    return res.json({
+      success: true,
+      data: architecture,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
       message: error.message,
     });
   }
 };
 
 module.exports = {
-  testScanner,
+  analyzeRepositoryArchitecture,
+  getRepositoryArchitecture
 };

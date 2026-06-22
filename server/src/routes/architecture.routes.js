@@ -1,11 +1,13 @@
 const express = require("express");
 
 const {
-  testScanner,
+  analyzeRepositoryArchitecture,
+  getRepositoryArchitecture,
 } = require("../controllers/architecture.controller");
 
 const router = express.Router();
 
-router.get("/test", testScanner);
+router.post("/analyze/:repositoryId", analyzeRepositoryArchitecture);
+router.get("/:repositoryId", getRepositoryArchitecture);
 
 module.exports = router;

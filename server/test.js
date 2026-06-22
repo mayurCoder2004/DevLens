@@ -1,31 +1,16 @@
-require("dotenv").config();
-
 const prisma = require("./src/config/prisma");
 
-const architectureAnalyzer = require(
-  "./src/services/architecture/architectureAnalyzer"
-);
-
-const circularDependencyDetector = require(
-  "./src/services/architecture/circularDependencyDetector"
+const architecturePersistenceService = require(
+  "./src/services/architecture/architecturePersistence.service"
 );
 
 (async () => {
   const repository =
-    await prisma.repository.findFirst({
-      include: {
-        user: true,
-      },
-    });
+    await prisma.repository.findFirst();
 
-  const graph =
-    await architectureAnalyzer.analyze(
-      repository.owner,
-      repository.name,
-      repository.user.githubToken
-    );
+  const result =
+    await architecturePersistenceService
+      .analyzeAndStore(repository.id);
 
-  console.log(
-    circularDependencyDetector.detect(graph)
-  );
+  console.log(result);
 })();

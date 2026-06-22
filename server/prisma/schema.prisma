@@ -50,6 +50,8 @@ model Repository {
 
   health RepositoryHealth?
 
+  architecture RepositoryArchitecture?
+
   createdAt DateTime @default(now())
 }
 
@@ -98,4 +100,25 @@ model RepositoryHealth {
 
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+}
+
+model RepositoryArchitecture {
+  id String @id @default(cuid())
+
+  repositoryId String @unique
+
+  graph Json
+
+  nodeCount Int
+
+  edgeCount Int
+
+  complexityScore Int
+
+  hasCircularDependency Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }

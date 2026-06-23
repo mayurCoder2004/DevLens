@@ -44,5 +44,5 @@ const getRepositoryArchitecture = async (req, res) => {
 
 module.exports = {
   analyzeRepositoryArchitecture,
-  getRepositoryArchitecture
+  getRepositoryArchitecture,
 };

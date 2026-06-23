@@ -7,9 +7,7 @@ class CircularDependencyDetector {
         adjacencyList[edge.source] = [];
       }
 
-      adjacencyList[edge.source].push(
-        edge.target
-      );
+      adjacencyList[edge.source].push(edge.target);
     }
 
     const visited = new Set();
@@ -27,8 +25,7 @@ class CircularDependencyDetector {
       visited.add(node);
       recursionStack.add(node);
 
-      const neighbors =
-        adjacencyList[node] || [];
+      const neighbors = adjacencyList[node] || [];
 
       for (const neighbor of neighbors) {
         if (hasCycle(neighbor)) {
@@ -51,5 +48,4 @@ class CircularDependencyDetector {
   }
 }
 
-module.exports =
-  new CircularDependencyDetector();
+module.exports = new CircularDependencyDetector();

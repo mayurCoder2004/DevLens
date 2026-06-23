@@ -3,8 +3,7 @@ class ArchitectureMetrics {
     const nodeCount = graph.nodes.length;
     const edgeCount = graph.edges.length;
 
-    const complexityScore =
-      nodeCount + edgeCount * 2;
+    const complexityScore = nodeCount + edgeCount * 2;
 
     return {
       nodeCount,

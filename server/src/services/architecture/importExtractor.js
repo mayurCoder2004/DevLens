@@ -2,11 +2,9 @@ class ImportExtractor {
   extractImports(content) {
     const imports = [];
 
-    const importRegex =
-      /import\s+.*?\s+from\s+["'](.*?)["']/g;
+    const importRegex = /import\s+.*?\s+from\s+["'](.*?)["']/g;
 
-    const requireRegex =
-      /require\(["'](.*?)["']\)/g;
+    const requireRegex = /require\(["'](.*?)["']\)/g;
 
     let match;
 

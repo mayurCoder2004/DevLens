@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RepositoryDetails from "./pages/RepositoryDetails";
+import ArchitecturePage from "./pages/ArchitecturePage";
 
 function App() {
   return (
@@ -24,6 +25,15 @@ function App() {
         element={
           <ProtectedRoute>
             <RepositoryDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/architecture/:repositoryId"
+        element={
+          <ProtectedRoute>
+            <ArchitecturePage />
           </ProtectedRoute>
         }
       />

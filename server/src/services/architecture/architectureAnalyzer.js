@@ -36,7 +36,6 @@ class ArchitectureAnalyzer {
           path: file.path,
           imports: resolvedImports,
         });
-        
       } catch (error) {
         console.error(`Failed to process ${file.path}`);
       }

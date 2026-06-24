@@ -1,18 +1,27 @@
-const technicalDebtService = require(
-  "./src/services/technicalDebt/technicalDebt.service"
+const repositoryScanner = require(
+  "./src/services/architecture/repositoryScanner"
+);
+
+const deploymentAnalyzer = require(
+  "./src/services/deploymentAnalyzer.service"
 );
 
 async function test() {
-  const result =
-    await technicalDebtService.analyzeTechnicalDebt(
+  const contents =
+    await repositoryScanner.getRepositoryContents(
       "mayurCoder2004",
       "chefmate",
       "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"
     );
 
-  console.log(
-    JSON.stringify(result, null, 2)
-  );
+  const report =
+    deploymentAnalyzer.analyzeInfrastructure(
+      contents
+    );
+
+  console.log(report);
 }
 
-test();
+test().catch((error) => {
+  console.error(error);
+});

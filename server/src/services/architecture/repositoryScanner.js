@@ -46,6 +46,50 @@ class RepositoryScanner {
       }
     }
   }
+
+  async getRepositoryContents(owner, repo, githubToken) {
+  const headers = {
+    Authorization: `Bearer ${githubToken}`,
+  };
+
+  const contents = [];
+
+  await this.scanAllContents(
+    `https://api.github.com/repos/${owner}/${repo}/contents`,
+    headers,
+    contents,
+  );
+
+  return contents;
+}
+
+async scanAllContents(url, headers, contents) {
+  const response = await axios.get(url, {
+    headers,
+  });
+
+  const items = response.data;
+
+  for (const item of items) {
+    if (item.type === "file") {
+      contents.push({
+        name: item.name,
+        path: item.path,
+        downloadUrl: item.download_url,
+      });
+    }
+
+    if (item.type === "dir") {
+      await this.scanAllContents(
+        item.url,
+        headers,
+        contents,
+      );
+    }
+  }
+}
+
+
 }
 
 module.exports = new RepositoryScanner();

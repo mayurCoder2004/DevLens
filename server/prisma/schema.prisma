@@ -43,6 +43,7 @@ model Repository {
   health        RepositoryHealth?
   architecture  RepositoryArchitecture?
   technicalDebt RepositoryTechnicalDebt?
+  deployment RepositoryDeployment?
 
   createdAt DateTime @default(now())
 }
@@ -132,6 +133,35 @@ model RepositoryTechnicalDebt {
   largeFiles           Json
   deadFiles            Json
   deepDependencyChains Json
+
+  recommendations Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RepositoryDeployment {
+  id String @id @default(cuid())
+
+  repositoryId String @unique
+  repository Repository @relation(fields: [repositoryId], references: [id])
+
+  deploymentScore Int
+
+  infrastructureScore Int
+  configurationScore Int
+  buildReadinessScore Int
+  ciCdScore Int
+
+  status String
+
+  checks Json
+
+  strengths Json
+
+  warnings Json
+
+  criticalIssues Json
 
   recommendations Json
 

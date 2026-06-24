@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RepositoryDetails from "./pages/RepositoryDetails";
 import ArchitecturePage from "./pages/ArchitecturePage";
+import TechnicalDebt from "./pages/TechnicalDebt";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/technical-debt/:repositoryId" element={<TechnicalDebt />} />
     </Routes>
   );
 }

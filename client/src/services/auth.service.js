@@ -1,6 +1,6 @@
-import axios from "axios";
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
 
+import api from "./api";
 import { auth } from "../firebase";
 
 const provider = new GithubAuthProvider();
@@ -16,7 +16,7 @@ export const loginWithGithub = async () => {
 
   const firebaseToken = await result.user.getIdToken();
 
-  const response = await axios.post("http://localhost:5000/api/auth/login", {
+  const response = await api.post("/auth/login", {
     firebaseToken,
     githubAccessToken: credential?.accessToken,
   });

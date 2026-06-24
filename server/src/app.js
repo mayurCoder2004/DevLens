@@ -10,6 +10,9 @@ const healthRoutes = require("./routes/health.routes");
 const portfolioRoutes = require("./routes/portfolio.routes");
 const activityRoutes = require("./routes/activity.routes");
 const architectureRoutes = require("./routes/architecture.routes");
+const technicalDebtRoutes = require(
+  "./routes/technicalDebt.routes"
+);
 
 const app = express();
 
@@ -40,5 +43,10 @@ app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/activity", activityRoutes);
 
 app.use("/api/architecture", architectureRoutes);
+
+app.use(
+  "/api/technical-debt",
+  technicalDebtRoutes
+);
 
 module.exports = app;

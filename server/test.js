@@ -1,13 +1,18 @@
-const prisma = require("./src/config/prisma");
+const technicalDebtService = require(
+  "./src/services/technicalDebt/technicalDebt.service"
+);
 
-const architecturePersistenceService = require("./src/services/architecture/architecturePersistence.service");
+async function test() {
+  const result =
+    await technicalDebtService.analyzeTechnicalDebt(
+      "mayurCoder2004",
+      "chefmate",
+      "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"
+    );
 
-(async () => {
-  const repository = await prisma.repository.findFirst();
-
-  const result = await architecturePersistenceService.analyzeAndStore(
-    repository.id,
+  console.log(
+    JSON.stringify(result, null, 2)
   );
+}
 
-  console.log(result);
-})();
+test();

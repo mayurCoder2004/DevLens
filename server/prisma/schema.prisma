@@ -22,35 +22,27 @@ model User {
 model Repository {
   id String @id @default(cuid())
 
-  githubRepoId Int @unique
-
-  name String
-
-  owner String
-
-  description String?
-
-  language String?
-
-  stars Int @default(0)
+  githubRepoId Int     @unique
+  name         String
+  owner        String
+  description  String?
+  language     String?
+  stars        Int     @default(0)
 
   private Boolean
 
-  repoUrl String
-
+  repoUrl       String
   defaultBranch String
 
   userId String
 
   user User @relation(fields: [userId], references: [id])
 
-  analytics RepositoryAnalytics?
-
-  techStack RepositoryTechStack?
-
-  health RepositoryHealth?
-
-  architecture RepositoryArchitecture?
+  analytics     RepositoryAnalytics?
+  techStack     RepositoryTechStack?
+  health        RepositoryHealth?
+  architecture  RepositoryArchitecture?
+  technicalDebt RepositoryTechnicalDebt?
 
   createdAt DateTime @default(now())
 }
@@ -85,10 +77,10 @@ model RepositoryTechStack {
 }
 
 model RepositoryHealth {
-  id                 String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  repositoryId       String   @unique
-  repository         Repository @relation(fields: [repositoryId], references: [id])
+  repositoryId String     @unique
+  repository   Repository @relation(fields: [repositoryId], references: [id])
 
   healthScore        Int
   activityScore      Int
@@ -96,10 +88,10 @@ model RepositoryHealth {
   maintenanceScore   Int
   openSourceScore    Int
 
-  recommendations    Json
+  recommendations Json
 
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model RepositoryArchitecture {
@@ -121,4 +113,28 @@ model RepositoryArchitecture {
   updatedAt DateTime @updatedAt
 
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+}
+
+model RepositoryTechnicalDebt {
+  id String @id @default(cuid())
+
+  repositoryId String     @unique
+  repository   Repository @relation(fields: [repositoryId], references: [id])
+
+  technicalDebtScore   Int
+  maintainabilityScore Int
+
+  largeFileCount           Int @default(0)
+  deadFileCount            Int @default(0)
+  circularDependencyCount  Int @default(0)
+  deepDependencyChainCount Int @default(0)
+
+  largeFiles           Json
+  deadFiles            Json
+  deepDependencyChains Json
+
+  recommendations Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

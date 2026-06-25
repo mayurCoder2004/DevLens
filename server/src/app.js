@@ -13,6 +13,7 @@ const architectureRoutes = require("./routes/architecture.routes");
 const technicalDebtRoutes = require(
   "./routes/technicalDebt.routes"
 );
+const deploymentRoutes = require("./routes/deployment.routes");
 
 const app = express();
 
@@ -43,6 +44,8 @@ app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/activity", activityRoutes);
 
 app.use("/api/architecture", architectureRoutes);
+
+app.use("/api/deployment", deploymentRoutes);
 
 app.use(
   "/api/technical-debt",

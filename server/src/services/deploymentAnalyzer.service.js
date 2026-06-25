@@ -1,4 +1,5 @@
 const fileDownloader = require("./architecture/fileDownloader");
+const prisma = require("../config/prisma");
 
 const FRONTEND_FRAMEWORKS = [
   "react",
@@ -290,8 +291,256 @@ async function analyzeBuildReadiness(contents) {
   };
 }
 
+function analyzeCiCd(contents) {
+  let score = 0;
+
+  const strengths = [];
+  const warnings = [];
+  const criticalIssues = [];
+
+  const workflowFiles = contents.filter((file) =>
+    file.path.startsWith(".github/workflows/"),
+  );
+
+  const hasWorkflowDirectory = workflowFiles.length > 0;
+
+  if (hasWorkflowDirectory) {
+    score += 25;
+    strengths.push("GitHub Actions workflows detected");
+  } else {
+    criticalIssues.push("No GitHub Actions workflows found");
+  }
+
+  const hasBuildWorkflow = workflowFiles.some((file) => {
+    const name = file.name.toLowerCase();
+
+    return name.includes("build") || name.includes("ci");
+  });
+
+  if (hasBuildWorkflow) {
+    score += 30;
+    strengths.push("Build workflow detected");
+  } else {
+    warnings.push("No build workflow found");
+  }
+
+  const hasTestWorkflow = workflowFiles.some((file) =>
+    file.name.toLowerCase().includes("test"),
+  );
+
+  if (hasTestWorkflow) {
+    score += 20;
+    strengths.push("Test workflow detected");
+  } else {
+    warnings.push("No test workflow found");
+  }
+
+  const hasDeployWorkflow = workflowFiles.some((file) => {
+    const name = file.name.toLowerCase();
+
+    return (
+      name.includes("deploy") ||
+      name.includes("release") ||
+      name.includes("publish")
+    );
+  });
+
+  if (hasDeployWorkflow) {
+    score += 25;
+    strengths.push("Deployment workflow detected");
+  } else {
+    warnings.push("No deployment workflow found");
+  }
+
+  return {
+    score,
+
+    checks: {
+      workflowDirectory: hasWorkflowDirectory,
+      buildWorkflow: hasBuildWorkflow,
+      testWorkflow: hasTestWorkflow,
+      deployWorkflow: hasDeployWorkflow,
+    },
+
+    strengths,
+    warnings,
+    criticalIssues,
+  };
+}
+
+function getDeploymentStatus(score) {
+  if (score >= 90) {
+    return "Production Ready";
+  }
+
+  if (score >= 75) {
+    return "Deployable";
+  }
+
+  if (score >= 60) {
+    return "Deployable With Risks";
+  }
+
+  return "Not Deployment Ready";
+}
+
+function generateDeploymentRecommendations(report) {
+  const recommendations = [];
+
+  if (!report.infrastructure.checks.dockerfile) {
+    recommendations.push(
+      "Create a Dockerfile to containerize the application.",
+    );
+  }
+
+  if (!report.infrastructure.checks.dockerCompose) {
+    recommendations.push(
+      "Add a docker-compose.yml file for local multi-service development.",
+    );
+  }
+
+  if (!report.configuration.checks.envTemplate) {
+    recommendations.push(
+      "Provide a .env.example file documenting required environment variables.",
+    );
+  }
+
+  if (
+    !report.buildReadiness.projects.every((project) => project.scripts.build)
+  ) {
+    recommendations.push(
+      "Add build scripts for all projects that require production builds.",
+    );
+  }
+
+  if (!report.ciCd.checks.workflowDirectory) {
+    recommendations.push(
+      "Configure GitHub Actions to automate builds, tests, and deployments.",
+    );
+  }
+
+  return recommendations;
+}
+
+async function analyzeDeployment(contents) {
+  const infrastructure = analyzeInfrastructure(contents);
+
+  const configuration = await analyzeConfiguration(contents);
+
+  const buildReadiness = await analyzeBuildReadiness(contents);
+
+  const ciCd = analyzeCiCd(contents);
+
+  const deploymentScore = Math.round(
+    infrastructure.score * 0.3 +
+      configuration.score * 0.25 +
+      buildReadiness.score * 0.25 +
+      ciCd.score * 0.2,
+  );
+
+  const status = getDeploymentStatus(deploymentScore);
+
+  const recommendations = generateDeploymentRecommendations({
+    infrastructure,
+    configuration,
+    buildReadiness,
+    ciCd,
+  });
+
+  return {
+    deploymentScore,
+
+    status,
+
+    infrastructure,
+
+    configuration,
+
+    buildReadiness,
+
+    ciCd,
+
+    strengths: [
+      ...infrastructure.strengths,
+      ...configuration.strengths,
+      ...buildReadiness.strengths,
+      ...ciCd.strengths,
+    ],
+
+    warnings: [
+      ...infrastructure.warnings,
+      ...configuration.warnings,
+      ...buildReadiness.warnings,
+      ...ciCd.warnings,
+    ],
+
+    criticalIssues: [
+      ...infrastructure.criticalIssues,
+      ...configuration.criticalIssues,
+      ...buildReadiness.criticalIssues,
+      ...ciCd.criticalIssues,
+    ],
+
+    recommendations,
+  };
+}
+
+async function saveDeploymentReport(repositoryId, report) {
+  return prisma.repositoryDeployment.upsert({
+    where: {
+      repositoryId,
+    },
+
+    update: {
+      deploymentScore: report.deploymentScore,
+      deploymentStatus: report.status,
+
+      infrastructureScore: report.infrastructure.score,
+
+      configurationScore: report.configuration.score,
+
+      buildReadinessScore: report.buildReadiness.score,
+
+      ciCdScore: report.ciCd.score,
+
+      strengths: report.strengths,
+      warnings: report.warnings,
+      criticalIssues: report.criticalIssues,
+
+      recommendations: report.recommendations,
+    },
+
+    create: {
+      repositoryId,
+
+      deploymentScore: report.deploymentScore,
+
+      deploymentStatus: report.status,
+
+      infrastructureScore: report.infrastructure.score,
+
+      configurationScore: report.configuration.score,
+
+      buildReadinessScore: report.buildReadiness.score,
+
+      ciCdScore: report.ciCd.score,
+
+      strengths: report.strengths,
+
+      warnings: report.warnings,
+
+      criticalIssues: report.criticalIssues,
+
+      recommendations: report.recommendations,
+    },
+  });
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
   analyzeBuildReadiness,
+  analyzeCiCd,
+  analyzeDeployment,
+  saveDeploymentReport,
 };

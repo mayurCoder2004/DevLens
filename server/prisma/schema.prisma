@@ -144,25 +144,19 @@ model RepositoryDeployment {
   id String @id @default(cuid())
 
   repositoryId String @unique
-  repository Repository @relation(fields: [repositoryId], references: [id])
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 
   deploymentScore Int
+  deploymentStatus String
 
   infrastructureScore Int
   configurationScore Int
   buildReadinessScore Int
   ciCdScore Int
 
-  status String
-
-  checks Json
-
   strengths Json
-
   warnings Json
-
   criticalIssues Json
-
   recommendations Json
 
   createdAt DateTime @default(now())

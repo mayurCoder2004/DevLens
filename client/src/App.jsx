@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RepositoryDetails from "./pages/RepositoryDetails";
 import ArchitecturePage from "./pages/ArchitecturePage";
 import TechnicalDebt from "./pages/TechnicalDebt";
+import Deployment from "./pages/Deployment";
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
       />
 
       <Route path="/technical-debt/:repositoryId" element={<TechnicalDebt />} />
+
+      <Route path="/repositories/:id/deployment" element={<Deployment />} />
     </Routes>
   );
 }

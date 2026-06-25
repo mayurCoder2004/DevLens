@@ -15,11 +15,11 @@ async function test() {
     );
 
   const report =
-    await deploymentAnalyzer.analyzeConfiguration(
-      contents
-    );
+  await deploymentAnalyzer.analyzeBuildReadiness(
+    contents
+  );
 
-  console.log(report);
+console.log(report);
 }
 
 test().catch((error) => {

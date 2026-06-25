@@ -15,7 +15,7 @@ async function test() {
     );
 
   const report =
-    deploymentAnalyzer.analyzeInfrastructure(
+    await deploymentAnalyzer.analyzeConfiguration(
       contents
     );
 

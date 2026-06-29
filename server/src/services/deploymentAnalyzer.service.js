@@ -794,6 +794,71 @@ async function analyzeWorkflowQuality(contents) {
   };
 }
 
+function analyzeLockFiles(contents) {
+  const packageLock = contents.find(
+    (file) => file.name === "package-lock.json"
+  );
+
+  const yarnLock = contents.find(
+    (file) => file.name === "yarn.lock"
+  );
+
+  const pnpmLock = contents.find(
+    (file) => file.name === "pnpm-lock.yaml"
+  );
+
+  const bunLock = contents.find(
+    (file) => file.name === "bun.lockb"
+  );
+
+  let score = 0;
+
+  const strengths = [];
+  const warnings = [];
+  const criticalIssues = [];
+
+  const checks = {
+    packageLock: !!packageLock,
+    yarnLock: !!yarnLock,
+    pnpmLock: !!pnpmLock,
+    bunLock: !!bunLock,
+  };
+
+  if (packageLock) {
+    score = 100;
+    strengths.push("package-lock.json detected");
+  }
+
+  if (yarnLock) {
+    score = 100;
+    strengths.push("yarn.lock detected");
+  }
+
+  if (pnpmLock) {
+    score = 100;
+    strengths.push("pnpm-lock.yaml detected");
+  }
+
+  if (bunLock) {
+    score = 100;
+    strengths.push("bun.lockb detected");
+  }
+
+  if (score === 0) {
+    criticalIssues.push(
+      "No dependency lock file found"
+    );
+  }
+
+  return {
+    score,
+    checks,
+    strengths,
+    warnings,
+    criticalIssues,
+  };
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
@@ -803,5 +868,6 @@ module.exports = {
   saveDeploymentReport,
   analyzeDeploymentPlatforms,
   analyzeDockerfileQuality,
-  analyzeWorkflowQuality
+  analyzeWorkflowQuality,
+  analyzeLockFiles
 };

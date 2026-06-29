@@ -15,7 +15,7 @@ async function test() {
     );
 
   const report =
-  await deploymentAnalyzer.analyzeWorkflowQuality(
+  deploymentAnalyzer.analyzeLockFiles(
     contents
   );
 

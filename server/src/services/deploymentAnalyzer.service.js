@@ -536,6 +536,48 @@ async function saveDeploymentReport(repositoryId, report) {
   });
 }
 
+async function analyzeDeploymentPlatforms(contents) {
+  const platforms = [];
+
+  const hasFile = (...names) =>
+    contents.some((file) => names.includes(file.name));
+
+  if (hasFile("vercel.json")) {
+    platforms.push("Vercel");
+  }
+
+  if (hasFile("netlify.toml")) {
+    platforms.push("Netlify");
+  }
+
+  if (
+    hasFile("render.yaml", "render.yml")
+  ) {
+    platforms.push("Render");
+  }
+
+  if (hasFile("railway.json")) {
+    platforms.push("Railway");
+  }
+
+  if (hasFile("fly.toml")) {
+    platforms.push("Fly.io");
+  }
+
+  if (
+    hasFile(
+      "docker-compose.yml",
+      "docker-compose.yaml"
+    )
+  ) {
+    platforms.push("Docker Compose");
+  }
+
+  return {
+    platforms,
+  };
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
@@ -543,4 +585,5 @@ module.exports = {
   analyzeCiCd,
   analyzeDeployment,
   saveDeploymentReport,
+  analyzeDeploymentPlatforms
 };

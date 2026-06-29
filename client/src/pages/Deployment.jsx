@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   XCircle,
 } from "lucide-react";
+import AnalysisCard from "../components/deployments/AnalysisCard";
 
 function getStatusColor(score) {
   if (score >= 80) return "bg-green-500";
@@ -358,6 +359,52 @@ This may take a few seconds for the first time.
             bgColor="bg-blue-50"
           />
         </section>
+
+        <div className="mb-10">
+  <AnalysisCard
+    title="Dockerfile Quality"
+    score={deployment.dockerQuality.score}
+    checks={deployment.dockerQuality.checks}
+    strengths={deployment.dockerQuality.strengths}
+    warnings={deployment.dockerQuality.warnings}
+    criticalIssues={deployment.dockerQuality.criticalIssues}
+  />
+</div>
+
+<div className="mb-10">
+  <AnalysisCard
+    title="Workflow Quality"
+    score={deployment.workflowQuality.score}
+    checks={deployment.workflowQuality.checks}
+    strengths={deployment.workflowQuality.strengths}
+    warnings={deployment.workflowQuality.warnings}
+    criticalIssues={deployment.workflowQuality.criticalIssues}
+  />
+</div>
+
+<div className="mb-10">
+  <AnalysisCard
+    title="Dependency Lock Files"
+    score={deployment.lockFiles.score}
+    checks={deployment.lockFiles.checks}
+    strengths={deployment.lockFiles.strengths}
+    warnings={deployment.lockFiles.warnings}
+    criticalIssues={deployment.lockFiles.criticalIssues}
+  />
+</div>
+
+<div className="mb-10">
+  <AnalysisCard
+    title="Runtime Configuration"
+    score={deployment.runtime.score}
+    checks={deployment.runtime.checks}
+    strengths={deployment.runtime.strengths}
+    warnings={deployment.runtime.warnings}
+    criticalIssues={deployment.runtime.criticalIssues}
+  />
+</div>
+
+
       </main>
     </div>
   );

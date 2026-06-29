@@ -693,6 +693,107 @@ async function analyzeDockerfileQuality(contents) {
   };
 }
 
+async function analyzeWorkflowQuality(contents) {
+  const workflowFiles = contents.filter(
+    (file) =>
+      file.path.startsWith(".github/workflows/") &&
+      (file.name.endsWith(".yml") ||
+        file.name.endsWith(".yaml"))
+  );
+
+  if (workflowFiles.length === 0) {
+    return {
+      score: 0,
+
+      checks: {
+        workflowFiles: false,
+      },
+
+      strengths: [],
+      warnings: [],
+      criticalIssues: [
+        "No GitHub Actions workflows found",
+      ],
+    };
+  }
+
+  let score = 20;
+
+  const strengths = [];
+  const warnings = [];
+  const criticalIssues = [];
+
+  const checks = {
+    workflowFiles: true,
+    build: false,
+    test: false,
+    lint: false,
+    deploy: false,
+  };
+
+  let workflowContent = "";
+
+  for (const workflow of workflowFiles) {
+    const content =
+      await fileDownloader.downloadFileContent(
+        workflow.downloadUrl
+      );
+
+    workflowContent += "\n" + content.toLowerCase();
+  }
+
+  if (workflowContent.includes("build")) {
+    checks.build = true;
+    score += 20;
+    strengths.push("Build workflow detected");
+  } else {
+    warnings.push("No build workflow detected");
+  }
+
+  if (
+    workflowContent.includes("test") ||
+    workflowContent.includes("jest") ||
+    workflowContent.includes("vitest") ||
+    workflowContent.includes("mocha")
+  ) {
+    checks.test = true;
+    score += 20;
+    strengths.push("Test workflow detected");
+  } else {
+    warnings.push("No test workflow detected");
+  }
+
+  if (
+    workflowContent.includes("lint") ||
+    workflowContent.includes("eslint")
+  ) {
+    checks.lint = true;
+    score += 20;
+    strengths.push("Lint workflow detected");
+  } else {
+    warnings.push("No lint workflow detected");
+  }
+
+  if (
+    workflowContent.includes("deploy") ||
+    workflowContent.includes("release")
+  ) {
+    checks.deploy = true;
+    score += 20;
+    strengths.push("Deployment workflow detected");
+  } else {
+    warnings.push("No deployment workflow detected");
+  }
+
+  return {
+    score,
+    checks,
+    strengths,
+    warnings,
+    criticalIssues,
+  };
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
@@ -701,5 +802,6 @@ module.exports = {
   analyzeDeployment,
   saveDeploymentReport,
   analyzeDeploymentPlatforms,
-  analyzeDockerfileQuality
+  analyzeDockerfileQuality,
+  analyzeWorkflowQuality
 };

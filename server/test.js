@@ -15,7 +15,7 @@ async function test() {
     );
 
   const report =
-  await deploymentAnalyzer.analyzeDockerfileQuality(
+  await deploymentAnalyzer.analyzeWorkflowQuality(
     contents
   );
 

@@ -38,7 +38,7 @@ function analyzeInfrastructure(contents) {
     score += 60;
     strengths.push("Dockerfile detected");
   } else {
-    criticalIssues.push("No Dockerfile found");
+    criticalIssues.push("Dockerfile not found");
   }
 
   if (dockerCompose) {
@@ -539,47 +539,52 @@ async function saveDeploymentReport(repositoryId, report) {
     },
 
     update: {
-      deploymentScore: report.deploymentScore,
-      deploymentStatus: report.status,
+  deploymentScore: report.deploymentScore,
+  deploymentStatus: report.status,
 
-      infrastructureScore: report.infrastructure.score,
+  infrastructureScore: report.infrastructure.score,
+  configurationScore: report.configuration.score,
+  buildReadinessScore: report.buildReadiness.score,
+  ciCdScore: report.ciCd.score,
 
-      configurationScore: report.configuration.score,
+  // Phase 5B
 
-      buildReadinessScore: report.buildReadiness.score,
+  platforms: report.platforms,
+  dockerQuality: report.dockerQuality,
+  workflowQuality: report.workflowQuality,
+  lockFiles: report.lockFiles,
+  runtime: report.runtime,
 
-      ciCdScore: report.ciCd.score,
-
-      strengths: report.strengths,
-      warnings: report.warnings,
-      criticalIssues: report.criticalIssues,
-
-      recommendations: report.recommendations,
-    },
+  strengths: report.strengths,
+  warnings: report.warnings,
+  criticalIssues: report.criticalIssues,
+  recommendations: report.recommendations,
+},
 
     create: {
-      repositoryId,
+  repositoryId,
 
-      deploymentScore: report.deploymentScore,
+  deploymentScore: report.deploymentScore,
+  deploymentStatus: report.status,
 
-      deploymentStatus: report.status,
+  infrastructureScore: report.infrastructure.score,
+  configurationScore: report.configuration.score,
+  buildReadinessScore: report.buildReadiness.score,
+  ciCdScore: report.ciCd.score,
 
-      infrastructureScore: report.infrastructure.score,
+  // Phase 5B
 
-      configurationScore: report.configuration.score,
+  platforms: report.platforms,
+  dockerQuality: report.dockerQuality,
+  workflowQuality: report.workflowQuality,
+  lockFiles: report.lockFiles,
+  runtime: report.runtime,
 
-      buildReadinessScore: report.buildReadiness.score,
-
-      ciCdScore: report.ciCd.score,
-
-      strengths: report.strengths,
-
-      warnings: report.warnings,
-
-      criticalIssues: report.criticalIssues,
-
-      recommendations: report.recommendations,
-    },
+  strengths: report.strengths,
+  warnings: report.warnings,
+  criticalIssues: report.criticalIssues,
+  recommendations: report.recommendations,
+},
   });
 }
 

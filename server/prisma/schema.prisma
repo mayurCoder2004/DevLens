@@ -154,6 +154,18 @@ model RepositoryDeployment {
   buildReadinessScore Int
   ciCdScore Int
 
+  // Phase 5B
+
+  platforms Json?
+
+  dockerQuality Json?
+
+  workflowQuality Json?
+
+  lockFiles Json?
+
+  runtime Json?
+
   strengths Json
   warnings Json
   criticalIssues Json

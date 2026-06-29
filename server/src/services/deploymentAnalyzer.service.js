@@ -578,6 +578,121 @@ async function analyzeDeploymentPlatforms(contents) {
   };
 }
 
+async function analyzeDockerfileQuality(contents) {
+  const dockerfile = contents.find(
+    (file) => file.name === "Dockerfile"
+  );
+
+  if (!dockerfile) {
+    return {
+      score: 0,
+
+      checks: {
+        dockerfile: false,
+      },
+
+      strengths: [],
+      warnings: [],
+      criticalIssues: [
+        "Dockerfile not found",
+      ],
+    };
+  }
+
+  const content =
+    await fileDownloader.downloadFileContent(
+      dockerfile.downloadUrl
+    );
+
+  const dockerContent = content.toString();
+
+  let score = 0;
+
+  const strengths = [];
+  const warnings = [];
+  const criticalIssues = [];
+
+  const checks = {
+    dockerfile: true,
+    baseImage: false,
+    workdir: false,
+    copy: false,
+    install: false,
+    expose: false,
+    cmd: false,
+    multiStage: false,
+  };
+
+  if (/^FROM\s+/im.test(dockerContent)) {
+    checks.baseImage = true;
+    score += 20;
+    strengths.push("Base image configured");
+  } else {
+    criticalIssues.push("Base image missing");
+  }
+
+  if (/^WORKDIR\s+/im.test(dockerContent)) {
+    checks.workdir = true;
+    score += 15;
+    strengths.push("Working directory configured");
+  } else {
+    warnings.push("WORKDIR not configured");
+  }
+
+  if (/^COPY\s+/im.test(dockerContent)) {
+    checks.copy = true;
+    score += 15;
+    strengths.push("Application files copied");
+  } else {
+    warnings.push("COPY instruction missing");
+  }
+
+  if (/^RUN\s+/im.test(dockerContent)) {
+    checks.install = true;
+    score += 15;
+    strengths.push("Build steps detected");
+  } else {
+    warnings.push("RUN instruction missing");
+  }
+
+  if (/^EXPOSE\s+/im.test(dockerContent)) {
+    checks.expose = true;
+    score += 10;
+    strengths.push("Container port exposed");
+  } else {
+    warnings.push("EXPOSE instruction missing");
+  }
+
+  if (/^(CMD|ENTRYPOINT)\s+/im.test(dockerContent)) {
+    checks.cmd = true;
+    score += 15;
+    strengths.push("Startup command configured");
+  } else {
+    criticalIssues.push("No CMD or ENTRYPOINT found");
+  }
+
+  const fromCount =
+    (dockerContent.match(/^FROM\s+/gim) || []).length;
+
+  if (fromCount > 1) {
+    checks.multiStage = true;
+    score += 10;
+    strengths.push("Multi-stage Docker build detected");
+  } else {
+    warnings.push(
+      "Dockerfile is not using a multi-stage build"
+    );
+  }
+
+  return {
+    score,
+    checks,
+    strengths,
+    warnings,
+    criticalIssues,
+  };
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
@@ -585,5 +700,6 @@ module.exports = {
   analyzeCiCd,
   analyzeDeployment,
   saveDeploymentReport,
-  analyzeDeploymentPlatforms
+  analyzeDeploymentPlatforms,
+  analyzeDockerfileQuality
 };

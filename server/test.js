@@ -10,18 +10,18 @@ async function test() {
   const contents =
     await repositoryScanner.getRepositoryContents(
       "mayurCoder2004",
-      "chefmate",
+      "kubeshort",
       "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"
     );
 
   const report =
-    await deploymentAnalyzer.analyzeDeploymentPlatforms(
-      contents
-    );
+  await deploymentAnalyzer.analyzeDockerfileQuality(
+    contents
+  );
 
-  console.dir(report, {
-    depth: null,
-  });
+console.dir(report, {
+  depth: null,
+});
 }
 
 test().catch(console.error);

@@ -859,6 +859,90 @@ function analyzeLockFiles(contents) {
   };
 }
 
+function analyzeRuntimeConfiguration(contents) {
+  const nvmrc = contents.find(
+    (file) => file.name === ".nvmrc"
+  );
+
+  const nodeVersion = contents.find(
+    (file) => file.name === ".node-version"
+  );
+
+  const pythonVersion = contents.find(
+    (file) => file.name === ".python-version"
+  );
+
+  const javaVersion = contents.find(
+    (file) => file.name === ".java-version"
+  );
+
+  const rubyVersion = contents.find(
+    (file) => file.name === ".ruby-version"
+  );
+
+  const toolVersions = contents.find(
+    (file) => file.name === ".tool-versions"
+  );
+
+  let score = 0;
+
+  const strengths = [];
+  const warnings = [];
+  const criticalIssues = [];
+
+  const checks = {
+    nodeVersion: false,
+    pythonVersion: false,
+    javaVersion: false,
+    rubyVersion: false,
+    toolVersions: false,
+  };
+
+  if (nvmrc || nodeVersion) {
+    checks.nodeVersion = true;
+    score += 40;
+    strengths.push("Node.js runtime version is pinned");
+  }
+
+  if (pythonVersion) {
+    checks.pythonVersion = true;
+    score += 20;
+    strengths.push("Python runtime version is pinned");
+  }
+
+  if (javaVersion) {
+    checks.javaVersion = true;
+    score += 20;
+    strengths.push("Java runtime version is pinned");
+  }
+
+  if (rubyVersion) {
+    checks.rubyVersion = true;
+    score += 10;
+    strengths.push("Ruby runtime version is pinned");
+  }
+
+  if (toolVersions) {
+    checks.toolVersions = true;
+    score += 10;
+    strengths.push("asdf runtime configuration detected");
+  }
+
+  if (score === 0) {
+    warnings.push(
+      "No runtime version configuration found"
+    );
+  }
+
+  return {
+    score,
+    checks,
+    strengths,
+    warnings,
+    criticalIssues,
+  };
+}
+
 module.exports = {
   analyzeInfrastructure,
   analyzeConfiguration,
@@ -869,5 +953,6 @@ module.exports = {
   analyzeDeploymentPlatforms,
   analyzeDockerfileQuality,
   analyzeWorkflowQuality,
-  analyzeLockFiles
+  analyzeLockFiles,
+  analyzeRuntimeConfiguration
 };

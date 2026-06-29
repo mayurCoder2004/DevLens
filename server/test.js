@@ -15,7 +15,7 @@ async function test() {
     );
 
   const report =
-  deploymentAnalyzer.analyzeLockFiles(
+  deploymentAnalyzer.analyzeRuntimeConfiguration(
     contents
   );
 

@@ -431,12 +431,29 @@ async function analyzeDeployment(contents) {
 
   const ciCd = analyzeCiCd(contents);
 
+  // Phase 5B analyzers
+
+  const platforms = await analyzeDeploymentPlatforms(contents);
+
+  const dockerQuality = await analyzeDockerfileQuality(contents);
+
+  const workflowQuality = await analyzeWorkflowQuality(contents);
+
+  const lockFiles = analyzeLockFiles(contents);
+
+  const runtime = analyzeRuntimeConfiguration(contents);
+
   const deploymentScore = Math.round(
-    infrastructure.score * 0.3 +
-      configuration.score * 0.25 +
-      buildReadiness.score * 0.25 +
-      ciCd.score * 0.2,
-  );
+  infrastructure.score * 0.20 +
+  configuration.score * 0.15 +
+  buildReadiness.score * 0.15 +
+  ciCd.score * 0.15 +
+  dockerQuality.score * 0.15 +
+  workflowQuality.score * 0.05 +
+  lockFiles.score * 0.05 +
+  runtime.score * 0.05 +
+  (platforms.platforms.length > 0 ? 100 : 0) * 0.05
+);
 
   const status = getDeploymentStatus(deploymentScore);
 
@@ -460,26 +477,56 @@ async function analyzeDeployment(contents) {
 
     ciCd,
 
+    // Phase 5B
+
+    platforms,
+
+    dockerQuality,
+
+    workflowQuality,
+
+    lockFiles,
+
+    runtime,
+
     strengths: [
-      ...infrastructure.strengths,
-      ...configuration.strengths,
-      ...buildReadiness.strengths,
-      ...ciCd.strengths,
-    ],
+  ...new Set([
+    ...infrastructure.strengths,
+    ...configuration.strengths,
+    ...buildReadiness.strengths,
+    ...ciCd.strengths,
+    ...dockerQuality.strengths,
+    ...workflowQuality.strengths,
+    ...lockFiles.strengths,
+    ...runtime.strengths,
+  ]),
+],
 
-    warnings: [
-      ...infrastructure.warnings,
-      ...configuration.warnings,
-      ...buildReadiness.warnings,
-      ...ciCd.warnings,
-    ],
+warnings: [
+  ...new Set([
+    ...infrastructure.warnings,
+    ...configuration.warnings,
+    ...buildReadiness.warnings,
+    ...ciCd.warnings,
+    ...dockerQuality.warnings,
+    ...workflowQuality.warnings,
+    ...lockFiles.warnings,
+    ...runtime.warnings,
+  ]),
+],
 
-    criticalIssues: [
-      ...infrastructure.criticalIssues,
-      ...configuration.criticalIssues,
-      ...buildReadiness.criticalIssues,
-      ...ciCd.criticalIssues,
-    ],
+criticalIssues: [
+  ...new Set([
+    ...infrastructure.criticalIssues,
+    ...configuration.criticalIssues,
+    ...buildReadiness.criticalIssues,
+    ...ciCd.criticalIssues,
+    ...dockerQuality.criticalIssues,
+    ...workflowQuality.criticalIssues,
+    ...lockFiles.criticalIssues,
+    ...runtime.criticalIssues,
+  ]),
+],
 
     recommendations,
   };

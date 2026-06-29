@@ -106,6 +106,33 @@ function ScoreCard({ title, score, icon: Icon }) {
   );
 }
 
+function PlatformCard({ platforms }) {
+  return (
+    <div className="bg-white rounded-2xl border shadow-sm p-6">
+      <h2 className="text-xl font-bold mb-5">
+        Deployment Platforms
+      </h2>
+
+      {platforms.length === 0 ? (
+        <p className="text-gray-500">
+          No deployment platform detected.
+        </p>
+      ) : (
+        <div className="flex flex-wrap gap-3">
+          {platforms.map((platform) => (
+            <span
+              key={platform}
+              className="px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-medium"
+            >
+              {platform}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Deployment() {
   const { id } = useParams();
 
@@ -113,26 +140,55 @@ export default function Deployment() {
   const [deployment, setDeployment] = useState(null);
 
   const fetchDeployment = useCallback(async () => {
-    try {
-      const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/deployment/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  try {
+    // Try to fetch an existing deployment report
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/deployment/${id}`,
+      {
+        headers,
+      },
+    );
+
+    setDeployment(response.data.data);
+  } catch (error) {
+    // If no report exists, generate it automatically
+    if (error.response?.status === 404) {
+      try {
+        setLoading(true);
+
+        await axios.post(
+  `${import.meta.env.VITE_API_URL}/deployment/${id}/analyze`,
+  {},
+  {
+    headers,
+  },
+);
+
+        // Fetch the newly generated report
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/deployment/${id}`,
+          {
+            headers,
           },
-        },
-      );
+        );
 
-      setDeployment(response.data.data);
-    } catch (error) {
-      console.error(error.response?.data);
+        setDeployment(response.data.data);
+      } catch (analysisError) {
+        console.error(analysisError);
+      }
+    } else {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
-  }, [id]);
+  } finally {
+    setLoading(false);
+  }
+}, [id]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -143,7 +199,9 @@ export default function Deployment() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-gray-100 px-6">
         <h1 className="animate-pulse text-3xl font-bold text-gray-700">
-          Loading deployment intelligence...
+          Analyzing repository...
+
+This may take a few seconds for the first time.
         </h1>
       </div>
     );
@@ -260,6 +318,12 @@ export default function Deployment() {
 
           <ScoreCard title="CI/CD" score={deployment.ciCdScore} icon={Cpu} />
         </section>
+
+        <section className="mb-12">
+  <PlatformCard
+    platforms={deployment.platforms.platforms}
+  />
+</section>
 
         <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           <ListCard

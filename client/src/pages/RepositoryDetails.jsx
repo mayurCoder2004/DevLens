@@ -1,9 +1,60 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const RepositoryDetails = () => {
   const { id } = useParams();
-
   const navigate = useNavigate();
+
+  const [jobStatus, setJobStatus] = useState(null);
+
+const handleAnalyze = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+      `http://localhost:5000/api/analysis/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const jobId = response.data.jobId;
+
+    setJobStatus({
+      jobId,
+      state: "waiting",
+    });
+
+    const interval = setInterval(async () => {
+      const statusResponse = await axios.get(
+        `http://localhost:5000/api/jobs/${jobId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const status = statusResponse.data.data;
+
+      setJobStatus(status);
+
+      if (status.state === "completed") {
+        clearInterval(interval);
+      }
+
+      if (status.state === "failed") {
+        clearInterval(interval);
+      }
+    }, 2000);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="p-6">
@@ -16,6 +67,19 @@ const RepositoryDetails = () => {
       </p>
 
       <div className="flex flex-wrap gap-4">
+        <button
+  onClick={handleAnalyze}
+  disabled={jobStatus?.state === "waiting" || jobStatus?.state === "active"}
+  className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50"
+>
+  {jobStatus?.state === "waiting"
+    ? "Queued..."
+    : jobStatus?.state === "active"
+    ? "Analyzing..."
+    : jobStatus?.state === "completed"
+    ? "Analysis Complete"
+    : "Analyze Repository"}
+</button>
         <button
           onClick={() => navigate(`/architecture/${id}`)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"

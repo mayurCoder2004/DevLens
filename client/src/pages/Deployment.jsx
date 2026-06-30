@@ -9,9 +9,7 @@ import {
   CheckCircle2,
   CircleDashed,
   Clock3,
-  Code2,
   Cpu,
-  FileJson2,
   GitBranch,
   Hammer,
   Layers3,
@@ -371,8 +369,15 @@ function ChecklistCard({
   checks,
   checklist,
   icon: Icon,
+  strengths,
+  warnings,
+  criticalIssues,
 }) {
   const safeChecks = checks || {};
+  const primaryKeys = new Set(checklist.map(([key]) => key));
+  const additionalChecks = Object.keys(safeChecks)
+    .filter((key) => !primaryKeys.has(key))
+    .map((key) => [key, humanizeKey(key)]);
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -415,11 +420,104 @@ function ChecklistCard({
           </div>
         ))}
       </div>
+
+      {additionalChecks.length > 0 && (
+        <div className="mt-5">
+          <h3 className="text-sm font-bold text-slate-800">
+            Additional Checks
+          </h3>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {additionalChecks.map(([key, label]) => (
+              <span
+                key={key}
+                className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold ring-1 ${
+                  safeChecks[key]
+                    ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                    : "bg-slate-100 text-slate-500 ring-slate-200"
+                }`}
+              >
+                {safeChecks[key] ? (
+                  <Check className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <X className="h-4 w-4" aria-hidden="true" />
+                )}
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <MiniFindings
+        strengths={strengths}
+        warnings={warnings}
+        criticalIssues={criticalIssues}
+      />
     </section>
   );
 }
 
-function DetectionGrid({ title, subtitle, icon: Icon, checks, items }) {
+function MiniFindings({ strengths, warnings, criticalIssues }) {
+  const groups = [
+    {
+      title: "Strengths",
+      items: strengths,
+      icon: CheckCircle2,
+      className: "text-emerald-700",
+    },
+    {
+      title: "Warnings",
+      items: warnings,
+      icon: AlertTriangle,
+      className: "text-amber-700",
+    },
+    {
+      title: "Critical Issues",
+      items: criticalIssues,
+      icon: XCircle,
+      className: "text-rose-700",
+    },
+  ].filter((group) => group.items?.length);
+
+  if (groups.length === 0) return null;
+
+  return (
+    <div className="mt-6 grid gap-4 lg:grid-cols-3">
+      {groups.map((group) => {
+        const Icon = group.icon;
+
+        return (
+          <div key={group.title} className="rounded-xl bg-slate-50 p-4">
+            <h3
+              className={`mb-3 flex items-center gap-2 text-sm font-bold ${group.className}`}
+            >
+              <Icon className="h-4 w-4" aria-hidden="true" />
+              {group.title}
+            </h3>
+            <ul className="space-y-2">
+              {group.items.map((item) => (
+                <li key={item} className="text-sm leading-6 text-slate-600">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DetectionGrid({
+  title,
+  subtitle,
+  icon: Icon,
+  checks,
+  items,
+  strengths,
+  warnings,
+  criticalIssues,
+}) {
   const safeChecks = checks || {};
 
   return (
@@ -457,6 +555,12 @@ function DetectionGrid({ title, subtitle, icon: Icon, checks, items }) {
           );
         })}
       </div>
+
+      <MiniFindings
+        strengths={strengths}
+        warnings={warnings}
+        criticalIssues={criticalIssues}
+      />
     </section>
   );
 }
@@ -789,6 +893,9 @@ export default function Deployment() {
             checks={deployment.dockerQuality?.checks}
             checklist={dockerChecklist}
             icon={Boxes}
+            strengths={deployment.dockerQuality?.strengths}
+            warnings={deployment.dockerQuality?.warnings}
+            criticalIssues={deployment.dockerQuality?.criticalIssues}
           />
           <ChecklistCard
             title="Workflow Quality"
@@ -797,6 +904,9 @@ export default function Deployment() {
             checks={deployment.workflowQuality?.checks}
             checklist={workflowChecklist}
             icon={GitBranch}
+            strengths={deployment.workflowQuality?.strengths}
+            warnings={deployment.workflowQuality?.warnings}
+            criticalIssues={deployment.workflowQuality?.criticalIssues}
           />
         </section>
 
@@ -807,6 +917,9 @@ export default function Deployment() {
             icon={TerminalSquare}
             checks={deployment.runtime?.checks}
             items={runtimeChecklist}
+            strengths={deployment.runtime?.strengths}
+            warnings={deployment.runtime?.warnings}
+            criticalIssues={deployment.runtime?.criticalIssues}
           />
           <DetectionGrid
             title="Lock Files"
@@ -814,6 +927,9 @@ export default function Deployment() {
             icon={PackageCheck}
             checks={deployment.lockFiles?.checks}
             items={lockFileChecklist}
+            strengths={deployment.lockFiles?.strengths}
+            warnings={deployment.lockFiles?.warnings}
+            criticalIssues={deployment.lockFiles?.criticalIssues}
           />
         </section>
 
@@ -848,26 +964,6 @@ export default function Deployment() {
           />
         </section>
 
-        <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <DetectionGrid
-            title="Raw Docker Checks"
-            subtitle="Additional Docker analyzer checks preserved from the report."
-            icon={FileJson2}
-            checks={deployment.dockerQuality?.checks}
-            items={Object.keys(deployment.dockerQuality?.checks || {}).map(
-              (key) => [key, humanizeKey(key)],
-            )}
-          />
-          <DetectionGrid
-            title="Raw Workflow Checks"
-            subtitle="Additional workflow analyzer checks preserved from the report."
-            icon={Code2}
-            checks={deployment.workflowQuality?.checks}
-            items={Object.keys(deployment.workflowQuality?.checks || {}).map(
-              (key) => [key, humanizeKey(key)],
-            )}
-          />
-        </section>
       </main>
     </div>
   );

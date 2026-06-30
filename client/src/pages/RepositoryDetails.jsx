@@ -8,78 +8,76 @@ const RepositoryDetails = () => {
 
   const [jobStatus, setJobStatus] = useState(null);
 
-const handleAnalyze = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const handleAnalyze = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const response = await axios.post(
-      `http://localhost:5000/api/analysis/${id}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const jobId = response.data.jobId;
-
-    setJobStatus({
-      jobId,
-      state: "waiting",
-    });
-
-    const interval = setInterval(async () => {
-      const statusResponse = await axios.get(
-        `http://localhost:5000/api/jobs/${jobId}`,
+      const response = await axios.post(
+        `http://localhost:5000/api/analysis/${id}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
-      const status = statusResponse.data.data;
+      const jobId = response.data.jobId;
 
-      setJobStatus(status);
+      setJobStatus({
+        jobId,
+        state: "waiting",
+      });
 
-      if (status.state === "completed") {
-        clearInterval(interval);
-      }
+      const interval = setInterval(async () => {
+        const statusResponse = await axios.get(
+          `http://localhost:5000/api/jobs/${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-      if (status.state === "failed") {
-        clearInterval(interval);
-      }
-    }, 2000);
-  } catch (error) {
-    console.error(error);
-  }
-};
+        const status = statusResponse.data.data;
+
+        setJobStatus(status);
+
+        if (status.state === "completed") {
+          clearInterval(interval);
+        }
+
+        if (status.state === "failed") {
+          clearInterval(interval);
+        }
+      }, 2000);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Repository Details
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Repository Details</h1>
 
-      <p className="mb-6">
-        Repository ID: {id}
-      </p>
+      <p className="mb-6">Repository ID: {id}</p>
 
       <div className="flex flex-wrap gap-4">
         <button
-  onClick={handleAnalyze}
-  disabled={jobStatus?.state === "waiting" || jobStatus?.state === "active"}
-  className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50"
->
-  {jobStatus?.state === "waiting"
-    ? "Queued..."
-    : jobStatus?.state === "active"
-    ? "Analyzing..."
-    : jobStatus?.state === "completed"
-    ? "Analysis Complete"
-    : "Analyze Repository"}
-</button>
+          onClick={handleAnalyze}
+          disabled={
+            jobStatus?.state === "waiting" || jobStatus?.state === "active"
+          }
+          className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 disabled:opacity-50"
+        >
+          {jobStatus?.state === "waiting"
+            ? "Queued..."
+            : jobStatus?.state === "active"
+              ? "Analyzing..."
+              : jobStatus?.state === "completed"
+                ? "Analysis Complete"
+                : "Analyze Repository"}
+        </button>
         <button
           onClick={() => navigate(`/architecture/${id}`)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"

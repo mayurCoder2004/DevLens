@@ -10,9 +10,7 @@ const healthRoutes = require("./routes/health.routes");
 const portfolioRoutes = require("./routes/portfolio.routes");
 const activityRoutes = require("./routes/activity.routes");
 const architectureRoutes = require("./routes/architecture.routes");
-const technicalDebtRoutes = require(
-  "./routes/technicalDebt.routes"
-);
+const technicalDebtRoutes = require("./routes/technicalDebt.routes");
 const deploymentRoutes = require("./routes/deployment.routes");
 const analysisRoutes = require("./routes/analysis.routes");
 const jobStatusRoutes = require("./routes/jobStatus.routes");
@@ -49,10 +47,7 @@ app.use("/api/architecture", architectureRoutes);
 
 app.use("/api/deployment", deploymentRoutes);
 
-app.use(
-  "/api/technical-debt",
-  technicalDebtRoutes
-);
+app.use("/api/technical-debt", technicalDebtRoutes);
 
 app.use("/api/analysis", analysisRoutes);
 

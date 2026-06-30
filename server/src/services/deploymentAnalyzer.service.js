@@ -444,16 +444,16 @@ async function analyzeDeployment(contents) {
   const runtime = analyzeRuntimeConfiguration(contents);
 
   const deploymentScore = Math.round(
-  infrastructure.score * 0.20 +
-  configuration.score * 0.15 +
-  buildReadiness.score * 0.15 +
-  ciCd.score * 0.15 +
-  dockerQuality.score * 0.15 +
-  workflowQuality.score * 0.05 +
-  lockFiles.score * 0.05 +
-  runtime.score * 0.05 +
-  (platforms.platforms.length > 0 ? 100 : 0) * 0.05
-);
+    infrastructure.score * 0.2 +
+      configuration.score * 0.15 +
+      buildReadiness.score * 0.15 +
+      ciCd.score * 0.15 +
+      dockerQuality.score * 0.15 +
+      workflowQuality.score * 0.05 +
+      lockFiles.score * 0.05 +
+      runtime.score * 0.05 +
+      (platforms.platforms.length > 0 ? 100 : 0) * 0.05,
+  );
 
   const status = getDeploymentStatus(deploymentScore);
 
@@ -490,43 +490,43 @@ async function analyzeDeployment(contents) {
     runtime,
 
     strengths: [
-  ...new Set([
-    ...infrastructure.strengths,
-    ...configuration.strengths,
-    ...buildReadiness.strengths,
-    ...ciCd.strengths,
-    ...dockerQuality.strengths,
-    ...workflowQuality.strengths,
-    ...lockFiles.strengths,
-    ...runtime.strengths,
-  ]),
-],
+      ...new Set([
+        ...infrastructure.strengths,
+        ...configuration.strengths,
+        ...buildReadiness.strengths,
+        ...ciCd.strengths,
+        ...dockerQuality.strengths,
+        ...workflowQuality.strengths,
+        ...lockFiles.strengths,
+        ...runtime.strengths,
+      ]),
+    ],
 
-warnings: [
-  ...new Set([
-    ...infrastructure.warnings,
-    ...configuration.warnings,
-    ...buildReadiness.warnings,
-    ...ciCd.warnings,
-    ...dockerQuality.warnings,
-    ...workflowQuality.warnings,
-    ...lockFiles.warnings,
-    ...runtime.warnings,
-  ]),
-],
+    warnings: [
+      ...new Set([
+        ...infrastructure.warnings,
+        ...configuration.warnings,
+        ...buildReadiness.warnings,
+        ...ciCd.warnings,
+        ...dockerQuality.warnings,
+        ...workflowQuality.warnings,
+        ...lockFiles.warnings,
+        ...runtime.warnings,
+      ]),
+    ],
 
-criticalIssues: [
-  ...new Set([
-    ...infrastructure.criticalIssues,
-    ...configuration.criticalIssues,
-    ...buildReadiness.criticalIssues,
-    ...ciCd.criticalIssues,
-    ...dockerQuality.criticalIssues,
-    ...workflowQuality.criticalIssues,
-    ...lockFiles.criticalIssues,
-    ...runtime.criticalIssues,
-  ]),
-],
+    criticalIssues: [
+      ...new Set([
+        ...infrastructure.criticalIssues,
+        ...configuration.criticalIssues,
+        ...buildReadiness.criticalIssues,
+        ...ciCd.criticalIssues,
+        ...dockerQuality.criticalIssues,
+        ...workflowQuality.criticalIssues,
+        ...lockFiles.criticalIssues,
+        ...runtime.criticalIssues,
+      ]),
+    ],
 
     recommendations,
   };
@@ -539,52 +539,52 @@ async function saveDeploymentReport(repositoryId, report) {
     },
 
     update: {
-  deploymentScore: report.deploymentScore,
-  deploymentStatus: report.status,
+      deploymentScore: report.deploymentScore,
+      deploymentStatus: report.status,
 
-  infrastructureScore: report.infrastructure.score,
-  configurationScore: report.configuration.score,
-  buildReadinessScore: report.buildReadiness.score,
-  ciCdScore: report.ciCd.score,
+      infrastructureScore: report.infrastructure.score,
+      configurationScore: report.configuration.score,
+      buildReadinessScore: report.buildReadiness.score,
+      ciCdScore: report.ciCd.score,
 
-  // Phase 5B
+      // Phase 5B
 
-  platforms: report.platforms,
-  dockerQuality: report.dockerQuality,
-  workflowQuality: report.workflowQuality,
-  lockFiles: report.lockFiles,
-  runtime: report.runtime,
+      platforms: report.platforms,
+      dockerQuality: report.dockerQuality,
+      workflowQuality: report.workflowQuality,
+      lockFiles: report.lockFiles,
+      runtime: report.runtime,
 
-  strengths: report.strengths,
-  warnings: report.warnings,
-  criticalIssues: report.criticalIssues,
-  recommendations: report.recommendations,
-},
+      strengths: report.strengths,
+      warnings: report.warnings,
+      criticalIssues: report.criticalIssues,
+      recommendations: report.recommendations,
+    },
 
     create: {
-  repositoryId,
+      repositoryId,
 
-  deploymentScore: report.deploymentScore,
-  deploymentStatus: report.status,
+      deploymentScore: report.deploymentScore,
+      deploymentStatus: report.status,
 
-  infrastructureScore: report.infrastructure.score,
-  configurationScore: report.configuration.score,
-  buildReadinessScore: report.buildReadiness.score,
-  ciCdScore: report.ciCd.score,
+      infrastructureScore: report.infrastructure.score,
+      configurationScore: report.configuration.score,
+      buildReadinessScore: report.buildReadiness.score,
+      ciCdScore: report.ciCd.score,
 
-  // Phase 5B
+      // Phase 5B
 
-  platforms: report.platforms,
-  dockerQuality: report.dockerQuality,
-  workflowQuality: report.workflowQuality,
-  lockFiles: report.lockFiles,
-  runtime: report.runtime,
+      platforms: report.platforms,
+      dockerQuality: report.dockerQuality,
+      workflowQuality: report.workflowQuality,
+      lockFiles: report.lockFiles,
+      runtime: report.runtime,
 
-  strengths: report.strengths,
-  warnings: report.warnings,
-  criticalIssues: report.criticalIssues,
-  recommendations: report.recommendations,
-},
+      strengths: report.strengths,
+      warnings: report.warnings,
+      criticalIssues: report.criticalIssues,
+      recommendations: report.recommendations,
+    },
   });
 }
 
@@ -602,9 +602,7 @@ async function analyzeDeploymentPlatforms(contents) {
     platforms.push("Netlify");
   }
 
-  if (
-    hasFile("render.yaml", "render.yml")
-  ) {
+  if (hasFile("render.yaml", "render.yml")) {
     platforms.push("Render");
   }
 
@@ -616,12 +614,7 @@ async function analyzeDeploymentPlatforms(contents) {
     platforms.push("Fly.io");
   }
 
-  if (
-    hasFile(
-      "docker-compose.yml",
-      "docker-compose.yaml"
-    )
-  ) {
+  if (hasFile("docker-compose.yml", "docker-compose.yaml")) {
     platforms.push("Docker Compose");
   }
 
@@ -631,9 +624,7 @@ async function analyzeDeploymentPlatforms(contents) {
 }
 
 async function analyzeDockerfileQuality(contents) {
-  const dockerfile = contents.find(
-    (file) => file.name === "Dockerfile"
-  );
+  const dockerfile = contents.find((file) => file.name === "Dockerfile");
 
   if (!dockerfile) {
     return {
@@ -645,16 +636,13 @@ async function analyzeDockerfileQuality(contents) {
 
       strengths: [],
       warnings: [],
-      criticalIssues: [
-        "Dockerfile not found",
-      ],
+      criticalIssues: ["Dockerfile not found"],
     };
   }
 
-  const content =
-    await fileDownloader.downloadFileContent(
-      dockerfile.downloadUrl
-    );
+  const content = await fileDownloader.downloadFileContent(
+    dockerfile.downloadUrl,
+  );
 
   const dockerContent = content.toString();
 
@@ -723,17 +711,14 @@ async function analyzeDockerfileQuality(contents) {
     criticalIssues.push("No CMD or ENTRYPOINT found");
   }
 
-  const fromCount =
-    (dockerContent.match(/^FROM\s+/gim) || []).length;
+  const fromCount = (dockerContent.match(/^FROM\s+/gim) || []).length;
 
   if (fromCount > 1) {
     checks.multiStage = true;
     score += 10;
     strengths.push("Multi-stage Docker build detected");
   } else {
-    warnings.push(
-      "Dockerfile is not using a multi-stage build"
-    );
+    warnings.push("Dockerfile is not using a multi-stage build");
   }
 
   return {
@@ -749,8 +734,7 @@ async function analyzeWorkflowQuality(contents) {
   const workflowFiles = contents.filter(
     (file) =>
       file.path.startsWith(".github/workflows/") &&
-      (file.name.endsWith(".yml") ||
-        file.name.endsWith(".yaml"))
+      (file.name.endsWith(".yml") || file.name.endsWith(".yaml")),
   );
 
   if (workflowFiles.length === 0) {
@@ -763,9 +747,7 @@ async function analyzeWorkflowQuality(contents) {
 
       strengths: [],
       warnings: [],
-      criticalIssues: [
-        "No GitHub Actions workflows found",
-      ],
+      criticalIssues: ["No GitHub Actions workflows found"],
     };
   }
 
@@ -786,10 +768,9 @@ async function analyzeWorkflowQuality(contents) {
   let workflowContent = "";
 
   for (const workflow of workflowFiles) {
-    const content =
-      await fileDownloader.downloadFileContent(
-        workflow.downloadUrl
-      );
+    const content = await fileDownloader.downloadFileContent(
+      workflow.downloadUrl,
+    );
 
     workflowContent += "\n" + content.toLowerCase();
   }
@@ -815,10 +796,7 @@ async function analyzeWorkflowQuality(contents) {
     warnings.push("No test workflow detected");
   }
 
-  if (
-    workflowContent.includes("lint") ||
-    workflowContent.includes("eslint")
-  ) {
+  if (workflowContent.includes("lint") || workflowContent.includes("eslint")) {
     checks.lint = true;
     score += 20;
     strengths.push("Lint workflow detected");
@@ -848,20 +826,14 @@ async function analyzeWorkflowQuality(contents) {
 
 function analyzeLockFiles(contents) {
   const packageLock = contents.find(
-    (file) => file.name === "package-lock.json"
+    (file) => file.name === "package-lock.json",
   );
 
-  const yarnLock = contents.find(
-    (file) => file.name === "yarn.lock"
-  );
+  const yarnLock = contents.find((file) => file.name === "yarn.lock");
 
-  const pnpmLock = contents.find(
-    (file) => file.name === "pnpm-lock.yaml"
-  );
+  const pnpmLock = contents.find((file) => file.name === "pnpm-lock.yaml");
 
-  const bunLock = contents.find(
-    (file) => file.name === "bun.lockb"
-  );
+  const bunLock = contents.find((file) => file.name === "bun.lockb");
 
   let score = 0;
 
@@ -897,9 +869,7 @@ function analyzeLockFiles(contents) {
   }
 
   if (score === 0) {
-    criticalIssues.push(
-      "No dependency lock file found"
-    );
+    criticalIssues.push("No dependency lock file found");
   }
 
   return {
@@ -912,29 +882,19 @@ function analyzeLockFiles(contents) {
 }
 
 function analyzeRuntimeConfiguration(contents) {
-  const nvmrc = contents.find(
-    (file) => file.name === ".nvmrc"
-  );
+  const nvmrc = contents.find((file) => file.name === ".nvmrc");
 
-  const nodeVersion = contents.find(
-    (file) => file.name === ".node-version"
-  );
+  const nodeVersion = contents.find((file) => file.name === ".node-version");
 
   const pythonVersion = contents.find(
-    (file) => file.name === ".python-version"
+    (file) => file.name === ".python-version",
   );
 
-  const javaVersion = contents.find(
-    (file) => file.name === ".java-version"
-  );
+  const javaVersion = contents.find((file) => file.name === ".java-version");
 
-  const rubyVersion = contents.find(
-    (file) => file.name === ".ruby-version"
-  );
+  const rubyVersion = contents.find((file) => file.name === ".ruby-version");
 
-  const toolVersions = contents.find(
-    (file) => file.name === ".tool-versions"
-  );
+  const toolVersions = contents.find((file) => file.name === ".tool-versions");
 
   let score = 0;
 
@@ -981,9 +941,7 @@ function analyzeRuntimeConfiguration(contents) {
   }
 
   if (score === 0) {
-    warnings.push(
-      "No runtime version configuration found"
-    );
+    warnings.push("No runtime version configuration found");
   }
 
   return {
@@ -1006,5 +964,5 @@ module.exports = {
   analyzeDockerfileQuality,
   analyzeWorkflowQuality,
   analyzeLockFiles,
-  analyzeRuntimeConfiguration
+  analyzeRuntimeConfiguration,
 };

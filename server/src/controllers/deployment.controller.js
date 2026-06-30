@@ -20,11 +20,10 @@ async function analyzeDeployment(req, res) {
       });
     }
 
-    const report =
-      await deploymentService.analyzeRepositoryDeployment(
-        repository,
-        repository.user.githubToken
-      );
+    const report = await deploymentService.analyzeRepositoryDeployment(
+      repository,
+      repository.user.githubToken,
+    );
 
     return res.json({
       success: true,
@@ -42,12 +41,11 @@ async function analyzeDeployment(req, res) {
 
 async function getDeploymentReport(req, res) {
   try {
-    const report =
-      await prisma.repositoryDeployment.findUnique({
-        where: {
-          repositoryId: req.params.id,
-        },
-      });
+    const report = await prisma.repositoryDeployment.findUnique({
+      where: {
+        repositoryId: req.params.id,
+      },
+    });
 
     if (!report) {
       return res.status(404).json({

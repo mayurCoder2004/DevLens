@@ -18,13 +18,9 @@ class RepositoryScanner {
           throw error;
         }
 
-        console.log(
-          `Retrying request (${attempt}/${retries}) -> ${url}`
-        );
+        console.log(`Retrying request (${attempt}/${retries}) -> ${url}`);
 
-        await new Promise((resolve) =>
-          setTimeout(resolve, 1000)
-        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
   }
@@ -39,33 +35,24 @@ class RepositoryScanner {
     await this.scanDirectory(
       `https://api.github.com/repos/${owner}/${repo}/contents`,
       headers,
-      files
+      files,
     );
 
     return files;
   }
 
   async scanDirectory(url, headers, files) {
-    const response = await this.fetchWithRetry(
-      url,
-      headers
-    );
+    const response = await this.fetchWithRetry(url, headers);
 
     const contents = response.data;
 
     for (const item of contents) {
       if (item.type === "file") {
-        const validExtensions = [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx",
-        ];
+        const validExtensions = [".js", ".jsx", ".ts", ".tsx"];
 
-        const isCodeFile =
-          validExtensions.some((ext) =>
-            item.name.endsWith(ext)
-          );
+        const isCodeFile = validExtensions.some((ext) =>
+          item.name.endsWith(ext),
+        );
 
         if (isCodeFile) {
           files.push({
@@ -77,20 +64,12 @@ class RepositoryScanner {
       }
 
       if (item.type === "dir") {
-        await this.scanDirectory(
-          item.url,
-          headers,
-          files
-        );
+        await this.scanDirectory(item.url, headers, files);
       }
     }
   }
 
-  async getRepositoryContents(
-    owner,
-    repo,
-    githubToken
-  ) {
+  async getRepositoryContents(owner, repo, githubToken) {
     const headers = {
       Authorization: `Bearer ${githubToken}`,
     };
@@ -100,21 +79,14 @@ class RepositoryScanner {
     await this.scanAllContents(
       `https://api.github.com/repos/${owner}/${repo}/contents`,
       headers,
-      contents
+      contents,
     );
 
     return contents;
   }
 
-  async scanAllContents(
-    url,
-    headers,
-    contents
-  ) {
-    const response = await this.fetchWithRetry(
-      url,
-      headers
-    );
+  async scanAllContents(url, headers, contents) {
+    const response = await this.fetchWithRetry(url, headers);
 
     const items = response.data;
 
@@ -128,11 +100,7 @@ class RepositoryScanner {
       }
 
       if (item.type === "dir") {
-        await this.scanAllContents(
-          item.url,
-          headers,
-          contents
-        );
+        await this.scanAllContents(item.url, headers, contents);
       }
     }
   }

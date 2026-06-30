@@ -4,10 +4,7 @@ const analysisQueue = require("../queues/analysis.queue");
 
 class JobStatusService {
   async getJobStatus(jobId) {
-    const job = await Job.fromId(
-      analysisQueue,
-      jobId
-    );
+    const job = await Job.fromId(analysisQueue, jobId);
 
     if (!job) {
       throw new Error("Job not found");

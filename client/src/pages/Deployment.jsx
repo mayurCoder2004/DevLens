@@ -963,7 +963,6 @@ export default function Deployment() {
             emptyText="No recommendations found."
           />
         </section>
-
       </main>
     </div>
   );

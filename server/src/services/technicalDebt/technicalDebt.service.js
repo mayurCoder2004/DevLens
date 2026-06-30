@@ -11,7 +11,7 @@ async function detectLargeFiles(files) {
   for (const file of files) {
     try {
       const content = await fileDownloader.downloadFileContent(
-        file.downloadUrl
+        file.downloadUrl,
       );
 
       const lines = content.split("\n").length;
@@ -23,10 +23,7 @@ async function detectLargeFiles(files) {
         });
       }
     } catch (error) {
-      console.error(
-        `Failed to analyze ${file.path}`,
-        error.message
-      );
+      console.error(`Failed to analyze ${file.path}`, error.message);
     }
   }
 
@@ -41,22 +38,14 @@ function detectDeadFiles(graph) {
   }
 
   for (const edge of graph.edges) {
-    incomingCount[edge.target] =
-      (incomingCount[edge.target] || 0) + 1;
+    incomingCount[edge.target] = (incomingCount[edge.target] || 0) + 1;
   }
 
-  const entryFiles = [
-    "main.jsx",
-    "App.jsx",
-    "server.js",
-    "index.js",
-  ];
+  const entryFiles = ["main.jsx", "App.jsx", "server.js", "index.js"];
 
   return graph.nodes
     .filter(
-      (node) =>
-        incomingCount[node.id] === 0 &&
-        !entryFiles.includes(node.id)
+      (node) => incomingCount[node.id] === 0 && !entryFiles.includes(node.id),
     )
     .map((node) => node.id);
 }
@@ -116,13 +105,8 @@ function calculateTechnicalDebtScore({
   return Math.max(0, score);
 }
 
-function calculateMaintainabilityScore(
-  technicalDebtScore
-) {
-  return Math.min(
-    100,
-    technicalDebtScore + 20
-  );
+function calculateMaintainabilityScore(technicalDebtScore) {
+  return Math.min(100, technicalDebtScore + 20);
 }
 
 function generateRecommendations({
@@ -135,83 +119,64 @@ function generateRecommendations({
 
   if (largeFiles.length > 0) {
     recommendations.push(
-      "Split large files into smaller modules and components"
+      "Split large files into smaller modules and components",
     );
   }
 
   if (deadFiles.length > 0) {
-    recommendations.push(
-      "Remove unused or dead files from the codebase"
-    );
+    recommendations.push("Remove unused or dead files from the codebase");
   }
 
   if (deepChains.length > 0) {
     recommendations.push(
-      "Reduce dependency depth by simplifying module relationships"
+      "Reduce dependency depth by simplifying module relationships",
     );
   }
 
   if (circularDependencyCount > 0) {
     recommendations.push(
-      "Refactor circular dependencies to improve maintainability"
+      "Refactor circular dependencies to improve maintainability",
     );
   }
 
   return recommendations;
 }
 
-async function analyzeTechnicalDebt(
-  owner,
-  repo,
-  githubToken
-) {
-  const files =
-    await repositoryScanner.getAllRepositoryFiles(
-      owner,
-      repo,
-      githubToken
-    );
+async function analyzeTechnicalDebt(owner, repo, githubToken) {
+  const files = await repositoryScanner.getAllRepositoryFiles(
+    owner,
+    repo,
+    githubToken,
+  );
 
-  const graph =
-    await architectureAnalyzer.analyze(
-      owner,
-      repo,
-      githubToken
-    );
+  const graph = await architectureAnalyzer.analyze(owner, repo, githubToken);
 
-  const largeFiles =
-    await detectLargeFiles(files);
+  const largeFiles = await detectLargeFiles(files);
 
-  const deadFiles =
-    detectDeadFiles(graph);
+  const deadFiles = detectDeadFiles(graph);
 
-  const deepChains =
-    detectDeepDependencyChains(graph);
+  const deepChains = detectDeepDependencyChains(graph);
 
   // Phase 3 currently only stores a boolean
   // We'll improve this later if needed
   const circularDependencyCount = 0;
 
-  const technicalDebtScore =
-    calculateTechnicalDebtScore({
-      largeFiles,
-      deadFiles,
-      deepChains,
-      circularDependencyCount,
-    });
+  const technicalDebtScore = calculateTechnicalDebtScore({
+    largeFiles,
+    deadFiles,
+    deepChains,
+    circularDependencyCount,
+  });
 
   const maintainabilityScore =
-    calculateMaintainabilityScore(
-      technicalDebtScore
-    );
+    calculateMaintainabilityScore(technicalDebtScore);
 
-  const recommendations =
-    generateRecommendations({
-      largeFiles,
-      deadFiles,
-      deepChains,
-      circularDependencyCount,
-    });
+  const recommendations = generateRecommendations({
+    largeFiles,
+    deadFiles,
+    deepChains,
+    circularDependencyCount,
+  });
 
   return {
     technicalDebtScore,
@@ -220,22 +185,17 @@ async function analyzeTechnicalDebt(
     largeFileCount: largeFiles.length,
     deadFileCount: deadFiles.length,
     circularDependencyCount,
-    deepDependencyChainCount:
-      deepChains.length,
+    deepDependencyChainCount: deepChains.length,
 
     largeFiles,
     deadFiles,
-    deepDependencyChains:
-      deepChains,
+    deepDependencyChains: deepChains,
 
     recommendations,
   };
 }
 
-async function saveTechnicalDebt(
-  repositoryId,
-  report
-) {
+async function saveTechnicalDebt(repositoryId, report) {
   return prisma.repositoryTechnicalDebt.upsert({
     where: {
       repositoryId,
@@ -246,46 +206,32 @@ async function saveTechnicalDebt(
 
       largeFileCount: report.largeFileCount,
       deadFileCount: report.deadFileCount,
-      circularDependencyCount:
-        report.circularDependencyCount,
-      deepDependencyChainCount:
-        report.deepDependencyChainCount,
+      circularDependencyCount: report.circularDependencyCount,
+      deepDependencyChainCount: report.deepDependencyChainCount,
 
       largeFiles: report.largeFiles,
       deadFiles: report.deadFiles,
-      deepDependencyChains:
-        report.deepDependencyChains,
+      deepDependencyChains: report.deepDependencyChains,
 
-      recommendations:
-        report.recommendations,
+      recommendations: report.recommendations,
     },
 
     create: {
       repositoryId,
 
-      technicalDebtScore:
-        report.technicalDebtScore,
-      maintainabilityScore:
-        report.maintainabilityScore,
+      technicalDebtScore: report.technicalDebtScore,
+      maintainabilityScore: report.maintainabilityScore,
 
-      largeFileCount:
-        report.largeFileCount,
-      deadFileCount:
-        report.deadFileCount,
-      circularDependencyCount:
-        report.circularDependencyCount,
-      deepDependencyChainCount:
-        report.deepDependencyChainCount,
+      largeFileCount: report.largeFileCount,
+      deadFileCount: report.deadFileCount,
+      circularDependencyCount: report.circularDependencyCount,
+      deepDependencyChainCount: report.deepDependencyChainCount,
 
-      largeFiles:
-        report.largeFiles,
-      deadFiles:
-        report.deadFiles,
-      deepDependencyChains:
-        report.deepDependencyChains,
+      largeFiles: report.largeFiles,
+      deadFiles: report.deadFiles,
+      deepDependencyChains: report.deepDependencyChains,
 
-      recommendations:
-        report.recommendations,
+      recommendations: report.recommendations,
     },
   });
 }
@@ -307,13 +253,10 @@ async function analyzeAndStore(repositoryId) {
   const report = await analyzeTechnicalDebt(
     repository.owner,
     repository.name,
-    repository.user.githubToken
+    repository.user.githubToken,
   );
 
-  const saved = await saveTechnicalDebt(
-    repositoryId,
-    report
-  );
+  const saved = await saveTechnicalDebt(repositoryId, report);
 
   return saved;
 }

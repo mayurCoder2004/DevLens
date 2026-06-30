@@ -10,19 +10,18 @@ const analysisWorker = new Worker(
     console.log("Job ID:", job.id);
     console.log("Repository ID:", job.data.repositoryId);
 
-    const result =
-        await repositoryAnalysisService.analyzeRepository(
-            job.data.repositoryId
-        );
+    const result = await repositoryAnalysisService.analyzeRepository(
+      job.data.repositoryId,
+    );
 
     console.log("Repository analysis completed.");
     console.log("==================================");
 
     return result;
-},
+  },
   {
     connection,
-  }
+  },
 );
 
 analysisWorker.on("completed", (job) => {

@@ -6,10 +6,6 @@ const authMiddleware = require("../middleware/auth.middleware");
 
 const jobStatusController = require("../controllers/jobStatus.controller");
 
-router.get(
-  "/:jobId",
-  authMiddleware,
-  jobStatusController.getJobStatus
-);
+router.get("/:jobId", authMiddleware, jobStatusController.getJobStatus);
 
 module.exports = router;

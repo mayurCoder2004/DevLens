@@ -1,19 +1,16 @@
 const prisma = require("../config/prisma");
-const technicalDebtService = require(
-  "../services/technicalDebt/technicalDebt.service"
-);
+const technicalDebtService = require("../services/technicalDebt/technicalDebt.service");
 
 class TechnicalDebtController {
   async analyze(req, res) {
     try {
       const { repositoryId } = req.params;
 
-      const repository =
-        await prisma.repository.findUnique({
-          where: {
-            id: repositoryId,
-          },
-        });
+      const repository = await prisma.repository.findUnique({
+        where: {
+          id: repositoryId,
+        },
+      });
 
       if (!repository) {
         return res.status(404).json({
@@ -22,24 +19,19 @@ class TechnicalDebtController {
         });
       }
 
-      const user =
-        await prisma.user.findUnique({
-          where: {
-            id: repository.userId,
-          },
-        });
+      const user = await prisma.user.findUnique({
+        where: {
+          id: repository.userId,
+        },
+      });
 
-      const report =
-        await technicalDebtService.analyzeTechnicalDebt(
-          repository.owner,
-          repository.name,
-          user.githubToken
-        );
-
-      await technicalDebtService.saveTechnicalDebt(
-        repositoryId,
-        report
+      const report = await technicalDebtService.analyzeTechnicalDebt(
+        repository.owner,
+        repository.name,
+        user.githubToken,
       );
+
+      await technicalDebtService.saveTechnicalDebt(repositoryId, report);
 
       res.json({
         success: true,
@@ -50,8 +42,7 @@ class TechnicalDebtController {
 
       res.status(500).json({
         success: false,
-        message:
-          "Technical debt analysis failed",
+        message: "Technical debt analysis failed",
       });
     }
   }
@@ -60,20 +51,16 @@ class TechnicalDebtController {
     try {
       const { repositoryId } = req.params;
 
-      const debt =
-        await prisma.repositoryTechnicalDebt.findUnique(
-          {
-            where: {
-              repositoryId,
-            },
-          }
-        );
+      const debt = await prisma.repositoryTechnicalDebt.findUnique({
+        where: {
+          repositoryId,
+        },
+      });
 
       if (!debt) {
         return res.status(404).json({
           success: false,
-          message:
-            "Technical debt analysis not found",
+          message: "Technical debt analysis not found",
         });
       }
 
@@ -86,12 +73,10 @@ class TechnicalDebtController {
 
       res.status(500).json({
         success: false,
-        message:
-          "Failed to fetch technical debt analysis",
+        message: "Failed to fetch technical debt analysis",
       });
     }
   }
 }
 
-module.exports =
-  new TechnicalDebtController();
+module.exports = new TechnicalDebtController();

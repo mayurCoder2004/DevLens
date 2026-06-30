@@ -56,37 +56,37 @@ class AnalyticsService {
   }
 
   async analyzeAndStore(repositoryId) {
-  const repository = await prisma.repository.findUnique({
-    where: {
-      id: repositoryId,
-    },
-    include: {
-      user: true,
-    },
-  });
+    const repository = await prisma.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        user: true,
+      },
+    });
 
-  if (!repository) {
-    throw new Error("Repository not found");
+    if (!repository) {
+      throw new Error("Repository not found");
+    }
+
+    const analytics = await this.getRepositoryAnalytics(
+      repository,
+      repository.user.githubToken,
+    );
+
+    const saved = await prisma.repositoryAnalytics.upsert({
+      where: {
+        repositoryId,
+      },
+      update: analytics,
+      create: {
+        repositoryId,
+        ...analytics,
+      },
+    });
+
+    return saved;
   }
-
-  const analytics = await this.getRepositoryAnalytics(
-    repository,
-    repository.user.githubToken
-  );
-
-  const saved = await prisma.repositoryAnalytics.upsert({
-    where: {
-      repositoryId,
-    },
-    update: analytics,
-    create: {
-      repositoryId,
-      ...analytics,
-    },
-  });
-
-  return saved;
-}
 }
 
 module.exports = new AnalyticsService();

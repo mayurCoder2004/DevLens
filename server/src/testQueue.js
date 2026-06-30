@@ -6,8 +6,7 @@ async function testQueue() {
   const job = await analysisQueue.add(
     "analyze-repository",
     {
-      repositoryId: "repo-123",
-      userId: "user-456",
+      repositoryId: "cmqfi2elj0011uzf4acrjvfyf",
     }
   );
 

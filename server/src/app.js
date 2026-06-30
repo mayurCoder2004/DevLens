@@ -14,6 +14,8 @@ const technicalDebtRoutes = require(
   "./routes/technicalDebt.routes"
 );
 const deploymentRoutes = require("./routes/deployment.routes");
+const analysisRoutes = require("./routes/analysis.routes");
+const jobStatusRoutes = require("./routes/jobStatus.routes");
 
 const app = express();
 
@@ -51,5 +53,9 @@ app.use(
   "/api/technical-debt",
   technicalDebtRoutes
 );
+
+app.use("/api/analysis", analysisRoutes);
+
+app.use("/api/jobs", jobStatusRoutes);
 
 module.exports = app;

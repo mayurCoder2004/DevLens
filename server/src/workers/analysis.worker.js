@@ -1,25 +1,25 @@
 const { Worker } = require("bullmq");
 const connection = require("../config/redis");
+const repositoryAnalysisService = require("../services/repositoryAnalysis.service");
 
 const analysisWorker = new Worker(
   "repository-analysis",
   async (job) => {
     console.log("==================================");
-    console.log("Processing Job");
+    console.log("Processing Repository Analysis Job");
     console.log("Job ID:", job.id);
-    console.log("Job Name:", job.name);
-    console.log("Job Data:", job.data);
+    console.log("Repository ID:", job.data.repositoryId);
 
-    // Simulate a long-running task
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    const result =
+        await repositoryAnalysisService.analyzeRepository(
+            job.data.repositoryId
+        );
 
-    console.log("Job Completed!");
+    console.log("Repository analysis completed.");
     console.log("==================================");
 
-    return {
-      success: true,
-    };
-  },
+    return result;
+},
   {
     connection,
   }

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const prisma = require("../config/prisma");
 
 class AnalyticsService {
   async getRepositoryAnalytics(repo, githubToken) {
@@ -53,6 +54,39 @@ class AnalyticsService {
       lastCommitDate,
     };
   }
+
+  async analyzeAndStore(repositoryId) {
+  const repository = await prisma.repository.findUnique({
+    where: {
+      id: repositoryId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!repository) {
+    throw new Error("Repository not found");
+  }
+
+  const analytics = await this.getRepositoryAnalytics(
+    repository,
+    repository.user.githubToken
+  );
+
+  const saved = await prisma.repositoryAnalytics.upsert({
+    where: {
+      repositoryId,
+    },
+    update: analytics,
+    create: {
+      repositoryId,
+      ...analytics,
+    },
+  });
+
+  return saved;
+}
 }
 
 module.exports = new AnalyticsService();

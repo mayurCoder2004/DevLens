@@ -290,6 +290,34 @@ async function saveTechnicalDebt(
   });
 }
 
+async function analyzeAndStore(repositoryId) {
+  const repository = await prisma.repository.findUnique({
+    where: {
+      id: repositoryId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!repository) {
+    throw new Error("Repository not found");
+  }
+
+  const report = await analyzeTechnicalDebt(
+    repository.owner,
+    repository.name,
+    repository.user.githubToken
+  );
+
+  const saved = await saveTechnicalDebt(
+    repositoryId,
+    report
+  );
+
+  return saved;
+}
+
 module.exports = {
   detectLargeFiles,
   detectDeadFiles,
@@ -301,5 +329,6 @@ module.exports = {
   generateRecommendations,
 
   analyzeTechnicalDebt,
-  saveTechnicalDebt
+  saveTechnicalDebt,
+  analyzeAndStore,
 };

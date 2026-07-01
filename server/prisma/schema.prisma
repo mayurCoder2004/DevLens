@@ -44,6 +44,7 @@ model Repository {
   architecture  RepositoryArchitecture?
   technicalDebt RepositoryTechnicalDebt?
   deployment RepositoryDeployment?
+  pullRequestAnalyses PullRequestAnalysis[]
 
   createdAt DateTime @default(now())
 }
@@ -173,4 +174,29 @@ model RepositoryDeployment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PullRequestAnalysis {
+  id                     String   @id @default(cuid())
+
+  repositoryId           String
+  repository             Repository @relation(fields: [repositoryId], references: [id])
+
+  prNumber               Int
+  title                  String
+  riskScore              Int
+  riskLevel              String
+
+  changedFiles           Json
+  criticalFiles          Json
+
+  hasDependencyChanges   Boolean @default(false)
+  hasConfigurationChanges Boolean @default(false)
+
+  recommendations        Json
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@unique([repositoryId, prNumber])
 }

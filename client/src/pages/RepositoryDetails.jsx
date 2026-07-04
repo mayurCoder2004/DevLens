@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import PullRequestAnalysisCard from "../components/pullRequest/PullRequestAnalysisCard";
 
 const RepositoryDetails = () => {
   const { id } = useParams();
@@ -99,6 +100,9 @@ const RepositoryDetails = () => {
           Deployment Intelligence
         </button>
       </div>
+      <div className="mt-8">
+  <PullRequestAnalysisCard repositoryId={id} />
+</div>
     </div>
   );
 };

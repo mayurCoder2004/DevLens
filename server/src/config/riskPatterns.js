@@ -164,9 +164,68 @@ const DOCUMENTATION_FILES = [
   "documentation/",
 ];
 
+const RISK_WEIGHTS = {
+  critical: {
+    perFile: 10,
+    max: 40,
+  },
+
+  infrastructure: {
+    perFile: 10,
+    max: 20,
+  },
+
+  dependency: {
+    perFile: 5,
+    max: 15,
+  },
+
+  fileCount: {
+    thresholds: [
+      { min: 50, score: 15 },
+      { min: 20, score: 10 },
+      { min: 10, score: 5 },
+    ],
+  },
+
+  documentation: {
+    reductionPerFile: 2,
+    maxReduction: 10,
+  },
+};
+
+const RISK_LEVELS = [
+  {
+    min: 75,
+    label: "Critical",
+    color: "red",
+    requiresReview: true,
+  },
+  {
+    min: 50,
+    label: "High",
+    color: "orange",
+    requiresReview: true,
+  },
+  {
+    min: 25,
+    label: "Medium",
+    color: "yellow",
+    requiresReview: true,
+  },
+  {
+    min: 0,
+    label: "Low",
+    color: "green",
+    requiresReview: false,
+  },
+];
+
 module.exports = {
   UNIVERSAL_PATTERNS,
   TECHNOLOGY_RULES,
   INFRASTRUCTURE_FILES,
   DOCUMENTATION_FILES,
+  RISK_WEIGHTS,
+  RISK_LEVELS
 };

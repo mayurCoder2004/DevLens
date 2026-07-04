@@ -3,6 +3,7 @@ const {
   TECHNOLOGY_RULES,
   INFRASTRUCTURE_FILES,
   DOCUMENTATION_FILES,
+  RISK_WEIGHTS
 } = require("../config/riskPatterns");
 
 /**
@@ -89,6 +90,8 @@ const classifyChangedFiles = (
     result.others.push(file.filename);
   });
 
+  
+
   return {
     summary: {
       totalFiles: changedFiles.length,
@@ -103,7 +106,70 @@ const classifyChangedFiles = (
   };
 };
 
+const calculateRiskScore = (classification) => {
+  const { summary } = classification;
+
+  const breakdown = {
+    critical: Math.min(
+      summary.criticalCount * RISK_WEIGHTS.critical.perFile,
+      RISK_WEIGHTS.critical.max
+    ),
+
+    infrastructure: Math.min(
+      summary.infrastructureCount * RISK_WEIGHTS.infrastructure.perFile,
+      RISK_WEIGHTS.infrastructure.max
+    ),
+
+    dependency: Math.min(
+      summary.dependencyCount * RISK_WEIGHTS.dependency.perFile,
+      RISK_WEIGHTS.dependency.max
+    ),
+
+    fileCount: 0,
+
+    documentation: -Math.min(
+      summary.documentationCount *
+        RISK_WEIGHTS.documentation.reductionPerFile,
+      RISK_WEIGHTS.documentation.maxReduction
+    ),
+  };
+
+  // File count contribution
+  for (const threshold of RISK_WEIGHTS.fileCount.thresholds) {
+    if (summary.totalFiles >= threshold.min) {
+      breakdown.fileCount = threshold.score;
+      break;
+    }
+  }
+
+  let score =
+    breakdown.critical +
+    breakdown.infrastructure +
+    breakdown.dependency +
+    breakdown.fileCount +
+    breakdown.documentation;
+
+  score = Math.max(0, Math.min(score, 100));
+
+  let level = "Low";
+
+  if (score >= 75) {
+    level = "Critical";
+  } else if (score >= 50) {
+    level = "High";
+  } else if (score >= 25) {
+    level = "Medium";
+  }
+
+  return {
+    score,
+    level,
+    breakdown,
+  };
+};
+
 module.exports = {
   classifyChangedFiles,
   getDependencyFiles,
+  calculateRiskScore,
 };

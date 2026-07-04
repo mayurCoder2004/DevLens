@@ -7,7 +7,7 @@ const savePullRequestAnalysis = async ({
   analysis,
 }) => {
   const analysisData = {
-    title,
+    title: analysis.pullRequest.title,
 
     // Risk Analysis
     riskScore: analysis.risk.score,

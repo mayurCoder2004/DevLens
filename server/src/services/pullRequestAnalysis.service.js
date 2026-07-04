@@ -40,12 +40,20 @@ const analyzePullRequest = async ({
 }) => {
   try {
     // Fetch changed files from GitHub
-    const files = await githubService.getPullRequestFiles(
-      owner,
-      repo,
-      prNumber,
-      githubToken
-    );
+    const [pullRequest, files] = await Promise.all([
+  githubService.getPullRequest(
+    owner,
+    repo,
+    prNumber,
+    githubToken
+  ),
+  githubService.getPullRequestFiles(
+    owner,
+    repo,
+    prNumber,
+    githubToken
+  ),
+]);
 
     // Build summary
     const summary = buildPullRequestSummary(files);
@@ -67,10 +75,18 @@ const analyzePullRequest = async ({
 
     return {
       pullRequest: {
-        owner,
-        repo,
-        prNumber,
-      },
+  number: pullRequest.number,
+  title: pullRequest.title,
+  state: pullRequest.state,
+  author: pullRequest.user?.login,
+  authorAvatar: pullRequest.user?.avatar_url,
+  baseBranch: pullRequest.base?.ref,
+  headBranch: pullRequest.head?.ref,
+  createdAt: pullRequest.created_at,
+  updatedAt: pullRequest.updated_at,
+  merged: pullRequest.merged,
+  url: pullRequest.html_url,
+},
 
       summary,
 

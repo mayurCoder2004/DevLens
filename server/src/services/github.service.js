@@ -76,9 +76,38 @@ const getPullRequestFiles = async (
   });
 };
 
+const getPullRequest = async (
+  owner,
+  repo,
+  prNumber,
+  accessToken
+) => {
+  try {
+    const response = await axios.get(
+      `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`,
+      {
+        headers: {
+          Authorization: `token ${accessToken}`,
+          Accept: "application/vnd.github+json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching pull request:",
+      error.response?.data || error.message
+    );
+
+    throw new Error("Failed to fetch pull request.");
+  }
+};
+
 module.exports = {
   getRepositories,
   getRepositoryContents,
   getPullRequests,
   getPullRequestFiles,
+  getPullRequest
 };

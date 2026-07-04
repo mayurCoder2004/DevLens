@@ -51,16 +51,16 @@ if (Number.isNaN(prNumberInt)) {
 
     const savedAnalysis =
       await savePullRequestAnalysis({
-        repositoryId,
-        prNumber: Number(prNumber),
-        title: `Pull Request #${prNumber}`,
-        analysis,
-      });
+  repositoryId,
+  prNumber: prNumberInt,
+  title: analysis.pullRequest.title,
+  analysis,
+});
 
-    return res.json({
-      success: true,
-      data: savedAnalysis,
-    });
+return res.json({
+  success: true,
+  data: analysis,
+});
   } catch (error) {
     console.error(error);
 

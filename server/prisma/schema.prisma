@@ -177,26 +177,40 @@ model RepositoryDeployment {
 }
 
 model PullRequestAnalysis {
-  id                     String   @id @default(cuid())
+  id           String @id @default(cuid())
 
-  repositoryId           String
-  repository             Repository @relation(fields: [repositoryId], references: [id])
+  repositoryId String
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 
-  prNumber               Int
-  title                  String
-  riskScore              Int
-  riskLevel              String
+  // Pull Request Details
+  prNumber Int
+  title    String
 
-  changedFiles           Json
-  criticalFiles          Json
+  // Risk Analysis
+  riskScore Int
+  riskLevel String
 
-  hasDependencyChanges   Boolean @default(false)
+  riskBreakdown Json
+
+  // Pull Request Statistics
+  totalFiles  Int
+  additions   Int
+  deletions   Int
+  totalChanges Int
+
+  // File Analysis
+  changedFiles  Json
+  criticalFiles Json
+
+  // Flags
+  hasDependencyChanges    Boolean @default(false)
   hasConfigurationChanges Boolean @default(false)
 
-  recommendations        Json
+  // Recommendations
+  recommendations Json
 
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([repositoryId, prNumber])
 }

@@ -221,11 +221,40 @@ const RISK_LEVELS = [
   },
 ];
 
+const RECOMMENDATION_RULES = {
+  critical: [
+    "Review critical application components carefully before merging.",
+    "Request review from a senior developer for critical code changes.",
+  ],
+
+  dependency: [
+    "Verify dependency compatibility and run dependency security checks.",
+  ],
+
+  infrastructure: [
+    "Validate infrastructure changes in a staging environment before deployment.",
+  ],
+
+  highRisk: [
+    "Execute a full regression test suite before merging.",
+    "Ensure all CI/CD checks pass successfully.",
+  ],
+
+  documentationOnly: [
+    "Documentation-only changes detected. Minimal engineering risk.",
+  ],
+
+  default: [
+    "No major risks detected. Follow the standard review process.",
+  ],
+};
+
 module.exports = {
   UNIVERSAL_PATTERNS,
   TECHNOLOGY_RULES,
   INFRASTRUCTURE_FILES,
   DOCUMENTATION_FILES,
   RISK_WEIGHTS,
-  RISK_LEVELS
+  RISK_LEVELS,
+  RECOMMENDATION_RULES
 };

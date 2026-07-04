@@ -168,8 +168,78 @@ const calculateRiskScore = (classification) => {
   };
 };
 
+const generateRecommendations = (classification, riskAnalysis) => {
+  const recommendations = [];
+
+  const { summary } = classification;
+  const { level } = riskAnalysis;
+
+  // Critical files
+  if (summary.criticalCount > 0) {
+    recommendations.push(
+      "Review critical application components carefully before merging."
+    );
+
+    recommendations.push(
+      "Request review from a senior developer for critical code changes."
+    );
+  }
+
+  // Dependency changes
+  if (summary.dependencyCount > 0) {
+    recommendations.push(
+      "Verify dependency compatibility and run dependency security checks."
+    );
+  }
+
+  // Infrastructure changes
+  if (summary.infrastructureCount > 0) {
+    recommendations.push(
+      "Validate infrastructure changes in a staging environment before deployment."
+    );
+  }
+
+  // Large pull requests
+  if (summary.totalFiles >= 20) {
+    recommendations.push(
+      "Consider splitting this pull request into smaller, focused changes."
+    );
+  }
+
+  // Documentation-only changes
+  if (
+    summary.documentationCount === summary.totalFiles &&
+    summary.totalFiles > 0
+  ) {
+    recommendations.push(
+      "Documentation-only changes detected. Minimal engineering risk."
+    );
+  }
+
+  // High-risk PRs
+  if (level === "High" || level === "Critical") {
+    recommendations.push(
+      "Execute a full regression test suite before merging."
+    );
+
+    recommendations.push(
+      "Ensure all CI/CD checks pass successfully."
+    );
+  }
+
+  // Default recommendation
+  if (recommendations.length === 0) {
+    recommendations.push(
+      "No major risks detected. Follow the standard review process."
+    );
+  }
+
+  return recommendations;
+};
+
 module.exports = {
   classifyChangedFiles,
   getDependencyFiles,
   calculateRiskScore,
+  generateRecommendations,
 };

@@ -173,6 +173,10 @@ const engineeringHealthService = {
   engineeringScore,
   status,
 
+  analysis: {
+  generatedAt: new Date(),
+},
+
   scores: {
     repositoryHealth:
       repository.health?.healthScore ?? null,

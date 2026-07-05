@@ -15,6 +15,7 @@ const deploymentRoutes = require("./routes/deployment.routes");
 const analysisRoutes = require("./routes/analysis.routes");
 const jobStatusRoutes = require("./routes/jobStatus.routes");
 const pullRequestRoutes = require("./routes/pullRequest.routes");
+const engineeringHealthRoutes = require("./routes/engineeringHealth.routes");
 
 const app = express();
 
@@ -55,5 +56,7 @@ app.use("/api/analysis", analysisRoutes);
 app.use("/api/jobs", jobStatusRoutes);
 
 app.use("/api/pull-requests", pullRequestRoutes);
+
+app.use("/api/engineering-health", engineeringHealthRoutes);
 
 module.exports = app;

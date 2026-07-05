@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .engineering-health-hero {
+    background-image: linear-gradient(
+      to right,
+      var(--color-slate-950),
+      var(--color-slate-900),
+      var(--color-blue-900)
+    );
+  }
+}

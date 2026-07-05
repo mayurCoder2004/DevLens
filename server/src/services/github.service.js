@@ -21,10 +21,7 @@ const makeGitHubRequest = async ({
 
     return response.data;
   } catch (error) {
-    console.error(
-      "GitHub API Error:",
-      error.response?.data || error.message
-    );
+    console.error("GitHub API Error:", error.response?.data || error.message);
 
     throw new Error("GitHub API request failed.");
   }
@@ -42,46 +39,28 @@ const getRepositories = async (githubToken) => {
   });
 };
 
-const getRepositoryContents = async (
-  owner,
-  repo,
-  githubToken
-) => {
+const getRepositoryContents = async (owner, repo, githubToken) => {
   return makeGitHubRequest({
     url: `https://api.github.com/repos/${owner}/${repo}/contents`,
     githubToken,
   });
 };
 
-const getPullRequests = async (
-  owner,
-  repo,
-  githubToken
-) => {
+const getPullRequests = async (owner, repo, githubToken) => {
   return makeGitHubRequest({
     url: `https://api.github.com/repos/${owner}/${repo}/pulls`,
     githubToken,
   });
 };
 
-const getPullRequestFiles = async (
-  owner,
-  repo,
-  prNumber,
-  githubToken
-) => {
+const getPullRequestFiles = async (owner, repo, prNumber, githubToken) => {
   return makeGitHubRequest({
     url: `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}/files`,
     githubToken,
   });
 };
 
-const getPullRequest = async (
-  owner,
-  repo,
-  prNumber,
-  accessToken
-) => {
+const getPullRequest = async (owner, repo, prNumber, accessToken) => {
   try {
     const response = await axios.get(
       `https://api.github.com/repos/${owner}/${repo}/pulls/${prNumber}`,
@@ -90,14 +69,14 @@ const getPullRequest = async (
           Authorization: `token ${accessToken}`,
           Accept: "application/vnd.github+json",
         },
-      }
+      },
     );
 
     return response.data;
   } catch (error) {
     console.error(
       "Error fetching pull request:",
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
 
     throw new Error("Failed to fetch pull request.");
@@ -109,5 +88,5 @@ module.exports = {
   getRepositoryContents,
   getPullRequests,
   getPullRequestFiles,
-  getPullRequest
+  getPullRequest,
 };

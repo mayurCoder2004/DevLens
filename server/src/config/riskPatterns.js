@@ -76,54 +76,31 @@ const TECHNOLOGY_RULES = {
   },
 
   Java: {
-    dependencyFiles: [
-      "pom.xml",
-      "build.gradle",
-      "build.gradle.kts",
-    ],
+    dependencyFiles: ["pom.xml", "build.gradle", "build.gradle.kts"],
   },
 
   ".NET": {
-    dependencyFiles: [
-      ".csproj",
-      ".sln",
-      "packages.config",
-    ],
+    dependencyFiles: [".csproj", ".sln", "packages.config"],
   },
 
   Go: {
-    dependencyFiles: [
-      "go.mod",
-      "go.sum",
-    ],
+    dependencyFiles: ["go.mod", "go.sum"],
   },
 
   Rust: {
-    dependencyFiles: [
-      "Cargo.toml",
-      "Cargo.lock",
-    ],
+    dependencyFiles: ["Cargo.toml", "Cargo.lock"],
   },
 
   PHP: {
-    dependencyFiles: [
-      "composer.json",
-      "composer.lock",
-    ],
+    dependencyFiles: ["composer.json", "composer.lock"],
   },
 
   Ruby: {
-    dependencyFiles: [
-      "Gemfile",
-      "Gemfile.lock",
-    ],
+    dependencyFiles: ["Gemfile", "Gemfile.lock"],
   },
 
   Flutter: {
-    dependencyFiles: [
-      "pubspec.yaml",
-      "pubspec.lock",
-    ],
+    dependencyFiles: ["pubspec.yaml", "pubspec.lock"],
   },
 };
 
@@ -244,9 +221,7 @@ const RECOMMENDATION_RULES = {
     "Documentation-only changes detected. Minimal engineering risk.",
   ],
 
-  default: [
-    "No major risks detected. Follow the standard review process.",
-  ],
+  default: ["No major risks detected. Follow the standard review process."],
 };
 
 module.exports = {
@@ -256,5 +231,5 @@ module.exports = {
   DOCUMENTATION_FILES,
   RISK_WEIGHTS,
   RISK_LEVELS,
-  RECOMMENDATION_RULES
+  RECOMMENDATION_RULES,
 };

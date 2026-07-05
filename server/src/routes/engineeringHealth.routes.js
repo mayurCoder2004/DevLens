@@ -4,9 +4,6 @@ const engineeringHealthController = require("../controllers/engineeringHealth.co
 
 const router = express.Router();
 
-router.get(
-  "/:repositoryId",
-  engineeringHealthController.getEngineeringHealth
-);
+router.get("/:repositoryId", engineeringHealthController.getEngineeringHealth);
 
 module.exports = router;

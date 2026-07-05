@@ -59,7 +59,9 @@ const RiskBreakdownCard = ({ breakdown = {} }) => {
     <section className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-slate-950">Risk Breakdown</h3>
+          <h3 className="text-lg font-semibold text-slate-950">
+            Risk Breakdown
+          </h3>
           <p className="mt-1 text-sm text-slate-500">
             Weighted signals contributing to the overall pull request score.
           </p>
@@ -99,7 +101,9 @@ const RiskBreakdownCard = ({ breakdown = {} }) => {
                 )}
               </div>
 
-              <p className="mt-4 text-sm font-medium text-slate-600">{item.label}</p>
+              <p className="mt-4 text-sm font-medium text-slate-600">
+                {item.label}
+              </p>
               <p className={`mt-1 text-2xl font-bold ${item.text}`}>
                 {value > 0 ? `+${value}` : value}
               </p>

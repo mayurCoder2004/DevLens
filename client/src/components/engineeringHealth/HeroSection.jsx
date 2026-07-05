@@ -15,14 +15,9 @@ const formatAnalysisDate = (date) =>
     year: "numeric",
   });
 
-const HeroSection = ({
-  engineeringScore,
-  status,
-  generatedAt,
-}) => {
+const HeroSection = ({ engineeringScore, status, generatedAt }) => {
   const badgeClass =
-    statusBadgeClasses[status] ||
-    "bg-slate-100 text-slate-700 ring-slate-200";
+    statusBadgeClasses[status] || "bg-slate-100 text-slate-700 ring-slate-200";
 
   return (
     <div className="engineering-health-hero overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-blue-900 p-6 text-white shadow-lg sm:p-8">

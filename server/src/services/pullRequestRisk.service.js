@@ -3,7 +3,7 @@ const {
   TECHNOLOGY_RULES,
   INFRASTRUCTURE_FILES,
   DOCUMENTATION_FILES,
-  RISK_WEIGHTS
+  RISK_WEIGHTS,
 } = require("../config/riskPatterns");
 
 /**
@@ -18,9 +18,7 @@ const getDependencyFiles = (technologies = []) => {
 
     if (!rules) return;
 
-    (rules.dependencyFiles || []).forEach((file) =>
-      dependencyFiles.add(file)
-    );
+    (rules.dependencyFiles || []).forEach((file) => dependencyFiles.add(file));
   });
 
   return [...dependencyFiles];
@@ -29,10 +27,7 @@ const getDependencyFiles = (technologies = []) => {
 /**
  * Classify changed files into different categories.
  */
-const classifyChangedFiles = (
-  changedFiles = [],
-  technologies = []
-) => {
+const classifyChangedFiles = (changedFiles = [], technologies = []) => {
   const dependencyFiles = getDependencyFiles(technologies);
 
   const result = {
@@ -49,7 +44,7 @@ const classifyChangedFiles = (
     // Documentation
     if (
       DOCUMENTATION_FILES.some((pattern) =>
-        filename.includes(pattern.toLowerCase())
+        filename.includes(pattern.toLowerCase()),
       )
     ) {
       result.documentation.push(file.filename);
@@ -59,7 +54,7 @@ const classifyChangedFiles = (
     // Infrastructure
     if (
       INFRASTRUCTURE_FILES.some((pattern) =>
-        filename.includes(pattern.toLowerCase())
+        filename.includes(pattern.toLowerCase()),
       )
     ) {
       result.infrastructure.push(file.filename);
@@ -69,7 +64,7 @@ const classifyChangedFiles = (
     // Dependency files
     if (
       dependencyFiles.some((pattern) =>
-        filename.includes(pattern.toLowerCase())
+        filename.includes(pattern.toLowerCase()),
       )
     ) {
       result.dependencies.push(file.filename);
@@ -79,7 +74,7 @@ const classifyChangedFiles = (
     // Universal critical files
     if (
       UNIVERSAL_PATTERNS.some((pattern) =>
-        filename.includes(pattern.toLowerCase())
+        filename.includes(pattern.toLowerCase()),
       )
     ) {
       result.critical.push(file.filename);
@@ -89,8 +84,6 @@ const classifyChangedFiles = (
     // Others
     result.others.push(file.filename);
   });
-
-  
 
   return {
     summary: {
@@ -112,25 +105,24 @@ const calculateRiskScore = (classification) => {
   const breakdown = {
     critical: Math.min(
       summary.criticalCount * RISK_WEIGHTS.critical.perFile,
-      RISK_WEIGHTS.critical.max
+      RISK_WEIGHTS.critical.max,
     ),
 
     infrastructure: Math.min(
       summary.infrastructureCount * RISK_WEIGHTS.infrastructure.perFile,
-      RISK_WEIGHTS.infrastructure.max
+      RISK_WEIGHTS.infrastructure.max,
     ),
 
     dependency: Math.min(
       summary.dependencyCount * RISK_WEIGHTS.dependency.perFile,
-      RISK_WEIGHTS.dependency.max
+      RISK_WEIGHTS.dependency.max,
     ),
 
     fileCount: 0,
 
     documentation: -Math.min(
-      summary.documentationCount *
-        RISK_WEIGHTS.documentation.reductionPerFile,
-      RISK_WEIGHTS.documentation.maxReduction
+      summary.documentationCount * RISK_WEIGHTS.documentation.reductionPerFile,
+      RISK_WEIGHTS.documentation.maxReduction,
     ),
   };
 
@@ -177,32 +169,32 @@ const generateRecommendations = (classification, riskAnalysis) => {
   // Critical files
   if (summary.criticalCount > 0) {
     recommendations.push(
-      "Review critical application components carefully before merging."
+      "Review critical application components carefully before merging.",
     );
 
     recommendations.push(
-      "Request review from a senior developer for critical code changes."
+      "Request review from a senior developer for critical code changes.",
     );
   }
 
   // Dependency changes
   if (summary.dependencyCount > 0) {
     recommendations.push(
-      "Verify dependency compatibility and run dependency security checks."
+      "Verify dependency compatibility and run dependency security checks.",
     );
   }
 
   // Infrastructure changes
   if (summary.infrastructureCount > 0) {
     recommendations.push(
-      "Validate infrastructure changes in a staging environment before deployment."
+      "Validate infrastructure changes in a staging environment before deployment.",
     );
   }
 
   // Large pull requests
   if (summary.totalFiles >= 20) {
     recommendations.push(
-      "Consider splitting this pull request into smaller, focused changes."
+      "Consider splitting this pull request into smaller, focused changes.",
     );
   }
 
@@ -212,25 +204,23 @@ const generateRecommendations = (classification, riskAnalysis) => {
     summary.totalFiles > 0
   ) {
     recommendations.push(
-      "Documentation-only changes detected. Minimal engineering risk."
+      "Documentation-only changes detected. Minimal engineering risk.",
     );
   }
 
   // High-risk PRs
   if (level === "High" || level === "Critical") {
     recommendations.push(
-      "Execute a full regression test suite before merging."
+      "Execute a full regression test suite before merging.",
     );
 
-    recommendations.push(
-      "Ensure all CI/CD checks pass successfully."
-    );
+    recommendations.push("Ensure all CI/CD checks pass successfully.");
   }
 
   // Default recommendation
   if (recommendations.length === 0) {
     recommendations.push(
-      "No major risks detected. Follow the standard review process."
+      "No major risks detected. Follow the standard review process.",
     );
   }
 

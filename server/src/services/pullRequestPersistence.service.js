@@ -25,8 +25,7 @@ const savePullRequestAnalysis = async ({
     criticalFiles: analysis.classification.categories.critical,
 
     // Flags
-    hasDependencyChanges:
-      analysis.classification.summary.dependencyCount > 0,
+    hasDependencyChanges: analysis.classification.summary.dependencyCount > 0,
 
     hasConfigurationChanges:
       analysis.classification.summary.infrastructureCount > 0,

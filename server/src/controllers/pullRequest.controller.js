@@ -12,14 +12,14 @@ const analyzePullRequestController = async (req, res) => {
   try {
     const { repositoryId, prNumber } = req.params;
 
-const prNumberInt = Number(prNumber);
+    const prNumberInt = Number(prNumber);
 
-if (Number.isNaN(prNumberInt)) {
-  return res.status(400).json({
-    success: false,
-    message: "Invalid pull request number.",
-  });
-}
+    if (Number.isNaN(prNumberInt)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid pull request number.",
+      });
+    }
 
     const repository = await prisma.repository.findUnique({
       where: {
@@ -38,8 +38,7 @@ if (Number.isNaN(prNumberInt)) {
       });
     }
 
-    const technologies =
-      repository.techStack?.technologies || [];
+    const technologies = repository.techStack?.technologies || [];
 
     const analysis = await analyzePullRequest({
       owner: repository.owner,
@@ -49,18 +48,17 @@ if (Number.isNaN(prNumberInt)) {
       technologies,
     });
 
-    const savedAnalysis =
-      await savePullRequestAnalysis({
-  repositoryId,
-  prNumber: prNumberInt,
-  title: analysis.pullRequest.title,
-  analysis,
-});
+    const savedAnalysis = await savePullRequestAnalysis({
+      repositoryId,
+      prNumber: prNumberInt,
+      title: analysis.pullRequest.title,
+      analysis,
+    });
 
-return res.json({
-  success: true,
-  data: analysis,
-});
+    return res.json({
+      success: true,
+      data: analysis,
+    });
   } catch (error) {
     console.error(error);
 
@@ -75,24 +73,23 @@ const getPullRequestAnalysis = async (req, res) => {
   try {
     const { repositoryId, prNumber } = req.params;
 
-const prNumberInt = Number(prNumber);
+    const prNumberInt = Number(prNumber);
 
-if (Number.isNaN(prNumberInt)) {
-  return res.status(400).json({
-    success: false,
-    message: "Invalid pull request number.",
-  });
-}
-
-    const analysis =
-      await prisma.pullRequestAnalysis.findUnique({
-        where: {
-          repositoryId_prNumber: {
-            repositoryId,
-            prNumber: Number(prNumber),
-          },
-        },
+    if (Number.isNaN(prNumberInt)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid pull request number.",
       });
+    }
+
+    const analysis = await prisma.pullRequestAnalysis.findUnique({
+      where: {
+        repositoryId_prNumber: {
+          repositoryId,
+          prNumber: Number(prNumber),
+        },
+      },
+    });
 
     if (!analysis) {
       return res.status(404).json({
@@ -106,13 +103,13 @@ if (Number.isNaN(prNumberInt)) {
       data: analysis,
     });
   } catch (error) {
-  console.error(error);
+    console.error(error);
 
-  return res.status(500).json({
-    success: false,
-    message: error.message,
-  });
-}
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {

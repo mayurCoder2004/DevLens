@@ -1,11 +1,4 @@
-import {
-  BookOpen,
-  GitBranch,
-  Star,
-  User,
-  Calendar,
-  Code2,
-} from "lucide-react";
+import { BookOpen, GitBranch, Star, User, Calendar, Code2 } from "lucide-react";
 
 const formatAnalysisDate = (date) =>
   new Date(date).toLocaleString(undefined, {

@@ -6,11 +6,7 @@ import HeroSection from "../components/engineeringHealth/HeroSection";
 import ScoreBreakdown from "../components/engineeringHealth/ScoreBreakdown";
 import InsightCard from "../components/engineeringHealth/InsightCard";
 
-import {
-  ArrowLeft,
-  CheckCircle,
-  TriangleAlert,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, TriangleAlert } from "lucide-react";
 
 const EngineeringHealthPage = () => {
   const { id } = useParams();

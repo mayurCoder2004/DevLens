@@ -5,7 +5,9 @@ const RecommendationCard = ({ recommendations = [] }) => {
     <section className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-slate-950">Recommendations</h3>
+          <h3 className="text-lg font-semibold text-slate-950">
+            Recommendations
+          </h3>
           <p className="mt-1 text-sm text-slate-500">
             Review guidance generated from the pull request risk profile.
           </p>
@@ -20,11 +22,17 @@ const RecommendationCard = ({ recommendations = [] }) => {
       {recommendations.length === 0 ? (
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
           <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 flex-none text-emerald-600" aria-hidden="true" />
+            <ShieldCheck
+              className="mt-0.5 h-5 w-5 flex-none text-emerald-600"
+              aria-hidden="true"
+            />
             <div>
-              <p className="font-semibold text-emerald-900">No recommendations available</p>
+              <p className="font-semibold text-emerald-900">
+                No recommendations available
+              </p>
               <p className="mt-1 text-sm text-emerald-700">
-                The analysis did not identify any specific follow-up actions for this pull request.
+                The analysis did not identify any specific follow-up actions for
+                this pull request.
               </p>
             </div>
           </div>
@@ -45,7 +53,9 @@ const RecommendationCard = ({ recommendations = [] }) => {
                   )}
                 </div>
 
-                <p className="text-sm leading-6 text-slate-700">{recommendation}</p>
+                <p className="text-sm leading-6 text-slate-700">
+                  {recommendation}
+                </p>
               </div>
             </article>
           ))}

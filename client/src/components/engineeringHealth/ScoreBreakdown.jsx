@@ -8,30 +8,15 @@ const ScoreBreakdown = ({ scores }) => {
       </h2>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-5">
-        <MetricCard
-          title="Repository Health"
-          value={scores.repositoryHealth}
-        />
+        <MetricCard title="Repository Health" value={scores.repositoryHealth} />
 
-        <MetricCard
-          title="Architecture"
-          value={scores.architecture}
-        />
+        <MetricCard title="Architecture" value={scores.architecture} />
 
-        <MetricCard
-          title="Technical Debt"
-          value={scores.technicalDebt}
-        />
+        <MetricCard title="Technical Debt" value={scores.technicalDebt} />
 
-        <MetricCard
-          title="Deployment"
-          value={scores.deployment}
-        />
+        <MetricCard title="Deployment" value={scores.deployment} />
 
-        <MetricCard
-          title="Pull Request"
-          value={scores.pullRequest}
-        />
+        <MetricCard title="Pull Request" value={scores.pullRequest} />
       </div>
     </div>
   );

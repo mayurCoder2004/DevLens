@@ -73,9 +73,15 @@ const RiskScoreCard = ({ analysis }) => {
 
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
                 {pullRequest.merged ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 text-violet-600" aria-hidden="true" />
+                  <CheckCircle2
+                    className="h-3.5 w-3.5 text-violet-600"
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <GitBranch className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" />
+                  <GitBranch
+                    className="h-3.5 w-3.5 text-emerald-600"
+                    aria-hidden="true"
+                  />
                 )}
                 {pullRequest.merged ? "Merged" : pullRequest.state}
               </span>
@@ -92,7 +98,9 @@ const RiskScoreCard = ({ analysis }) => {
                   alt={`${pullRequest.author} avatar`}
                   className="h-8 w-8 rounded-full border border-white shadow-sm"
                 />
-                <span className="font-medium text-slate-800">{pullRequest.author}</span>
+                <span className="font-medium text-slate-800">
+                  {pullRequest.author}
+                </span>
               </div>
 
               <span className="hidden h-1 w-1 rounded-full bg-slate-300 sm:inline-block" />
@@ -117,14 +125,20 @@ const RiskScoreCard = ({ analysis }) => {
             </div>
           </div>
 
-          <div className={`rounded-xl border ${style.border} ${style.bg} p-4 ring-4 ${style.ring} lg:min-w-56`}>
+          <div
+            className={`rounded-xl border ${style.border} ${style.bg} p-4 ring-4 ${style.ring} lg:min-w-56`}
+          >
             <div className="flex items-center justify-between gap-4">
-              <span className={`inline-flex items-center gap-1.5 rounded-full border ${style.border} bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide ${style.text}`}>
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border ${style.border} bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide ${style.text}`}
+              >
                 <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" />
                 {riskLevel} Risk
               </span>
 
-              <span className={`text-4xl font-black leading-none ${style.text}`}>
+              <span
+                className={`text-4xl font-black leading-none ${style.text}`}
+              >
                 {riskScore}
               </span>
             </div>
@@ -142,7 +156,8 @@ const RiskScoreCard = ({ analysis }) => {
             </div>
 
             <p className="mt-2 text-xs font-medium text-slate-600">
-              Score out of 100 based on changed files, categories, and impact signals.
+              Score out of 100 based on changed files, categories, and impact
+              signals.
             </p>
           </div>
         </div>
@@ -154,7 +169,9 @@ const RiskScoreCard = ({ analysis }) => {
             <FileCode2 className="h-4 w-4" aria-hidden="true" />
             Files Changed
           </div>
-          <p className="mt-3 text-3xl font-bold text-slate-950">{analysis.summary.totalFiles}</p>
+          <p className="mt-3 text-3xl font-bold text-slate-950">
+            {analysis.summary.totalFiles}
+          </p>
         </div>
 
         <div className="rounded-lg border border-slate-200 bg-white p-4">
@@ -162,7 +179,9 @@ const RiskScoreCard = ({ analysis }) => {
             <Plus className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             Additions
           </div>
-          <p className="mt-3 text-3xl font-bold text-emerald-600">+{analysis.summary.additions}</p>
+          <p className="mt-3 text-3xl font-bold text-emerald-600">
+            +{analysis.summary.additions}
+          </p>
         </div>
 
         <div className="rounded-lg border border-slate-200 bg-white p-4">
@@ -170,7 +189,9 @@ const RiskScoreCard = ({ analysis }) => {
             <Minus className="h-4 w-4 text-red-600" aria-hidden="true" />
             Deletions
           </div>
-          <p className="mt-3 text-3xl font-bold text-red-600">-{analysis.summary.deletions}</p>
+          <p className="mt-3 text-3xl font-bold text-red-600">
+            -{analysis.summary.deletions}
+          </p>
         </div>
 
         <div className="rounded-lg border border-slate-200 bg-white p-4">
@@ -178,7 +199,9 @@ const RiskScoreCard = ({ analysis }) => {
             <ShieldAlert className="h-4 w-4" aria-hidden="true" />
             Total Changes
           </div>
-          <p className="mt-3 text-3xl font-bold text-slate-950">{analysis.summary.totalChanges}</p>
+          <p className="mt-3 text-3xl font-bold text-slate-950">
+            {analysis.summary.totalChanges}
+          </p>
         </div>
       </div>
 

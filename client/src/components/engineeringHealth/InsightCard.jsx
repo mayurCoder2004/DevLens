@@ -11,11 +11,7 @@ const InsightCard = ({
   return (
     <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
       <div className="mb-6 flex items-center gap-3">
-        <div
-          className={`rounded-xl p-2 ${iconContainerClass}`}
-        >
-          {icon}
-        </div>
+        <div className={`rounded-xl p-2 ${iconContainerClass}`}>{icon}</div>
 
         <h2 className="text-xl font-bold text-slate-950">{title}</h2>
       </div>
@@ -37,9 +33,7 @@ const InsightCard = ({
                 {itemIcon}
               </div>
 
-              <span className="text-sm leading-6 text-slate-700">
-                {item}
-              </span>
+              <span className="text-sm leading-6 text-slate-700">{item}</span>
             </li>
           ))}
         </ul>

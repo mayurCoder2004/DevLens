@@ -12,20 +12,11 @@ const {
 const buildPullRequestSummary = (files = []) => ({
   totalFiles: files.length,
 
-  additions: files.reduce(
-    (sum, file) => sum + (file.additions || 0),
-    0
-  ),
+  additions: files.reduce((sum, file) => sum + (file.additions || 0), 0),
 
-  deletions: files.reduce(
-    (sum, file) => sum + (file.deletions || 0),
-    0
-  ),
+  deletions: files.reduce((sum, file) => sum + (file.deletions || 0), 0),
 
-  totalChanges: files.reduce(
-    (sum, file) => sum + (file.changes || 0),
-    0
-  ),
+  totalChanges: files.reduce((sum, file) => sum + (file.changes || 0), 0),
 });
 
 /**
@@ -41,52 +32,36 @@ const analyzePullRequest = async ({
   try {
     // Fetch changed files from GitHub
     const [pullRequest, files] = await Promise.all([
-  githubService.getPullRequest(
-    owner,
-    repo,
-    prNumber,
-    githubToken
-  ),
-  githubService.getPullRequestFiles(
-    owner,
-    repo,
-    prNumber,
-    githubToken
-  ),
-]);
+      githubService.getPullRequest(owner, repo, prNumber, githubToken),
+      githubService.getPullRequestFiles(owner, repo, prNumber, githubToken),
+    ]);
 
     // Build summary
     const summary = buildPullRequestSummary(files);
 
     // Classify files
-    const classification = classifyChangedFiles(
-      files,
-      technologies
-    );
+    const classification = classifyChangedFiles(files, technologies);
 
     // Calculate risk
     const risk = calculateRiskScore(classification);
 
     // Generate recommendations
-    const recommendations = generateRecommendations(
-      classification,
-      risk
-    );
+    const recommendations = generateRecommendations(classification, risk);
 
     return {
       pullRequest: {
-  number: pullRequest.number,
-  title: pullRequest.title,
-  state: pullRequest.state,
-  author: pullRequest.user?.login,
-  authorAvatar: pullRequest.user?.avatar_url,
-  baseBranch: pullRequest.base?.ref,
-  headBranch: pullRequest.head?.ref,
-  createdAt: pullRequest.created_at,
-  updatedAt: pullRequest.updated_at,
-  merged: pullRequest.merged,
-  url: pullRequest.html_url,
-},
+        number: pullRequest.number,
+        title: pullRequest.title,
+        state: pullRequest.state,
+        author: pullRequest.user?.login,
+        authorAvatar: pullRequest.user?.avatar_url,
+        baseBranch: pullRequest.base?.ref,
+        headBranch: pullRequest.head?.ref,
+        createdAt: pullRequest.created_at,
+        updatedAt: pullRequest.updated_at,
+        merged: pullRequest.merged,
+        url: pullRequest.html_url,
+      },
 
       summary,
 

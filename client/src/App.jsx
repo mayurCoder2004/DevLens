@@ -46,13 +46,13 @@ function App() {
       <Route path="/repositories/:id/deployment" element={<Deployment />} />
 
       <Route
-  path="/repositories/:id/engineering-health"
-  element={
-    <ProtectedRoute>
-      <EngineeringHealthPage />
-    </ProtectedRoute>
-  }
-/>
+        path="/repositories/:id/engineering-health"
+        element={
+          <ProtectedRoute>
+            <EngineeringHealthPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

@@ -1,12 +1,9 @@
 const MetricCard = ({ title, value }) => {
   const numericValue = Number(value);
   const hasValue =
-    value !== null &&
-    value !== undefined &&
-    !Number.isNaN(numericValue);
+    value !== null && value !== undefined && !Number.isNaN(numericValue);
 
-  const displayValue =
-    hasValue ? numericValue : "--";
+  const displayValue = hasValue ? numericValue : "--";
 
   const scoreClasses = !hasValue
     ? {
@@ -40,9 +37,7 @@ const MetricCard = ({ title, value }) => {
         </span>
 
         {hasValue && (
-          <span className="text-sm font-semibold text-slate-400">
-            / 100
-          </span>
+          <span className="text-sm font-semibold text-slate-400">/ 100</span>
         )}
       </div>
 

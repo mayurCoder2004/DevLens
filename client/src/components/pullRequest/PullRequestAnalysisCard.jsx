@@ -38,14 +38,16 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setAnalysis(response.data.data);
     } catch (error) {
       console.error(error);
 
-      setError(error.response?.data?.message || "Failed to analyze pull request.");
+      setError(
+        error.response?.data?.message || "Failed to analyze pull request.",
+      );
     } finally {
       setLoading(false);
     }
@@ -71,7 +73,8 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
             </h2>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Analyze changed files, risk signals, and review recommendations before merging.
+              Analyze changed files, risk signals, and review recommendations
+              before merging.
             </p>
           </div>
 
@@ -80,7 +83,10 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]"
+        >
           <label htmlFor="pull-request-number" className="sr-only">
             Pull request number
           </label>
@@ -118,9 +124,15 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
 
       <div className="px-5 pb-6 sm:px-6">
         {error && (
-          <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4" role="alert">
+          <div
+            className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4"
+            role="alert"
+          >
             <div className="flex items-start gap-3">
-              <AlertCircle className="mt-0.5 h-5 w-5 flex-none text-red-600" aria-hidden="true" />
+              <AlertCircle
+                className="mt-0.5 h-5 w-5 flex-none text-red-600"
+                aria-hidden="true"
+              />
               <div>
                 <p className="font-semibold text-red-900">Analysis failed</p>
                 <p className="mt-1 text-sm text-red-700">{error}</p>
@@ -137,12 +149,18 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-blue-950">Analyzing pull request</p>
+                <p className="font-semibold text-blue-950">
+                  Analyzing pull request
+                </p>
                 <p className="mt-1 text-sm leading-6 text-blue-700">
-                  Fetching files, calculating the risk score, and generating review guidance.
+                  Fetching files, calculating the risk score, and generating
+                  review guidance.
                 </p>
 
-                <div className="mt-4 grid gap-2 sm:grid-cols-3" aria-hidden="true">
+                <div
+                  className="mt-4 grid gap-2 sm:grid-cols-3"
+                  aria-hidden="true"
+                >
                   <div className="h-2 rounded-full bg-blue-200" />
                   <div className="h-2 rounded-full bg-blue-200/70" />
                   <div className="h-2 rounded-full bg-blue-200/40" />
@@ -163,8 +181,8 @@ const PullRequestAnalysisCard = ({ repositoryId }) => {
             </h3>
 
             <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-600">
-              Enter a pull request number to generate a risk score, breakdown, recommendations,
-              and a changed-files review.
+              Enter a pull request number to generate a risk score, breakdown,
+              recommendations, and a changed-files review.
             </p>
           </div>
         )}

@@ -37,23 +37,33 @@ const statusConfig = {
 
 const getStatusConfig = (status) => {
   const normalizedStatus = status?.toLowerCase();
-  return statusConfig[normalizedStatus] || {
-    label: status || "Changed",
-    icon: FileCode2,
-    className: "border-slate-200 bg-slate-50 text-slate-700",
-  };
+  return (
+    statusConfig[normalizedStatus] || {
+      label: status || "Changed",
+      icon: FileCode2,
+      className: "border-slate-200 bg-slate-50 text-slate-700",
+    }
+  );
 };
 
 const ChangedFilesCard = ({ files = [] }) => {
-  const totalAdditions = files.reduce((total, file) => total + (Number(file.additions) || 0), 0);
-  const totalDeletions = files.reduce((total, file) => total + (Number(file.deletions) || 0), 0);
+  const totalAdditions = files.reduce(
+    (total, file) => total + (Number(file.additions) || 0),
+    0,
+  );
+  const totalDeletions = files.reduce(
+    (total, file) => total + (Number(file.deletions) || 0),
+    0,
+  );
 
   return (
     <section className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="border-b border-slate-200 bg-slate-50/80 px-5 py-4 sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="text-lg font-semibold text-slate-950">Changed Files</h3>
+            <h3 className="text-lg font-semibold text-slate-950">
+              Changed Files
+            </h3>
             <p className="mt-1 text-sm text-slate-500">
               GitHub-style summary of files touched by this pull request.
             </p>
@@ -75,7 +85,9 @@ const ChangedFilesCard = ({ files = [] }) => {
       </div>
 
       {files.length === 0 ? (
-        <div className="p-6 text-sm text-slate-500">No changed files found.</div>
+        <div className="p-6 text-sm text-slate-500">
+          No changed files found.
+        </div>
       ) : (
         <div className="divide-y divide-slate-100">
           {files.map((file, index) => {
@@ -99,8 +111,13 @@ const ChangedFilesCard = ({ files = [] }) => {
                       </p>
 
                       <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${config.className}`}>
-                          <StatusIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold ${config.className}`}
+                        >
+                          <StatusIcon
+                            className="h-3.5 w-3.5"
+                            aria-hidden="true"
+                          />
                           {config.label}
                         </span>
 

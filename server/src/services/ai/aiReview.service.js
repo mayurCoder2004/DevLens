@@ -40,40 +40,51 @@ class AIReviewService {
     }
 
     async generateRepositoryReview(repositoryId) {
-        const repositoryAnalysis =
-            await this.repositoryAnalysisRepository.getRepositoryAnalysis(
-                repositoryId
-            );
-
-        const engineeringHealth =
-            await engineeringHealthService.getEngineeringHealth(
-                repositoryId
-            );
-
-        const analysis = this.buildAnalysisObject(
-            repositoryAnalysis,
-            engineeringHealth
+    const existingReview =
+        await this.repositoryAIReviewRepository.getReviewByRepositoryId(
+            repositoryId
         );
 
-        const prompt =
-            buildRepositoryReviewPrompt(analysis);
-
-        const review =
-            await this.provider.generateRepositoryReview(prompt);
-
-        console.log("✅ Gemini review generated");
-
-        const savedReview =
-            await this.repositoryAIReviewRepository.saveReview(
-                repositoryId,
-                review,
-                this.provider.model
-            );
-
-        console.log("✅ Review saved to database");
-
-        return savedReview;
+    if (existingReview) {
+        return existingReview;
     }
+
+    const repositoryAnalysis =
+        await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+            repositoryId
+        );
+
+    const engineeringHealth =
+        await engineeringHealthService.getEngineeringHealth(
+            repositoryId
+        );
+
+    const analysis = this.buildAnalysisObject(
+        repositoryAnalysis,
+        engineeringHealth
+    );
+
+    const prompt =
+        buildRepositoryReviewPrompt(analysis);
+
+    const review =
+        await this.provider.generateRepositoryReview(prompt);
+
+    const savedReview =
+        await this.repositoryAIReviewRepository.saveReview(
+            repositoryId,
+            review,
+            this.provider.model
+        );
+
+    return savedReview;
+}
+
+    async getRepositoryReview(repositoryId) {
+    return await this.repositoryAIReviewRepository.getReviewByRepositoryId(
+        repositoryId
+    );
+}
 }
 
 module.exports = AIReviewService;

@@ -2,164 +2,219 @@ const {
     REPOSITORY_REVIEW_SYSTEM_PROMPT,
 } = require("./prompts/repositoryReview.prompt");
 
-const buildRepositorySection = (repository = {}) => `
+const buildRepositorySection = (repository) => {
+    const data = repository ?? {};
+
+    return `
 Repository Information
 
-Name: ${repository.name ?? "Unknown"}
-Description: ${repository.description ?? "Not Available"}
-Primary Language: ${repository.language ?? "Unknown"}
-Stars: ${repository.stars ?? 0}
-Forks: ${repository.forks ?? 0}
-Default Branch: ${repository.defaultBranch ?? "Unknown"}
-Visibility: ${repository.private ? "Private" : "Public"}
+Name: ${data.name ?? "Unknown"}
+Description: ${data.description ?? "Not Available"}
+Primary Language: ${data.language ?? "Unknown"}
+Stars: ${data.stars ?? 0}
+Default Branch: ${data.defaultBranch ?? "Unknown"}
+Visibility: ${data.private ? "Private" : "Public"}
 `;
+};
 
-const buildEngineeringHealthSection = (engineeringHealth = {}) => `
+const buildEngineeringHealthSection = (engineeringHealth) => {
+    const data = engineeringHealth ?? {};
+
+    return `
 Engineering Health
 
-Overall Engineering Score: ${engineeringHealth.engineeringScore ?? "N/A"}
-Engineering Status: ${engineeringHealth.status ?? "Unknown"}
+Overall Engineering Score: ${data.engineeringScore ?? "N/A"}
+Engineering Status: ${data.status ?? "Unknown"}
 
 Engineering Strengths:
 ${
-    engineeringHealth.strengths?.length
-        ? engineeringHealth.strengths.map((item) => `- ${item}`).join("\n")
+    data.strengths?.length
+        ? data.strengths.map((item) => `- ${item}`).join("\n")
         : "None"
 }
 
 Priority Recommendations:
 ${
-    engineeringHealth.priorityRecommendations?.length
-        ? engineeringHealth.priorityRecommendations
-              .map((item) => `- ${item}`)
-              .join("\n")
+    data.priorityRecommendations?.length
+        ? data.priorityRecommendations.map((item) => `- ${item}`).join("\n")
         : "None"
 }
 `;
+};
 
-const buildRepositoryHealthSection = (repositoryHealth = {}) => `
+const buildRepositoryHealthSection = (repositoryHealth) => {
+    const data = repositoryHealth ?? {};
+
+    return `
 Repository Health
 
-Health Score: ${repositoryHealth.healthScore ?? "N/A"}
-Activity Score: ${repositoryHealth.activityScore ?? "N/A"}
-Documentation Score: ${repositoryHealth.documentationScore ?? "N/A"}
-Maintenance Score: ${repositoryHealth.maintenanceScore ?? "N/A"}
-`;
+Health Score: ${data.healthScore ?? "N/A"}
+Activity Score: ${data.activityScore ?? "N/A"}
+Documentation Score: ${data.documentationScore ?? "N/A"}
+Maintenance Score: ${data.maintenanceScore ?? "N/A"}
 
-const buildArchitectureSection = (architecture = {}) => `
+Recommendations:
+${
+    data.recommendations?.length
+        ? data.recommendations.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
+`;
+};
+
+const buildArchitectureSection = (architecture) => {
+    const data = architecture ?? {};
+
+    return `
 Architecture Analysis
 
-Complexity Score: ${architecture.complexityScore ?? "N/A"}
-Node Count: ${architecture.nodeCount ?? "N/A"}
-Edge Count: ${architecture.edgeCount ?? "N/A"}
+Complexity Score: ${data.complexityScore ?? "N/A"}
+Node Count: ${data.nodeCount ?? "N/A"}
+Edge Count: ${data.edgeCount ?? "N/A"}
 
 Circular Dependencies:
-${architecture.hasCircularDependency ? "Yes" : "No"}
-
-Circular Dependency Count:
-${architecture.circularDependencies?.length ?? 0}
+${data.hasCircularDependency ? "Yes" : "No"}
 `;
+};
 
-const buildTechnicalDebtSection = (technicalDebt = {}) => `
+const buildTechnicalDebtSection = (technicalDebt) => {
+    const data = technicalDebt ?? {};
+
+    return `
 Technical Debt
 
 Technical Debt Score:
-${technicalDebt.technicalDebtScore ?? "N/A"}
+${data.technicalDebtScore ?? "N/A"}
 
 Maintainability Score:
-${technicalDebt.maintainabilityScore ?? "N/A"}
+${data.maintainabilityScore ?? "N/A"}
 
-Large Files:
-${
-    technicalDebt.largeFiles?.length
-        ? technicalDebt.largeFiles
-              .map(
-                  (file) =>
-                      `- ${file.file || file.path} (${file.lines ?? "Unknown"} LOC)`
-              )
-              .join("\n")
-        : "None"
-}
+Large File Count:
+${data.largeFileCount ?? 0}
 
-Dead Files:
-${
-    technicalDebt.deadFiles?.length
-        ? technicalDebt.deadFiles
-              .map((file) => `- ${file.file || file}`)
-              .join("\n")
-        : "None"
-}
+Dead File Count:
+${data.deadFileCount ?? 0}
 
-Deep Dependency Chains:
+Circular Dependency Count:
+${data.circularDependencyCount ?? 0}
+
+Deep Dependency Chain Count:
+${data.deepDependencyChainCount ?? 0}
+
+Recommendations:
 ${
-    technicalDebt.deepDependencyChains?.length
-        ? technicalDebt.deepDependencyChains
-              .map(
-                  (chain) =>
-                      `- Depth ${chain.depth ?? "Unknown"} (${chain.path ?? ""})`
-              )
-              .join("\n")
+    data.recommendations?.length
+        ? data.recommendations.map((item) => `- ${item}`).join("\n")
         : "None"
 }
 `;
+};
 
-const buildDeploymentSection = (deployment = {}) => `
+const buildDeploymentSection = (deployment) => {
+    const data = deployment ?? {};
+
+    return `
 Deployment Readiness
 
 Deployment Score:
-${deployment.deploymentScore ?? "N/A"}
+${data.deploymentScore ?? "N/A"}
 
 Deployment Status:
-${deployment.status ?? "Unknown"}
+${data.deploymentStatus ?? "Unknown"}
 
-Dockerfile:
-${deployment.infrastructure?.dockerfile ? "Present" : "Missing"}
+Infrastructure Score:
+${data.infrastructureScore ?? "N/A"}
 
-Docker Compose:
-${deployment.infrastructure?.dockerCompose ? "Present" : "Missing"}
+Configuration Score:
+${data.configurationScore ?? "N/A"}
 
-GitHub Actions:
-${deployment.ciCd?.githubActions ? "Configured" : "Not Configured"}
+Build Readiness Score:
+${data.buildReadinessScore ?? "N/A"}
+
+CI/CD Score:
+${data.ciCdScore ?? "N/A"}
+
+Strengths:
+${
+    data.strengths?.length
+        ? data.strengths.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
+
+Warnings:
+${
+    data.warnings?.length
+        ? data.warnings.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
+
+Critical Issues:
+${
+    data.criticalIssues?.length
+        ? data.criticalIssues.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
+
+Recommendations:
+${
+    data.recommendations?.length
+        ? data.recommendations.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
 `;
+};
 
-const buildPullRequestSection = (pullRequestRisk = {}) => `
+const buildPullRequestSection = (pullRequestRisk) => {
+    const data = pullRequestRisk ?? {};
+
+    return `
 Pull Request Risk
 
+PR Number:
+${data.prNumber ?? "N/A"}
+
+Title:
+${data.title ?? "N/A"}
+
 Risk Score:
-${pullRequestRisk.riskScore ?? "N/A"}
+${data.riskScore ?? "N/A"}
 
 Risk Level:
-${pullRequestRisk.riskLevel ?? "Unknown"}
+${data.riskLevel ?? "Unknown"}
 
-Critical Files Changed:
-${pullRequestRisk.criticalFiles ?? 0}
+Files Changed:
+${data.totalFiles ?? 0}
+
+Additions:
+${data.additions ?? 0}
+
+Deletions:
+${data.deletions ?? 0}
 
 Dependency Changes:
-${pullRequestRisk.dependencyChanges ? "Yes" : "No"}
+${data.hasDependencyChanges ? "Yes" : "No"}
 
 Configuration Changes:
-${pullRequestRisk.configurationChanges ? "Yes" : "No"}
+${data.hasConfigurationChanges ? "Yes" : "No"}
+
+Recommendations:
+${
+    data.recommendations?.length
+        ? data.recommendations.map((item) => `- ${item}`).join("\n")
+        : "None"
+}
 `;
+};
 
 const buildRepositoryReviewPrompt = (analysis) => {
-    const {
-        repository,
-        engineeringHealth,
-        repositoryHealth,
-        architecture,
-        technicalDebt,
-        deployment,
-        pullRequestRisk,
-    } = analysis;
-
     const repositoryAnalysis = [
-        buildRepositorySection(repository),
-        buildEngineeringHealthSection(engineeringHealth),
-        buildRepositoryHealthSection(repositoryHealth),
-        buildArchitectureSection(architecture),
-        buildTechnicalDebtSection(technicalDebt),
-        buildDeploymentSection(deployment),
-        buildPullRequestSection(pullRequestRisk),
+        buildRepositorySection(analysis.repository),
+        buildEngineeringHealthSection(analysis.engineeringHealth),
+        buildRepositoryHealthSection(analysis.repositoryHealth),
+        buildArchitectureSection(analysis.architecture),
+        buildTechnicalDebtSection(analysis.technicalDebt),
+        buildDeploymentSection(analysis.deployment),
+        buildPullRequestSection(analysis.pullRequestRisk),
     ].join("\n\n");
 
     return `

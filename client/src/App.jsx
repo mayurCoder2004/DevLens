@@ -8,6 +8,7 @@ import ArchitecturePage from "./pages/ArchitecturePage";
 import TechnicalDebt from "./pages/TechnicalDebt";
 import Deployment from "./pages/Deployment";
 import EngineeringHealthPage from "./pages/EngineeringHealthPage";
+import AIReview from "./pages/AIReview";
 
 function App() {
   return (
@@ -53,6 +54,11 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+    path="/repositories/:id/ai-review"
+    element={<AIReview />}
+/>
     </Routes>
   );
 }

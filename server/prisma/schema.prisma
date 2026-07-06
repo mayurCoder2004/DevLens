@@ -45,6 +45,7 @@ model Repository {
   technicalDebt RepositoryTechnicalDebt?
   deployment RepositoryDeployment?
   pullRequestAnalyses PullRequestAnalysis[]
+  aiReview RepositoryAIReview?
 
   createdAt DateTime @default(now())
 }
@@ -213,4 +214,24 @@ model PullRequestAnalysis {
   updatedAt DateTime @updatedAt
 
   @@unique([repositoryId, prNumber])
+}
+
+model RepositoryAIReview {
+  id String @id @default(cuid())
+
+  repositoryId String @unique
+  repository Repository @relation(fields: [repositoryId], references: [id])
+
+  overallSummary String @db.Text
+
+  strengths Json
+  weaknesses Json
+  recommendations Json
+
+  engineeringSummary String @db.Text
+
+  modelUsed String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

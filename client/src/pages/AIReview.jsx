@@ -76,7 +76,7 @@ const AIReviewSkeleton = () => {
 const AIReview = () => {
     const [review, setReview] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [generating] = useState(false);
+    const [generating, setGenerating] = useState(false);
     const [error, setError] = useState("");
 
     const { id } = useParams();
@@ -99,6 +99,23 @@ const AIReview = () => {
             setLoading(false);
         }
     };
+
+    const refreshReview = async () => {
+    try {
+        setGenerating(true);
+        setError("");
+
+        const response = await axios.put(
+            `http://localhost:5000/api/repositories/${id}/ai-review`
+        );
+
+        setReview(response.data.data);
+    } catch (error) {
+        setError("Failed to refresh AI review.");
+    } finally {
+        setGenerating(false);
+    }
+};
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -145,11 +162,22 @@ const AIReview = () => {
 
                     <button
                         type="button"
+                        onClick={refreshReview}
                         disabled={generating}
                         className="mt-8 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {generating ? "Generating..." : "Generate AI Review"}
                     </button>
+
+                    <div className="flex justify-end">
+    <button
+        onClick={refreshReview}
+        disabled={generating}
+        className="rounded-lg bg-indigo-600 px-4 py-2 text-white transition hover:bg-indigo-700 disabled:opacity-50"
+    >
+        {generating ? "Refreshing..." : "Refresh AI Review"}
+    </button>
+</div>
                 </section>
             </div>
         );

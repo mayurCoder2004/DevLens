@@ -84,6 +84,35 @@ class AIReviewService {
     return await this.repositoryAIReviewRepository.getReviewByRepositoryId(
         repositoryId
     );
+
+    async refreshRepositoryReview(repositoryId) {
+    const repositoryAnalysis =
+        await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+            repositoryId
+        );
+
+    const engineeringHealth =
+        await engineeringHealthService.getEngineeringHealth(
+            repositoryId
+        );
+
+    const analysis = this.buildAnalysisObject(
+        repositoryAnalysis,
+        engineeringHealth
+    );
+
+    const prompt =
+        buildRepositoryReviewPrompt(analysis);
+
+    const review =
+        await this.provider.generateRepositoryReview(prompt);
+
+    return await this.repositoryAIReviewRepository.saveReview(
+        repositoryId,
+        review,
+        this.provider.model
+    );
+}
 }
 }
 

@@ -122,5 +122,5 @@ Return ONLY the JSON object.
 `;
 
 module.exports = {
-    REPOSITORY_REVIEW_SYSTEM_PROMPT,
+  REPOSITORY_REVIEW_SYSTEM_PROMPT,
 };

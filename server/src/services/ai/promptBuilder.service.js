@@ -1,11 +1,11 @@
 const {
-    REPOSITORY_REVIEW_SYSTEM_PROMPT,
+  REPOSITORY_REVIEW_SYSTEM_PROMPT,
 } = require("./prompts/repositoryReview.prompt");
 
 const buildRepositorySection = (repository) => {
-    const data = repository ?? {};
+  const data = repository ?? {};
 
-    return `
+  return `
 Repository Information
 
 Name: ${data.name ?? "Unknown"}
@@ -18,9 +18,9 @@ Visibility: ${data.private ? "Private" : "Public"}
 };
 
 const buildEngineeringHealthSection = (engineeringHealth) => {
-    const data = engineeringHealth ?? {};
+  const data = engineeringHealth ?? {};
 
-    return `
+  return `
 Engineering Health
 
 Overall Engineering Score: ${data.engineeringScore ?? "N/A"}
@@ -28,24 +28,24 @@ Engineering Status: ${data.status ?? "Unknown"}
 
 Engineering Strengths:
 ${
-    data.strengths?.length
-        ? data.strengths.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.strengths?.length
+    ? data.strengths.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 
 Priority Recommendations:
 ${
-    data.priorityRecommendations?.length
-        ? data.priorityRecommendations.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.priorityRecommendations?.length
+    ? data.priorityRecommendations.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 `;
 };
 
 const buildRepositoryHealthSection = (repositoryHealth) => {
-    const data = repositoryHealth ?? {};
+  const data = repositoryHealth ?? {};
 
-    return `
+  return `
 Repository Health
 
 Health Score: ${data.healthScore ?? "N/A"}
@@ -55,17 +55,17 @@ Maintenance Score: ${data.maintenanceScore ?? "N/A"}
 
 Recommendations:
 ${
-    data.recommendations?.length
-        ? data.recommendations.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.recommendations?.length
+    ? data.recommendations.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 `;
 };
 
 const buildArchitectureSection = (architecture) => {
-    const data = architecture ?? {};
+  const data = architecture ?? {};
 
-    return `
+  return `
 Architecture Analysis
 
 Complexity Score: ${data.complexityScore ?? "N/A"}
@@ -78,9 +78,9 @@ ${data.hasCircularDependency ? "Yes" : "No"}
 };
 
 const buildTechnicalDebtSection = (technicalDebt) => {
-    const data = technicalDebt ?? {};
+  const data = technicalDebt ?? {};
 
-    return `
+  return `
 Technical Debt
 
 Technical Debt Score:
@@ -103,17 +103,17 @@ ${data.deepDependencyChainCount ?? 0}
 
 Recommendations:
 ${
-    data.recommendations?.length
-        ? data.recommendations.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.recommendations?.length
+    ? data.recommendations.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 `;
 };
 
 const buildDeploymentSection = (deployment) => {
-    const data = deployment ?? {};
+  const data = deployment ?? {};
 
-    return `
+  return `
 Deployment Readiness
 
 Deployment Score:
@@ -136,38 +136,38 @@ ${data.ciCdScore ?? "N/A"}
 
 Strengths:
 ${
-    data.strengths?.length
-        ? data.strengths.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.strengths?.length
+    ? data.strengths.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 
 Warnings:
 ${
-    data.warnings?.length
-        ? data.warnings.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.warnings?.length
+    ? data.warnings.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 
 Critical Issues:
 ${
-    data.criticalIssues?.length
-        ? data.criticalIssues.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.criticalIssues?.length
+    ? data.criticalIssues.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 
 Recommendations:
 ${
-    data.recommendations?.length
-        ? data.recommendations.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.recommendations?.length
+    ? data.recommendations.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 `;
 };
 
 const buildPullRequestSection = (pullRequestRisk) => {
-    const data = pullRequestRisk ?? {};
+  const data = pullRequestRisk ?? {};
 
-    return `
+  return `
 Pull Request Risk
 
 PR Number:
@@ -199,25 +199,25 @@ ${data.hasConfigurationChanges ? "Yes" : "No"}
 
 Recommendations:
 ${
-    data.recommendations?.length
-        ? data.recommendations.map((item) => `- ${item}`).join("\n")
-        : "None"
+  data.recommendations?.length
+    ? data.recommendations.map((item) => `- ${item}`).join("\n")
+    : "None"
 }
 `;
 };
 
 const buildRepositoryReviewPrompt = (analysis) => {
-    const repositoryAnalysis = [
-        buildRepositorySection(analysis.repository),
-        buildEngineeringHealthSection(analysis.engineeringHealth),
-        buildRepositoryHealthSection(analysis.repositoryHealth),
-        buildArchitectureSection(analysis.architecture),
-        buildTechnicalDebtSection(analysis.technicalDebt),
-        buildDeploymentSection(analysis.deployment),
-        buildPullRequestSection(analysis.pullRequestRisk),
-    ].join("\n\n");
+  const repositoryAnalysis = [
+    buildRepositorySection(analysis.repository),
+    buildEngineeringHealthSection(analysis.engineeringHealth),
+    buildRepositoryHealthSection(analysis.repositoryHealth),
+    buildArchitectureSection(analysis.architecture),
+    buildTechnicalDebtSection(analysis.technicalDebt),
+    buildDeploymentSection(analysis.deployment),
+    buildPullRequestSection(analysis.pullRequestRisk),
+  ].join("\n\n");
 
-    return `
+  return `
 ${REPOSITORY_REVIEW_SYSTEM_PROMPT}
 
 Below is the engineering analysis generated by DevLens.
@@ -235,12 +235,12 @@ Using ONLY the repository analysis above:
 };
 
 module.exports = {
-    buildRepositorySection,
-    buildEngineeringHealthSection,
-    buildRepositoryHealthSection,
-    buildArchitectureSection,
-    buildTechnicalDebtSection,
-    buildDeploymentSection,
-    buildPullRequestSection,
-    buildRepositoryReviewPrompt,
+  buildRepositorySection,
+  buildEngineeringHealthSection,
+  buildRepositoryHealthSection,
+  buildArchitectureSection,
+  buildTechnicalDebtSection,
+  buildDeploymentSection,
+  buildPullRequestSection,
+  buildRepositoryReviewPrompt,
 };

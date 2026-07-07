@@ -108,11 +108,11 @@ const RepositoryDetails = () => {
         </button>
 
         <button
-  onClick={() => navigate(`/repositories/${id}/ai-review`)}
-  className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700"
->
-  🤖 AI Review
-</button>
+          onClick={() => navigate(`/repositories/${id}/ai-review`)}
+          className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700"
+        >
+          🤖 AI Review
+        </button>
       </div>
       <div className="mt-8">
         <PullRequestAnalysisCard repositoryId={id} />

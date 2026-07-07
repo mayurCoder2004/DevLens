@@ -55,10 +55,7 @@ function App() {
         }
       />
 
-      <Route
-    path="/repositories/:id/ai-review"
-    element={<AIReview />}
-/>
+      <Route path="/repositories/:id/ai-review" element={<AIReview />} />
     </Routes>
   );
 }

@@ -3,117 +3,103 @@ const RepositoryAIReviewRepository = require("../../repositories/repositoryAIRev
 
 const GeminiProvider = require("./providers/gemini.provider");
 
-const {
-    buildRepositoryReviewPrompt,
-} = require("./promptBuilder.service");
+const { buildRepositoryReviewPrompt } = require("./promptBuilder.service");
 
 const engineeringHealthService = require("../engineeringHealth.service");
 
 class AIReviewService {
-    constructor() {
-        this.repositoryAnalysisRepository =
-            new RepositoryAnalysisRepository();
+  constructor() {
+    this.repositoryAnalysisRepository = new RepositoryAnalysisRepository();
 
-        this.repositoryAIReviewRepository =
-            new RepositoryAIReviewRepository();
+    this.repositoryAIReviewRepository = new RepositoryAIReviewRepository();
 
-        this.provider = new GeminiProvider();
-    }
+    this.provider = new GeminiProvider();
+  }
 
-    buildAnalysisObject(repositoryAnalysis, engineeringHealth) {
-        return {
-            repository: repositoryAnalysis,
+  buildAnalysisObject(repositoryAnalysis, engineeringHealth) {
+    return {
+      repository: repositoryAnalysis,
 
-            engineeringHealth,
+      engineeringHealth,
 
-            repositoryHealth: repositoryAnalysis.health,
+      repositoryHealth: repositoryAnalysis.health,
 
-            architecture: repositoryAnalysis.architecture,
+      architecture: repositoryAnalysis.architecture,
 
-            technicalDebt: repositoryAnalysis.technicalDebt,
+      technicalDebt: repositoryAnalysis.technicalDebt,
 
-            deployment: repositoryAnalysis.deployment,
+      deployment: repositoryAnalysis.deployment,
 
-            pullRequestRisk:
-                repositoryAnalysis.pullRequestAnalyses[0] ?? null,
-        };
-    }
+      pullRequestRisk: repositoryAnalysis.pullRequestAnalyses[0] ?? null,
+    };
+  }
 
-    async generateRepositoryReview(repositoryId) {
+  async generateRepositoryReview(repositoryId) {
     const existingReview =
-        await this.repositoryAIReviewRepository.getReviewByRepositoryId(
-            repositoryId
-        );
+      await this.repositoryAIReviewRepository.getReviewByRepositoryId(
+        repositoryId,
+      );
 
     if (existingReview) {
-        return existingReview;
+      return existingReview;
     }
 
     const repositoryAnalysis =
-        await this.repositoryAnalysisRepository.getRepositoryAnalysis(
-            repositoryId
-        );
+      await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+        repositoryId,
+      );
 
     const engineeringHealth =
-        await engineeringHealthService.getEngineeringHealth(
-            repositoryId
-        );
+      await engineeringHealthService.getEngineeringHealth(repositoryId);
 
     const analysis = this.buildAnalysisObject(
-        repositoryAnalysis,
-        engineeringHealth
+      repositoryAnalysis,
+      engineeringHealth,
     );
 
-    const prompt =
-        buildRepositoryReviewPrompt(analysis);
+    const prompt = buildRepositoryReviewPrompt(analysis);
 
-    const review =
-        await this.provider.generateRepositoryReview(prompt);
+    const review = await this.provider.generateRepositoryReview(prompt);
 
-    const savedReview =
-        await this.repositoryAIReviewRepository.saveReview(
-            repositoryId,
-            review,
-            this.provider.model
-        );
+    const savedReview = await this.repositoryAIReviewRepository.saveReview(
+      repositoryId,
+      review,
+      this.provider.model,
+    );
 
     return savedReview;
-}
+  }
 
-    async getRepositoryReview(repositoryId) {
+  async getRepositoryReview(repositoryId) {
     return await this.repositoryAIReviewRepository.getReviewByRepositoryId(
-        repositoryId
+      repositoryId,
     );
-}
+  }
 
-async refreshRepositoryReview(repositoryId) {
+  async refreshRepositoryReview(repositoryId) {
     const repositoryAnalysis =
-        await this.repositoryAnalysisRepository.getRepositoryAnalysis(
-            repositoryId
-        );
+      await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+        repositoryId,
+      );
 
     const engineeringHealth =
-        await engineeringHealthService.getEngineeringHealth(
-            repositoryId
-        );
+      await engineeringHealthService.getEngineeringHealth(repositoryId);
 
     const analysis = this.buildAnalysisObject(
-        repositoryAnalysis,
-        engineeringHealth
+      repositoryAnalysis,
+      engineeringHealth,
     );
 
-    const prompt =
-        buildRepositoryReviewPrompt(analysis);
+    const prompt = buildRepositoryReviewPrompt(analysis);
 
-    const review =
-        await this.provider.generateRepositoryReview(prompt);
+    const review = await this.provider.generateRepositoryReview(prompt);
 
     return await this.repositoryAIReviewRepository.saveReview(
-        repositoryId,
-        review,
-        this.provider.model
+      repositoryId,
+      review,
+      this.provider.model,
     );
-}
+  }
 }
 
 module.exports = AIReviewService;

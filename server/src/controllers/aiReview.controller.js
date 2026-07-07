@@ -54,7 +54,32 @@ const getRepositoryReview = async (req, res) => {
     }
 };
 
+const refreshRepositoryReview = async (req, res) => {
+    try {
+        const { repositoryId } = req.params;
+
+        const review =
+            await aiReviewService.refreshRepositoryReview(
+                repositoryId
+            );
+
+        return res.status(200).json({
+            success: true,
+            message: "AI repository review refreshed successfully.",
+            data: review,
+        });
+    } catch (error) {
+        console.error("Refresh AI Review Error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message || "Failed to refresh AI review.",
+        });
+    }
+};
+
 module.exports = {
     generateRepositoryReview,
     getRepositoryReview,
+    refreshRepositoryReview,
 };

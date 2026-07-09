@@ -1,36 +1,40 @@
-import Button from "../ui/Button";
+import { useNavigate } from "react-router-dom";
 import Container from "../ui/Container";
+import Button from "../ui/Button";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
   return (
-    <nav className="w-full h-20 border-b border-slate-800 bg-[#0B0F19]">
-      <Container className="flex h-full items-center justify-between">
+   <nav className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F19]">
+      <Container className="flex h-16 items-center justify-between">
 
         {/* Logo */}
-        <div className="flex items-center gap-3">
-
-          {/* Temporary Logo */}
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500 text-sm font-bold text-white">
+        <div
+          onClick={() => navigate("/")}
+          className="flex cursor-pointer items-center gap-3"
+        >
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/20">
             DL
           </div>
 
-          <span className="text-xl font-bold text-white">
+          <span className="text-2xl font-bold tracking-tight text-white">
             DevLens
           </span>
         </div>
 
         {/* Navigation */}
-        <ul className="flex items-center gap-8">
+        <ul className="hidden items-center gap-10 md:flex">
 
-          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200">
+          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
             Features
           </li>
 
-          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200">
+          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
             How It Works
           </li>
 
-          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200">
+          <li className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
             GitHub
           </li>
 
@@ -39,11 +43,17 @@ export default function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-3">
 
-          <Button className="text-slate-300">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/login")}
+          >
             Sign In
           </Button>
 
-          <Button className="text-slate-300">
+          <Button
+            variant="primary"
+            onClick={() => navigate("/login")}
+          >
             Get Started
           </Button>
 

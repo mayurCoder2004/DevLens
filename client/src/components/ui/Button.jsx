@@ -8,7 +8,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
-      className={className}
+      className={`px-5 py-2 ${className}`}
     >
       {children}
     </button>

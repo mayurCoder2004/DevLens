@@ -9,11 +9,14 @@ import TechnicalDebt from "./pages/TechnicalDebt";
 import Deployment from "./pages/Deployment";
 import EngineeringHealthPage from "./pages/EngineeringHealthPage";
 import AIReview from "./pages/AIReview";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<LandingPage />} />
+
+      <Route path="/login" element={<Login />} />
 
       <Route
         path="/dashboard"

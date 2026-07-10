@@ -10,14 +10,42 @@ import TrustSection from "../components/landing/TrustSection";
 export default function LandingPage() {
   return (
     <>
-    <Navbar />
-    <Hero />
-    <TrustSection />
-    <HowItWorks />
-    <RepositoryPipeline />
-    <RepositoryWorkspace />
-    <LandingCTA />
-    <Footer />
+      <Navbar />
+
+      {/* Hero section */}
+      <div id="hero">
+        <Hero />
+      </div>
+
+      {/* Trust / Features section */}
+      <div id="features">
+        <TrustSection />
+      </div>
+
+      {/* How It Works section */}
+      <div id="how-it-works">
+        <HowItWorks />
+      </div>
+
+      {/* Repository Pipeline section */}
+      <div id="pipeline">
+        <RepositoryPipeline />
+      </div>
+
+      {/* Repository Workspace section */}
+      <div id="workspace">
+        <RepositoryWorkspace />
+      </div>
+
+      {/* CTA section */}
+      <div id="cta">
+        <LandingCTA />
+      </div>
+
+      {/* Footer section */}
+      <div id="footer">
+        <Footer />
+      </div>
     </>
   );
 }

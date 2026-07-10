@@ -3,11 +3,13 @@ import {
   Check,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 import Container from "../ui/Container";
 
 export default function LandingCTA() {
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-28">
       {/* Background Glow */}
@@ -48,7 +50,7 @@ export default function LandingCTA() {
           {/* CTA */}
 
           <div className="mt-12 flex justify-center">
-            <Button variant="primary">
+            <Button variant="primary" onClick={() => navigate("/login")}>
               <div className="flex items-center gap-3">
                 <FaGithub size={18} />
 

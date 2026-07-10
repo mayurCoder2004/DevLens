@@ -1,9 +1,12 @@
 import { CheckCircle, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 import Container from "../ui/Container";
 import RepositoryPreview from "./RepositoryPreview";
+import { GITHUB_REPO_URL } from "../../constants/urls";
 
 export default function Hero() {
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16">
 
@@ -74,16 +77,23 @@ export default function Hero() {
               <Button
                 variant="primary"
                 size="lg"
+                onClick={() => navigate("/login")}
               >
                 Get Started with GitHub
               </Button>
 
-              <Button
-                variant="secondary"
-                size="lg"
+              <a
+                href={GITHUB_REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                View Live Demo
-              </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                >
+                  View Live Demo
+                </Button>
+              </a>
 
             </div>
 

@@ -10,6 +10,8 @@ import Deployment from "./pages/Deployment";
 import EngineeringHealthPage from "./pages/EngineeringHealthPage";
 import AIReview from "./pages/AIReview";
 import LandingPage from "./pages/LandingPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import TermsPage from "./pages/TermsPage";
 
 function App() {
   return (
@@ -17,6 +19,10 @@ function App() {
       <Route path="/" element={<LandingPage />} />
 
       <Route path="/login" element={<Login />} />
+
+      <Route path="/privacy" element={<PrivacyPage />} />
+
+      <Route path="/terms" element={<TermsPage />} />
 
       <Route
         path="/dashboard"

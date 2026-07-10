@@ -1,25 +1,36 @@
 import { ArrowUpRight, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import Container from "../ui/Container";
+import { GITHUB_REPO_URL, LINKEDIN_URL } from "../../constants/urls";
 
 const currentYear = new Date().getFullYear();
 
+/**
+ * Footer navigation links.
+ * - external: opens in a new tab (uses <a>)
+ * - internal: React Router <Link> (no page reload)
+ */
 const links = [
   {
     title: "GitHub",
-    href: "#",
-  },
-  {
-    title: "Documentation",
-    href: "#",
+    href: GITHUB_REPO_URL,
+    external: true,
   },
   {
     title: "Contact",
-    href: "#",
+    href: LINKEDIN_URL,
+    external: true,
   },
   {
     title: "Privacy",
-    href: "#",
+    href: "/privacy",
+    external: false,
+  },
+  {
+    title: "Terms",
+    href: "/terms",
+    external: false,
   },
 ];
 
@@ -59,20 +70,37 @@ export default function Footer() {
           {/* Navigation */}
 
           <div className="flex flex-wrap gap-8">
-            {links.map((link) => (
-              <a
-                key={link.title}
-                href={link.href}
-                className="group flex items-center gap-1 text-sm text-slate-400 transition-colors hover:text-white"
-              >
-                {link.title}
+            {links.map((link) =>
+              link.external ? (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-1 text-sm text-slate-400 transition-colors hover:text-white"
+                >
+                  {link.title}
 
-                <ArrowUpRight
-                  size={15}
-                  className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                />
-              </a>
-            ))}
+                  <ArrowUpRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </a>
+              ) : (
+                <Link
+                  key={link.title}
+                  to={link.href}
+                  className="group flex items-center gap-1 text-sm text-slate-400 transition-colors hover:text-white"
+                >
+                  {link.title}
+
+                  <ArrowUpRight
+                    size={15}
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              )
+            )}
           </div>
         </div>
 
@@ -84,7 +112,7 @@ export default function Footer() {
           </span>
 
           <div className="flex items-center gap-2">
-            <span>Designed & Developed with</span>
+            <span>Designed &amp; Developed with</span>
 
             <Heart
               size={15}

@@ -9,11 +9,17 @@ import {
   FileText,
   ArrowDown,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import Container from "../ui/Container";
 import PipelineNode from "./PipelineNode";
+import {
+  useMotionVariants,
+  defaultViewport,
+} from "../../utils/motion";
 
 export default function RepositoryPipeline() {
+  const { fadeUp, staggerContainer, staggerItem } = useMotionVariants();
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-24">
 
@@ -23,9 +29,15 @@ export default function RepositoryPipeline() {
 
       <Container className="relative z-10">
 
-        {/* Heading */}
+        {/* Heading — fades up on scroll */}
 
-        <div className="mx-auto max-w-3xl text-center">
+        <motion.div
+          className="mx-auto max-w-3xl text-center"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={defaultViewport}
+        >
 
           <div className="inline-flex rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
 
@@ -45,11 +57,17 @@ export default function RepositoryPipeline() {
             generating a unified AI report.
           </p>
 
-        </div>
+        </motion.div>
 
-        {/* Pipeline */}
+        {/* Pipeline — nodes stagger upward on scroll */}
 
-        <div className="mt-16 flex flex-col items-center sm:mt-24">
+        <motion.div
+          className="mt-16 flex flex-col items-center sm:mt-24"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={defaultViewport}
+        >
 
           {/* Stage 1 */}
 
@@ -59,22 +77,26 @@ export default function RepositoryPipeline() {
             variant="primary"
           />
 
-          <ArrowDown
-            size={26}
-            className="my-4 text-slate-600 sm:my-5"
-          />
+          <motion.div variants={staggerItem}>
+            <ArrowDown
+              size={26}
+              className="my-4 text-slate-600 sm:my-5"
+            />
+          </motion.div>
 
           <PipelineNode
             icon={BarChart3}
             title="Repository Analytics"
           />
 
-          <ArrowDown
-            size={26}
-            className="my-6 text-slate-600 sm:my-8"
-          />
+          <motion.div variants={staggerItem}>
+            <ArrowDown
+              size={26}
+              className="my-6 text-slate-600 sm:my-8"
+            />
+          </motion.div>
 
-          {/* Parallel Stage: wraps to 1 col on very small, 3 col on sm+ */}
+          {/* Parallel Stage */}
 
           <div className="flex w-full max-w-2xl flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6 lg:gap-8">
 
@@ -95,10 +117,12 @@ export default function RepositoryPipeline() {
 
           </div>
 
-          <ArrowDown
-            size={26}
-            className="my-6 text-slate-600 sm:my-8"
-          />
+          <motion.div variants={staggerItem}>
+            <ArrowDown
+              size={26}
+              className="my-6 text-slate-600 sm:my-8"
+            />
+          </motion.div>
 
           {/* Stage 3 */}
 
@@ -107,20 +131,24 @@ export default function RepositoryPipeline() {
             title="Engineering Health"
           />
 
-          <ArrowDown
-            size={26}
-            className="my-4 text-slate-600 sm:my-5"
-          />
+          <motion.div variants={staggerItem}>
+            <ArrowDown
+              size={26}
+              className="my-4 text-slate-600 sm:my-5"
+            />
+          </motion.div>
 
           <PipelineNode
             icon={Sparkles}
             title="AI Repository Review"
           />
 
-          <ArrowDown
-            size={26}
-            className="my-4 text-slate-600 sm:my-5"
-          />
+          <motion.div variants={staggerItem}>
+            <ArrowDown
+              size={26}
+              className="my-4 text-slate-600 sm:my-5"
+            />
+          </motion.div>
 
           <PipelineNode
             icon={FileText}
@@ -128,7 +156,7 @@ export default function RepositoryPipeline() {
             variant="success"
           />
 
-        </div>
+        </motion.div>
 
       </Container>
 

@@ -4,10 +4,15 @@ import {
   ArrowRight,
   ArrowDown,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import Container from "../ui/Container";
 import StepCard from "./StepCard";
 import { FaGithub } from "react-icons/fa";
+import {
+  useMotionVariants,
+  defaultViewport,
+} from "../../utils/motion";
 
 const steps = [
   {
@@ -34,14 +39,22 @@ const steps = [
 ];
 
 export default function HowItWorks() {
+  const { fadeUp, staggerContainer, staggerItem } = useMotionVariants();
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-20">
       {/* Background Glow */}
       <div className="absolute left-1/2 top-0 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[160px] sm:h-[500px] sm:w-[500px]" />
 
       <Container className="relative z-10">
-        {/* Heading */}
-        <div className="mx-auto max-w-3xl text-center">
+
+        {/* Heading — fades up on scroll */}
+        <motion.div
+          className="mx-auto max-w-3xl text-center"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={defaultViewport}
+        >
           <div className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
             <span className="text-sm font-medium text-blue-400">
               Workflow
@@ -57,25 +70,41 @@ export default function HowItWorks() {
             AI-powered engineering intelligence in just
             a few minutes.
           </p>
-        </div>
+        </motion.div>
 
         {/* Steps */}
         <div className="mt-14 sm:mt-20">
 
-          {/* Mobile: vertical stack with down arrows */}
-          <div className="flex flex-col items-center gap-0 lg:hidden">
+          {/* Mobile: vertical stack with stagger + down arrows */}
+          <motion.div
+            className="flex flex-col items-center gap-0 lg:hidden"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={defaultViewport}
+          >
             {steps.map((step, index) => (
-              <div key={step.step} className="flex w-full max-w-lg flex-col items-center">
+              <motion.div
+                key={step.step}
+                variants={staggerItem}
+                className="flex w-full max-w-lg flex-col items-center"
+              >
                 <StepCard {...step} />
                 {index < steps.length - 1 && (
                   <ArrowDown size={28} className="my-4 text-slate-700" />
                 )}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Desktop: 3-column grid with right arrows */}
-          <div className="hidden lg:grid lg:grid-cols-3 lg:gap-8">
+          {/* Desktop: 3-column grid with stagger + right arrows */}
+          <motion.div
+            className="hidden lg:grid lg:grid-cols-3 lg:gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={defaultViewport}
+          >
             {steps.map((step, index) => (
               <div
                 key={step.step}
@@ -93,7 +122,7 @@ export default function HowItWorks() {
                 )}
               </div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </Container>

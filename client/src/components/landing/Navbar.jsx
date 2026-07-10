@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { motion } from "framer-motion";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 import { GITHUB_REPO_URL } from "../../constants/urls";
+import { useMotionVariants } from "../../utils/motion";
 
 /**
  * Scrolls to a section by ID with smooth behavior.
@@ -17,6 +19,7 @@ function scrollTo(id) {
 export default function Navbar() {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { fadeDown } = useMotionVariants();
 
   function handleNavClick(id) {
     scrollTo(id);
@@ -24,7 +27,12 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F19]">
+    <motion.nav
+      className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F19]"
+      variants={fadeDown}
+      initial="hidden"
+      animate="visible"
+    >
       <Container className="flex h-16 items-center justify-between">
 
         {/* Logo → scrolls to hero */}
@@ -91,7 +99,12 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="border-t border-slate-800 bg-[#0B0F19] md:hidden">
+        <motion.div
+          className="border-t border-slate-800 bg-[#0B0F19] md:hidden"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+        >
           <Container className="flex flex-col gap-1 py-4">
             <button
               onClick={() => handleNavClick("features")}
@@ -134,8 +147,8 @@ export default function Navbar() {
               </Button>
             </div>
           </Container>
-        </div>
+        </motion.div>
       )}
-    </nav>
+    </motion.nav>
   );
 }

@@ -6,10 +6,15 @@ import {
   Bug,
   GitBranch,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import Container from "../ui/Container";
 import TrustCard from "./TrustCard";
 import { FaGithub } from "react-icons/fa";
+import {
+  useMotionVariants,
+  defaultViewport,
+} from "../../utils/motion";
 
 const trustItems = [
     {
@@ -51,12 +56,20 @@ const trustItems = [
   ];
 
 export default function TrustSection() {
+  const { fadeUp, staggerContainer } = useMotionVariants();
 
   return (
   <section className="bg-[#0B0F19] py-16 sm:py-24">
     <Container>
 
-      <div className="mx-auto max-w-3xl text-center">
+      {/* Heading — fades up on scroll */}
+      <motion.div
+        className="mx-auto max-w-3xl text-center"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={defaultViewport}
+      >
 
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
           Built for Modern Engineering Teams
@@ -67,10 +80,16 @@ export default function TrustSection() {
           your entire software development lifecycle.
         </p>
 
-      </div>
+      </motion.div>
 
-      {/* 1 col mobile → 2 col tablet → 3 col desktop */}
-      <div className="mt-12 grid gap-4 sm:mt-16 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {/* Cards — stagger upward on scroll */}
+      <motion.div
+        className="mt-12 grid gap-4 sm:mt-16 sm:gap-6 md:grid-cols-2 xl:grid-cols-3"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={defaultViewport}
+      >
 
         {trustItems.map((item) => (
           <TrustCard
@@ -79,7 +98,7 @@ export default function TrustSection() {
           />
         ))}
 
-      </div>
+      </motion.div>
 
     </Container>
   </section>

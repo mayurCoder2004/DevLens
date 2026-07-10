@@ -1,8 +1,10 @@
 import { ArrowUpRight, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import Container from "../ui/Container";
 import { GITHUB_REPO_URL, LINKEDIN_URL } from "../../constants/urls";
+import { useMotionVariants, defaultViewport } from "../../utils/motion";
 
 const currentYear = new Date().getFullYear();
 
@@ -35,8 +37,15 @@ const links = [
 ];
 
 export default function Footer() {
+  const { fadeUp } = useMotionVariants();
   return (
-    <footer className="border-t border-slate-800 bg-[#0B0F19]">
+    <motion.footer
+      className="border-t border-slate-800 bg-[#0B0F19]"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
+    >
       <Container>
         {/* Top */}
 
@@ -123,6 +132,6 @@ export default function Footer() {
           </div>
         </div>
       </Container>
-    </footer>
+    </motion.footer>
   );
 }

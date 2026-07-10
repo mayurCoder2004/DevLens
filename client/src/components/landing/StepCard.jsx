@@ -1,11 +1,22 @@
+import { motion } from "framer-motion";
+import { useMotionVariants } from "../../utils/motion";
+
 export default function StepCard({
   icon: Icon,
   step,
   title,
   description,
 }) {
+  const { staggerItem } = useMotionVariants();
   return (
-    <div
+    <motion.div
+      variants={staggerItem}
+      whileHover={{
+        y: -8,
+        boxShadow: "0 24px 48px -12px rgba(59, 130, 246, 0.12)",
+        borderColor: "rgba(59, 130, 246, 0.35)",
+        transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] },
+      }}
       className="
         group
         relative
@@ -16,13 +27,9 @@ export default function StepCard({
         bg-slate-900/40
         p-8
         text-center
-        transition-all
+        transition-colors
         duration-300
-        hover:-translate-y-3
-        hover:border-blue-500/40
         hover:bg-slate-900
-        hover:shadow-xl
-        hover:shadow-blue-500/10
       "
     >
       {/* Step Badge */}
@@ -69,6 +76,6 @@ export default function StepCard({
       <p className="mt-4 text-sm leading-7 text-slate-400">
         {description}
       </p>
-    </div>
+    </motion.div>
   );
 }

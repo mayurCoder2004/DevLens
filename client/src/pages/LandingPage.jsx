@@ -1,5 +1,7 @@
+import Footer from "../components/landing/Footer";
 import Hero from "../components/landing/Hero";
 import HowItWorks from "../components/landing/HowItWorks";
+import LandingCTA from "../components/landing/LandingCTA";
 import Navbar from "../components/landing/Navbar";
 import RepositoryPipeline from "../components/landing/RepositoryPipeline";
 import RepositoryWorkspace from "../components/landing/RepositoryWorkspace";
@@ -14,6 +16,8 @@ export default function LandingPage() {
     <HowItWorks />
     <RepositoryPipeline />
     <RepositoryWorkspace />
+    <LandingCTA />
+    <Footer />
     </>
   );
 }

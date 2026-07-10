@@ -7,11 +7,12 @@ import {
 
 import Container from "../ui/Container";
 import StepCard from "./StepCard";
+import { FaGithub } from "react-icons/fa";
 
 const steps = [
   {
     step: "01",
-    icon: FolderGit2,
+    icon: FaGithub,
     title: "Connect Repository",
     description:
       "Securely connect any GitHub repository using GitHub OAuth in just a few clicks.",

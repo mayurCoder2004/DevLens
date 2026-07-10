@@ -9,10 +9,11 @@ import {
 
 import Container from "../ui/Container";
 import TrustCard from "./TrustCard";
+import { FaGithub } from "react-icons/fa";
 
 const trustItems = [
     {
-      icon: GitBranch,
+      icon: FaGithub,
       title: "GitHub Native",
       description:
         "Connect repositories securely in seconds.",

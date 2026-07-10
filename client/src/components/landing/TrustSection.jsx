@@ -53,23 +53,24 @@ const trustItems = [
 export default function TrustSection() {
 
   return (
-  <section className="bg-[#0B0F19] py-24">
+  <section className="bg-[#0B0F19] py-16 sm:py-24">
     <Container>
 
       <div className="mx-auto max-w-3xl text-center">
 
-        <h2 className="text-4xl font-bold tracking-tight text-white">
+        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
           Built for Modern Engineering Teams
         </h2>
 
-        <p className="mt-6 text-lg leading-8 text-slate-400">
+        <p className="mt-4 text-base leading-8 text-slate-400 sm:mt-6 sm:text-lg">
           AI-powered engineering intelligence across
           your entire software development lifecycle.
         </p>
 
       </div>
 
-      <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {/* 1 col mobile → 2 col tablet → 3 col desktop */}
+      <div className="mt-12 grid gap-4 sm:mt-16 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
 
         {trustItems.map((item) => (
           <TrustCard

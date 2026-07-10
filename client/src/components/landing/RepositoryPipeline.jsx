@@ -15,11 +15,11 @@ import PipelineNode from "./PipelineNode";
 
 export default function RepositoryPipeline() {
   return (
-    <section className="relative overflow-hidden bg-[#0B0F19] py-24">
+    <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-24">
 
       {/* Background Glow */}
 
-      <div className="absolute left-1/2 top-0 h-[650px] w-[650px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[180px]" />
+      <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[650px] sm:w-[650px]" />
 
       <Container className="relative z-10">
 
@@ -35,11 +35,11 @@ export default function RepositoryPipeline() {
 
           </div>
 
-          <h2 className="mt-6 text-4xl font-bold text-white lg:text-5xl">
+          <h2 className="mt-6 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
             Repository Analysis Pipeline
           </h2>
 
-          <p className="mt-6 text-lg leading-8 text-slate-400">
+          <p className="mt-4 text-base leading-8 text-slate-400 sm:mt-6 sm:text-lg">
             Every repository is processed through multiple
             engineering intelligence engines before
             generating a unified AI report.
@@ -49,7 +49,7 @@ export default function RepositoryPipeline() {
 
         {/* Pipeline */}
 
-        <div className="mt-24 flex flex-col items-center">
+        <div className="mt-16 flex flex-col items-center sm:mt-24">
 
           {/* Stage 1 */}
 
@@ -61,7 +61,7 @@ export default function RepositoryPipeline() {
 
           <ArrowDown
             size={26}
-            className="my-5 text-slate-600"
+            className="my-4 text-slate-600 sm:my-5"
           />
 
           <PipelineNode
@@ -71,12 +71,12 @@ export default function RepositoryPipeline() {
 
           <ArrowDown
             size={26}
-            className="my-8 text-slate-600"
+            className="my-6 text-slate-600 sm:my-8"
           />
 
-          {/* Parallel Stage */}
+          {/* Parallel Stage: wraps to 1 col on very small, 3 col on sm+ */}
 
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="flex w-full max-w-2xl flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-6 lg:gap-8">
 
             <PipelineNode
               icon={Network}
@@ -97,7 +97,7 @@ export default function RepositoryPipeline() {
 
           <ArrowDown
             size={26}
-            className="my-8 text-slate-600"
+            className="my-6 text-slate-600 sm:my-8"
           />
 
           {/* Stage 3 */}
@@ -109,7 +109,7 @@ export default function RepositoryPipeline() {
 
           <ArrowDown
             size={26}
-            className="my-5 text-slate-600"
+            className="my-4 text-slate-600 sm:my-5"
           />
 
           <PipelineNode
@@ -119,7 +119,7 @@ export default function RepositoryPipeline() {
 
           <ArrowDown
             size={26}
-            className="my-5 text-slate-600"
+            className="my-4 text-slate-600 sm:my-5"
           />
 
           <PipelineNode

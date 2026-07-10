@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 import { GITHUB_REPO_URL } from "../../constants/urls";
@@ -14,37 +16,41 @@ function scrollTo(id) {
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  function handleNavClick(id) {
+    scrollTo(id);
+    setMobileOpen(false);
+  }
 
   return (
-   <nav className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F19]">
+    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-[#0B0F19]">
       <Container className="flex h-16 items-center justify-between">
 
         {/* Logo → scrolls to hero */}
         <div
-          onClick={() => scrollTo("hero")}
+          onClick={() => handleNavClick("hero")}
           className="flex cursor-pointer items-center gap-3"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/20">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/20">
             DL
           </div>
-
-          <span className="text-2xl font-bold tracking-tight text-white">
+          <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">
             DevLens
           </span>
         </div>
 
-        {/* Navigation */}
-        <ul className="hidden items-center gap-10 md:flex">
-
+        {/* Desktop Navigation */}
+        <ul className="hidden items-center gap-8 md:flex lg:gap-10">
           <li
-            onClick={() => scrollTo("features")}
+            onClick={() => handleNavClick("features")}
             className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
           >
             Features
           </li>
 
           <li
-            onClick={() => scrollTo("how-it-works")}
+            onClick={() => handleNavClick("how-it-works")}
             className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
           >
             How It Works
@@ -60,29 +66,76 @@ export default function Navbar() {
               GitHub
             </a>
           </li>
-
         </ul>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/login")}
-          >
+        {/* Desktop Actions */}
+        <div className="hidden items-center gap-3 md:flex">
+          <Button variant="ghost" onClick={() => navigate("/login")}>
             Sign In
           </Button>
-
-          <Button
-            variant="primary"
-            onClick={() => navigate("/login")}
-          >
+          <Button variant="primary" onClick={() => navigate("/login")}>
             Get Started
           </Button>
-
         </div>
 
+        {/* Mobile: hamburger */}
+        <button
+          className="flex items-center justify-center rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white md:hidden"
+          onClick={() => setMobileOpen((o) => !o)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+
       </Container>
+
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="border-t border-slate-800 bg-[#0B0F19] md:hidden">
+          <Container className="flex flex-col gap-1 py-4">
+            <button
+              onClick={() => handleNavClick("features")}
+              className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+            >
+              Features
+            </button>
+
+            <button
+              onClick={() => handleNavClick("how-it-works")}
+              className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+            >
+              How It Works
+            </button>
+
+            <a
+              href={GITHUB_REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileOpen(false)}
+              className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+            >
+              GitHub
+            </a>
+
+            <div className="mt-3 flex flex-col gap-2 border-t border-slate-800 pt-3">
+              <Button
+                variant="ghost"
+                fullWidth
+                onClick={() => { navigate("/login"); setMobileOpen(false); }}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={() => { navigate("/login"); setMobileOpen(false); }}
+              >
+                Get Started
+              </Button>
+            </div>
+          </Container>
+        </div>
+      )}
     </nav>
   );
 }

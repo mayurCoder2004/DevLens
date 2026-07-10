@@ -40,17 +40,17 @@ export default function Footer() {
       <Container>
         {/* Top */}
 
-        <div className="flex flex-col gap-12 py-14 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-10 py-12 sm:gap-12 sm:py-14 lg:flex-row lg:items-start lg:justify-between">
           {/* Branding */}
 
-          <div>
+          <div className="max-w-md">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-500/20">
+              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-500/20 sm:h-12 sm:w-12">
                 DL
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className="text-xl font-bold text-white sm:text-2xl">
                   DevLens
                 </h3>
 
@@ -60,16 +60,16 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="mt-6 max-w-md text-sm leading-7 text-slate-400">
+            <p className="mt-5 text-sm leading-7 text-slate-400 sm:mt-6">
               Analyze repositories, understand architecture,
               detect technical debt, evaluate deployment readiness,
               and generate AI-powered engineering insights from one platform.
             </p>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation — wraps to 2×2 on mobile, row on lg */}
 
-          <div className="flex flex-wrap gap-8">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4 sm:flex sm:flex-wrap sm:gap-8">
             {links.map((link) =>
               link.external ? (
                 <a
@@ -106,7 +106,7 @@ export default function Footer() {
 
         {/* Bottom */}
 
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-800 py-6 text-sm text-slate-500 md:flex-row">
+        <div className="flex flex-col items-center gap-3 border-t border-slate-800 py-6 text-sm text-slate-500 sm:gap-4 md:flex-row md:justify-between">
           <span>
             © {currentYear} DevLens. All rights reserved.
           </span>

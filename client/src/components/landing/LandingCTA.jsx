@@ -11,13 +11,13 @@ import Container from "../ui/Container";
 export default function LandingCTA() {
   const navigate = useNavigate();
   return (
-    <section className="relative overflow-hidden bg-[#0B0F19] py-28">
+    <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-28">
       {/* Background Glow */}
 
-      <div className="absolute left-1/2 top-1/2 h-[550px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px]" />
+      <div className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[550px] sm:w-[550px]" />
 
       <Container>
-        <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 px-10 py-20 text-center shadow-2xl">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 px-6 py-16 text-center shadow-2xl sm:rounded-3xl sm:px-10 sm:py-20">
           {/* Badge */}
 
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
@@ -33,7 +33,7 @@ export default function LandingCTA() {
 
           {/* Heading */}
 
-          <h2 className="mx-auto mt-8 max-w-4xl text-5xl font-bold leading-tight text-white lg:text-6xl">
+          <h2 className="mx-auto mt-6 max-w-4xl text-3xl font-bold leading-tight text-white sm:mt-8 sm:text-4xl md:text-5xl lg:text-6xl">
             Transform Your Repository
             <br />
             Into Engineering Insights
@@ -41,7 +41,7 @@ export default function LandingCTA() {
 
           {/* Description */}
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-slate-400">
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-400 sm:mt-8 sm:text-lg">
             Analyze architecture, detect technical debt, evaluate deployment
             readiness, and receive AI-powered engineering recommendations in
             minutes.
@@ -49,7 +49,7 @@ export default function LandingCTA() {
 
           {/* CTA */}
 
-          <div className="mt-12 flex justify-center">
+          <div className="mt-10 flex justify-center sm:mt-12">
             <Button variant="primary" onClick={() => navigate("/login")}>
               <div className="flex items-center gap-3">
                 <FaGithub size={18} />
@@ -63,7 +63,7 @@ export default function LandingCTA() {
 
           {/* Trust Indicators */}
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:mt-12 sm:gap-x-8 sm:gap-y-4">
             {[
               "Free Repository Analysis",
               "Secure GitHub OAuth",
@@ -75,7 +75,7 @@ export default function LandingCTA() {
               >
                 <Check
                   size={18}
-                  className="text-green-400"
+                  className="flex-shrink-0 text-green-400"
                 />
 
                 <span className="text-sm text-slate-400">

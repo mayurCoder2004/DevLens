@@ -35,45 +35,41 @@ export default function WorkspaceContent() {
 
       {/* Top Toolbar */}
 
-      <div className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
+      <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 sm:px-6 sm:py-4">
 
-        <div className="flex items-center gap-6 text-sm">
-
-          <span className="font-medium text-blue-400">
+        {/* Tabs — scrollable on narrow screens */}
+        <div className="flex items-center gap-4 overflow-x-auto scrollbar-none sm:gap-6">
+          <span className="flex-shrink-0 text-sm font-medium text-blue-400">
             Overview
           </span>
-
-          <span className="text-slate-400">
+          <span className="flex-shrink-0 text-sm text-slate-400">
             Commits
           </span>
-
-          <span className="text-slate-400">
+          <span className="flex-shrink-0 text-sm text-slate-400">
             Pull Requests
           </span>
-
-          <span className="text-slate-400">
+          <span className="flex-shrink-0 text-sm text-slate-400">
             AI Review
           </span>
-
         </div>
 
-        <div className="rounded-lg bg-slate-800 px-3 py-1 text-xs text-slate-400">
+        <div className="ml-4 flex-shrink-0 rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-400 sm:px-3">
           Last Scan • 2 min ago
         </div>
 
       </div>
 
-      <div className="flex-1 space-y-6 overflow-y-auto p-6">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4 sm:space-y-6 sm:p-6">
 
         {/* Repository Header */}
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-6">
 
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between gap-3">
 
-            <div>
+            <div className="min-w-0">
 
-              <h2 className="text-xl font-semibold text-white">
+              <h2 className="truncate text-lg font-semibold text-white sm:text-xl">
                 mayurpawar / devlens
               </h2>
 
@@ -83,13 +79,14 @@ export default function WorkspaceContent() {
 
             </div>
 
-            <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm font-medium text-green-400">
+            <span className="flex-shrink-0 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400 sm:text-sm">
               Healthy
             </span>
 
           </div>
 
-          <div className="mt-5 flex gap-6 text-sm text-slate-400">
+          {/* Stats — wrap on tiny screens */}
+          <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-400 sm:mt-5 sm:gap-6">
 
             <div className="flex items-center gap-2">
               <Star size={16} />
@@ -112,27 +109,25 @@ export default function WorkspaceContent() {
 
         {/* Metrics */}
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+          <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5">
 
             <p className="text-sm text-slate-400">
               Engineering Score
             </p>
 
-            <h3 className="mt-2 text-4xl font-bold text-white">
+            <h3 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
               91
             </h3>
 
-            <div className="mt-4 h-2 rounded-full bg-slate-800">
-
+            <div className="mt-3 h-2 rounded-full bg-slate-800 sm:mt-4">
               <div className="h-full w-[91%] rounded-full bg-green-400" />
-
             </div>
 
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+          <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5">
 
             <div className="flex items-center gap-2">
 
@@ -141,17 +136,17 @@ export default function WorkspaceContent() {
                 className="text-blue-400"
               />
 
-              <span className="text-sm text-slate-400">
+              <span className="text-xs text-slate-400 sm:text-sm">
                 Deployment Readiness
               </span>
 
             </div>
 
-            <h3 className="mt-2 text-3xl font-bold text-blue-400">
+            <h3 className="mt-2 text-2xl font-bold text-blue-400 sm:text-3xl">
               Ready
             </h3>
 
-            <p className="mt-3 text-sm text-slate-500">
+            <p className="mt-2 text-xs text-slate-500 sm:mt-3 sm:text-sm">
               CI/CD and Docker configuration verified.
             </p>
 
@@ -161,9 +156,9 @@ export default function WorkspaceContent() {
 
         {/* Activity */}
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-6">
 
-          <div className="mb-6 flex items-center gap-2">
+          <div className="mb-4 flex items-center gap-2 sm:mb-6">
 
             <Activity
               size={18}
@@ -176,7 +171,7 @@ export default function WorkspaceContent() {
 
           </div>
 
-          <div className="flex h-36 items-end gap-2">
+          <div className="flex h-28 items-end gap-1.5 sm:h-36 sm:gap-2">
 
             {activity.map((height, index) => (
               <div
@@ -194,13 +189,13 @@ export default function WorkspaceContent() {
 
         {/* Findings */}
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+        <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-6">
 
-          <h3 className="mb-5 font-semibold text-white">
+          <h3 className="mb-4 font-semibold text-white sm:mb-5">
             Recent Findings
           </h3>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
 
             {findings.map((item) => {
               const Icon = item.icon;
@@ -208,12 +203,12 @@ export default function WorkspaceContent() {
               return (
                 <div
                   key={item.title}
-                  className="flex items-center gap-3"
+                  className="flex items-start gap-3"
                 >
 
                   <Icon
                     size={18}
-                    className={item.color}
+                    className={`mt-0.5 flex-shrink-0 ${item.color}`}
                   />
 
                   <span className="text-sm text-slate-300">

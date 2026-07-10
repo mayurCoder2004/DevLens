@@ -53,26 +53,26 @@ const recommendations = [
 
 export default function RepositoryPreview() {
   return (
-    <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40">
+    <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 lg:max-w-2xl">
 
       {/* Browser Header */}
-      <div className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-5 py-3">
+      <div className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2">
           <Circle size={10} className="fill-red-400 text-red-400" />
           <Circle size={10} className="fill-yellow-400 text-yellow-400" />
           <Circle size={10} className="fill-green-400 text-green-400" />
         </div>
 
-        <div className="rounded-md bg-slate-800 px-3 py-1 text-xs text-slate-400">
+        <div className="rounded-md bg-slate-800 px-2 py-1 text-xs text-slate-400 truncate max-w-[160px] sm:max-w-none">
           github.com/mayurpawar/devlens
         </div>
       </div>
 
       {/* Repository Header */}
-      <div className="space-y-5 border-b border-slate-700 p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-white">
+      <div className="space-y-4 border-b border-slate-700 p-4 sm:space-y-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-semibold text-white sm:text-lg">
               mayurpawar / devlens
             </h3>
             <p className="mt-1 text-sm text-slate-400">
@@ -80,7 +80,7 @@ export default function RepositoryPreview() {
             </p>
           </div>
 
-          <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">
+          <span className="flex-shrink-0 rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">
             Healthy
           </span>
         </div>
@@ -88,7 +88,7 @@ export default function RepositoryPreview() {
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-slate-400">Engineering Score</span>
-            <span className="text-2xl font-bold text-white">87</span>
+            <span className="text-xl font-bold text-white sm:text-2xl">87</span>
           </div>
 
           <div className="h-2 rounded-full bg-slate-800">
@@ -97,18 +97,18 @@ export default function RepositoryPreview() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-6 border-b border-slate-700 px-6 py-3 text-sm">
-        <span className="border-b-2 border-blue-500 pb-2 font-medium text-blue-400">
+      {/* Tabs – scrollable on very small screens */}
+      <div className="flex items-center gap-4 overflow-x-auto border-b border-slate-700 px-4 py-3 text-sm scrollbar-none sm:gap-6 sm:px-6">
+        <span className="flex-shrink-0 border-b-2 border-blue-500 pb-2 font-medium text-blue-400">
           Overview
         </span>
-        <span className="text-slate-400">Analytics</span>
-        <span className="text-slate-400">Architecture</span>
-        <span className="text-slate-400">AI Review</span>
+        <span className="flex-shrink-0 text-slate-400">Analytics</span>
+        <span className="flex-shrink-0 text-slate-400">Architecture</span>
+        <span className="flex-shrink-0 text-slate-400">AI Review</span>
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-2 gap-4 p-6">
+      <div className="grid grid-cols-2 gap-3 p-4 sm:gap-4 sm:p-6">
         {metrics.map((metric) => {
           const Icon = metric.icon;
           const Trend = metric.trendIcon;
@@ -116,21 +116,21 @@ export default function RepositoryPreview() {
           return (
             <div
               key={metric.title}
-              className="rounded-xl border border-slate-700 bg-slate-800 p-4 transition-colors hover:border-blue-500/40"
+              className="rounded-xl border border-slate-700 bg-slate-800 p-3 transition-colors hover:border-blue-500/40 sm:p-4"
             >
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-3 flex items-center justify-between sm:mb-4">
                 <Icon size={18} className={metric.color} />
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Trend size={14} className={metric.color} />
-                  <span className={`text-xl font-bold ${metric.color}`}>
+                  <span className={`text-lg font-bold sm:text-xl ${metric.color}`}>
                     {metric.value}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-400">{metric.title}</p>
+                <p className="text-xs text-slate-400 sm:text-sm">{metric.title}</p>
                 <span className={`text-xs ${metric.color}`}>
                   {metric.trend}
                 </span>
@@ -141,7 +141,7 @@ export default function RepositoryPreview() {
       </div>
 
       {/* AI Summary */}
-      <div className="border-t border-slate-700 bg-slate-950 p-6">
+      <div className="border-t border-slate-700 bg-slate-950 p-4 sm:p-6">
         <div className="mb-4 flex items-center gap-2">
           <Sparkles size={16} className="text-blue-400" />
           <h4 className="text-sm font-semibold text-white">AI Summary</h4>
@@ -160,8 +160,8 @@ export default function RepositoryPreview() {
 
           <div className="space-y-2">
             {recommendations.map((item) => (
-              <div key={item} className="flex items-center gap-2 text-sm text-slate-300">
-                <CheckCircle2 size={16} className="text-green-400" />
+              <div key={item} className="flex items-start gap-2 text-sm text-slate-300">
+                <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0 text-green-400" />
                 <span>{item}</span>
               </div>
             ))}

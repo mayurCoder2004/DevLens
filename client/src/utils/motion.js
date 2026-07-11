@@ -26,6 +26,30 @@ export const ease = [0.25, 0.1, 0.25, 1];
 export const easeOut = [0.0, 0.0, 0.2, 1];
 
 /* -------------------------------------------------------------------------- */
+/*  HOVER CONSTANTS — centralised so every card feels identical                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Standard card hover — subtle lift + stronger shadow + border brightening.
+ * Applied via `whileHover` prop on motion elements.
+ * Duration kept tight (0.2s) for immediate premium responsiveness.
+ */
+export const CARD_HOVER = {
+  y: -4,
+  boxShadow: "0 16px 40px -12px rgba(59, 130, 246, 0.14)",
+  borderColor: "rgba(59, 130, 246, 0.35)",
+  transition: { duration: 0.2, ease },
+};
+
+/**
+ * Icon subtle scale on card hover. Pair with `group-hover` or whileHover.
+ */
+export const ICON_HOVER = {
+  scale: 1.08,
+  transition: { duration: 0.2, ease },
+};
+
+/* -------------------------------------------------------------------------- */
 /*  BASE VARIANTS                                                               */
 /* -------------------------------------------------------------------------- */
 
@@ -91,6 +115,35 @@ export const heroPreview = {
   },
 };
 
+/**
+ * Progress bar fill — animates width from 0 to target on reveal.
+ * Apply as animate prop with custom width target.
+ */
+export const progressBar = {
+  hidden: { width: "0%" },
+  visible: (target) => ({
+    width: target,
+    transition: { duration: 0.8, ease: easeOut, delay: 0.15 },
+  }),
+};
+
+/**
+ * Ambient background glow — very slow opacity pulse, infinite reverse.
+ * Opacity only. Duration 12s. Almost invisible. Adds life without distraction.
+ */
+export const glowPulse = {
+  initial: { opacity: 0.7 },
+  animate: {
+    opacity: [0.7, 1, 0.7],
+    transition: {
+      duration: 12,
+      ease: "easeInOut",
+      repeat: Infinity,
+      repeatType: "reverse",
+    },
+  },
+};
+
 /* -------------------------------------------------------------------------- */
 /*  STAGGER CONTAINERS                                                          */
 /* -------------------------------------------------------------------------- */
@@ -123,6 +176,33 @@ export const heroStagger = {
 };
 
 /**
+ * Refined stagger for preview card grids — tighter delay, sequenced reveal.
+ */
+export const previewStagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.0,
+    },
+  },
+};
+
+/**
+ * Workspace panel stagger — left panel first, content second, insight last.
+ * Slightly longer delay for a deliberate, panel-by-panel feel.
+ */
+export const workspaceStagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+/**
  * A single stagger child — fades up as part of a staggered sequence.
  * Pair with `staggerContainer` or `heroStagger`.
  */
@@ -132,6 +212,19 @@ export const staggerItem = {
     opacity: 1,
     y: 0,
     transition: { duration: 0.45, ease },
+  },
+};
+
+/**
+ * Workspace panel reveal — slides in from slight y with fade.
+ * Slightly slower than staggerItem for more weight.
+ */
+export const workspacePanel = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease },
   },
 };
 
@@ -165,6 +258,16 @@ const noMotionContainer = {
   visible: { transition: { staggerChildren: 0, delayChildren: 0 } },
 };
 
+const noMotionProgress = {
+  hidden: { width: "0%" },
+  visible: (target) => ({ width: target, ...instant }),
+};
+
+const noMotionGlow = {
+  initial: { opacity: 0.7 },
+  animate: { opacity: 0.7 },
+};
+
 /**
  * React hook that returns all animation variants.
  * When the user has `prefers-reduced-motion: reduce` set in their OS,
@@ -186,7 +289,15 @@ export function useMotionVariants() {
       heroPreview: noMotionVariant,
       staggerContainer: noMotionContainer,
       heroStagger: noMotionContainer,
+      previewStagger: noMotionContainer,
+      workspaceStagger: noMotionContainer,
       staggerItem: noMotionVariant,
+      workspacePanel: noMotionVariant,
+      progressBar: noMotionProgress,
+      glowPulse: noMotionGlow,
+      // Hover constants — return empty objects so whileHover is a no-op
+      CARD_HOVER: {},
+      ICON_HOVER: {},
     };
   }
 
@@ -198,6 +309,13 @@ export function useMotionVariants() {
     heroPreview,
     staggerContainer,
     heroStagger,
+    previewStagger,
+    workspaceStagger,
     staggerItem,
+    workspacePanel,
+    progressBar,
+    glowPulse,
+    CARD_HOVER,
+    ICON_HOVER,
   };
 }

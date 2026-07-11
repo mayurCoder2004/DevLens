@@ -10,11 +10,22 @@ import {
 } from "../../utils/motion";
 
 export default function RepositoryWorkspace() {
-  const { fadeUp, staggerContainer, staggerItem } = useMotionVariants();
+  const {
+    fadeUp,
+    workspaceStagger,
+    workspacePanel,
+    glowPulse,
+  } = useMotionVariants();
+
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-28">
-      {/* Background Glow */}
-      <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[700px] sm:w-[700px]" />
+
+      {/* Background Glow — slow opacity pulse */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[700px] sm:w-[700px]"
+        initial={glowPulse.initial}
+        animate={glowPulse.animate}
+      />
 
       <Container>
 
@@ -43,7 +54,7 @@ export default function RepositoryWorkspace() {
           </p>
         </motion.div>
 
-        {/* Workspace Shell — entire card fades up */}
+        {/* Workspace Shell — card fades up */}
         <motion.div
           className="relative z-10 mx-auto mt-12 max-w-5xl sm:mt-20"
           variants={fadeUp}
@@ -66,28 +77,31 @@ export default function RepositoryWorkspace() {
               </div>
             </div>
 
-            {/* Mobile / Tablet – single column, fades up */}
+            {/* Mobile / Tablet – single column */}
             <div className="block lg:hidden">
               <WorkspaceContent />
             </div>
 
-            {/* Desktop – 3-column layout with staggered panel entry */}
+            {/* Desktop – 3-column layout with refined panel sequencing */}
             <motion.div
               className="hidden h-[560px] grid-cols-[220px_1fr_260px] lg:grid xl:grid-cols-[230px_1fr_270px]"
-              variants={staggerContainer}
+              variants={workspaceStagger}
               initial="hidden"
               whileInView="visible"
               viewport={defaultViewport}
             >
-              <motion.div variants={staggerItem} className="contents">
+              {/* Sidebar slides in first */}
+              <motion.div variants={workspacePanel} className="contents">
                 <WorkspaceSidebar />
               </motion.div>
 
-              <motion.div variants={staggerItem} className="contents">
+              {/* Main content second */}
+              <motion.div variants={workspacePanel} className="contents">
                 <WorkspaceContent />
               </motion.div>
 
-              <motion.div variants={staggerItem} className="contents">
+              {/* Insight panel last */}
+              <motion.div variants={workspacePanel} className="contents">
                 <InsightPanel />
               </motion.div>
             </motion.div>

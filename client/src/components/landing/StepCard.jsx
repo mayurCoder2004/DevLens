@@ -7,16 +7,12 @@ export default function StepCard({
   title,
   description,
 }) {
-  const { staggerItem } = useMotionVariants();
+  const { staggerItem, CARD_HOVER } = useMotionVariants();
+
   return (
     <motion.div
       variants={staggerItem}
-      whileHover={{
-        y: -8,
-        boxShadow: "0 24px 48px -12px rgba(59, 130, 246, 0.12)",
-        borderColor: "rgba(59, 130, 246, 0.35)",
-        transition: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] },
-      }}
+      whileHover={CARD_HOVER}
       className="
         group
         relative
@@ -28,9 +24,10 @@ export default function StepCard({
         p-8
         text-center
         transition-colors
-        duration-300
+        duration-200
         hover:bg-slate-900
       "
+      style={{ willChange: "transform, box-shadow" }}
     >
       {/* Step Badge */}
       <div className="mb-8 inline-flex rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-1.5">
@@ -50,21 +47,18 @@ export default function StepCard({
           justify-center
           rounded-2xl
           bg-blue-500/10
-          transition-all
-          duration-300
-          group-hover:scale-110
+          transition-colors
+          duration-200
           group-hover:bg-blue-500/20
         "
       >
-        <Icon
-          size={34}
-          className="
-            text-blue-400
-            transition-transform
-            duration-300
-            group-hover:rotate-3
-          "
-        />
+        {/* Icon scales very slightly — no rotation */}
+        <motion.span
+          className="inline-flex"
+          whileHover={{ scale: 1.1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
+        >
+          <Icon size={34} className="text-blue-400" />
+        </motion.span>
       </div>
 
       {/* Title */}

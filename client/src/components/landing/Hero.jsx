@@ -9,12 +9,24 @@ import { useMotionVariants } from "../../utils/motion";
 
 export default function Hero() {
   const navigate = useNavigate();
-  const { heroStagger, staggerItem, scaleIn, heroPreview } = useMotionVariants();
-  return (
-    <section className="relative overflow-hidden bg-[#0B0F19] py-12 sm:py-16">
+  const {
+    heroStagger,
+    staggerItem,
+    scaleIn,
+    heroPreview,
+    glowPulse,
+    CARD_HOVER,
+  } = useMotionVariants();
 
-      {/* Background Glow */}
-      <div className="absolute left-1/2 top-0 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[600px] sm:w-[600px]" />
+  return (
+    <section id="hero" className="relative overflow-hidden bg-[#0B0F19] py-12 sm:py-16">
+
+      {/* Background Glow — very slow opacity pulse, almost invisible */}
+      <motion.div
+        className="absolute left-1/2 top-0 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[600px] sm:w-[600px]"
+        initial={glowPulse.initial}
+        animate={glowPulse.animate}
+      />
 
       {/* Grid Pattern */}
       <div
@@ -79,8 +91,7 @@ export default function Hero() {
               className="mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center lg:justify-start"
             >
               <motion.div
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
                 className="w-full sm:w-auto"
               >
                 <Button
@@ -95,8 +106,7 @@ export default function Hero() {
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
                 className="w-full sm:w-auto"
               >
                 <a
@@ -117,26 +127,26 @@ export default function Hero() {
               </motion.div>
             </motion.div>
 
-            {/* Trust Indicators — fade up last */}
+            {/* Trust Indicators — fade up last, subtle hover feedback */}
             <motion.div
               variants={staggerItem}
               className="mt-8 flex flex-wrap justify-center gap-4 sm:mt-10 sm:gap-6 lg:justify-start"
             >
 
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                <span>Sign in with GitHub</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                <span>Free Repository Analysis</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                <span>No Credit Card Required</span>
-              </div>
+              {[
+                "Sign in with GitHub",
+                "Free Repository Analysis",
+                "No Credit Card Required",
+              ].map((label) => (
+                <motion.div
+                  key={label}
+                  className="flex items-center gap-2 text-sm text-slate-400"
+                  whileHover={{ color: "#cbd5e1", transition: { duration: 0.15 } }}
+                >
+                  <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
+                  <span>{label}</span>
+                </motion.div>
+              ))}
 
             </motion.div>
 

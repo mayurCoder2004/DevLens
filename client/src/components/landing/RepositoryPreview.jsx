@@ -9,6 +9,8 @@ import {
   TrendingDown,
   CheckCircle2,
 } from "lucide-react";
+import { motion } from "framer-motion";
+import { useMotionVariants } from "../../utils/motion";
 
 const metrics = [
   {
@@ -18,6 +20,8 @@ const metrics = [
     trendIcon: TrendingUp,
     color: "text-green-400",
     icon: ShieldCheck,
+    barColor: "bg-green-400",
+    barWidth: "91%",
   },
   {
     title: "Technical Debt",
@@ -26,6 +30,8 @@ const metrics = [
     trendIcon: TrendingDown,
     color: "text-yellow-400",
     icon: Brain,
+    barColor: "bg-yellow-400",
+    barWidth: "72%",
   },
   {
     title: "Deployment",
@@ -34,6 +40,8 @@ const metrics = [
     trendIcon: TrendingUp,
     color: "text-blue-400",
     icon: GitBranch,
+    barColor: "bg-blue-400",
+    barWidth: "94%",
   },
   {
     title: "Architecture",
@@ -42,6 +50,8 @@ const metrics = [
     trendIcon: TrendingUp,
     color: "text-purple-400",
     icon: BarChart3,
+    barColor: "bg-purple-400",
+    barWidth: "89%",
   },
 ];
 
@@ -52,8 +62,11 @@ const recommendations = [
 ];
 
 export default function RepositoryPreview() {
+  const { previewStagger, staggerItem, progressBar, CARD_HOVER } =
+    useMotionVariants();
+
   return (
-    <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 lg:max-w-2xl">
+    <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl lg:max-w-2xl">
 
       {/* Browser Header */}
       <div className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-4 py-3 sm:px-5">
@@ -85,6 +98,7 @@ export default function RepositoryPreview() {
           </span>
         </div>
 
+        {/* Engineering Score progress bar — animates on reveal */}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-slate-400">Engineering Score</span>
@@ -92,12 +106,18 @@ export default function RepositoryPreview() {
           </div>
 
           <div className="h-2 rounded-full bg-slate-800">
-            <div className="h-full w-[87%] rounded-full bg-blue-500"></div>
+            <motion.div
+              className="h-full rounded-full bg-blue-500"
+              variants={progressBar}
+              custom="87%"
+              initial="hidden"
+              animate="visible"
+            />
           </div>
         </div>
       </div>
 
-      {/* Tabs – scrollable on very small screens */}
+      {/* Tabs */}
       <div className="flex items-center gap-4 overflow-x-auto border-b border-slate-700 px-4 py-3 text-sm scrollbar-none sm:gap-6 sm:px-6">
         <span className="flex-shrink-0 border-b-2 border-blue-500 pb-2 font-medium text-blue-400">
           Overview
@@ -107,19 +127,31 @@ export default function RepositoryPreview() {
         <span className="flex-shrink-0 text-slate-400">AI Review</span>
       </div>
 
-      {/* Metrics */}
-      <div className="grid grid-cols-2 gap-3 p-4 sm:gap-4 sm:p-6">
+      {/* Metrics — staggered reveal on mount */}
+      <motion.div
+        className="grid grid-cols-2 gap-3 p-4 sm:gap-4 sm:p-6"
+        variants={previewStagger}
+        initial="hidden"
+        animate="visible"
+      >
         {metrics.map((metric) => {
           const Icon = metric.icon;
           const Trend = metric.trendIcon;
 
           return (
-            <div
+            <motion.div
               key={metric.title}
-              className="rounded-xl border border-slate-700 bg-slate-800 p-3 transition-colors hover:border-blue-500/40 sm:p-4"
+              variants={staggerItem}
+              whileHover={CARD_HOVER}
+              className="group rounded-xl border border-slate-700 bg-slate-800 p-3 sm:p-4"
+              style={{ willChange: "transform, box-shadow" }}
             >
               <div className="mb-3 flex items-center justify-between sm:mb-4">
-                <Icon size={18} className={metric.color} />
+                <motion.div
+                  whileHover={{ scale: 1.1, transition: { duration: 0.15 } }}
+                >
+                  <Icon size={18} className={metric.color} />
+                </motion.div>
 
                 <div className="flex items-center gap-1 sm:gap-2">
                   <Trend size={14} className={metric.color} />
@@ -135,10 +167,10 @@ export default function RepositoryPreview() {
                   {metric.trend}
                 </span>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* AI Summary */}
       <div className="border-t border-slate-700 bg-slate-950 p-4 sm:p-6">
@@ -158,14 +190,24 @@ export default function RepositoryPreview() {
             Recommended Actions
           </h5>
 
-          <div className="space-y-2">
+          {/* Recommendations — stagger in */}
+          <motion.div
+            className="space-y-2"
+            variants={previewStagger}
+            initial="hidden"
+            animate="visible"
+          >
             {recommendations.map((item) => (
-              <div key={item} className="flex items-start gap-2 text-sm text-slate-300">
+              <motion.div
+                key={item}
+                variants={staggerItem}
+                className="flex items-start gap-2 text-sm text-slate-300"
+              >
                 <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0 text-green-400" />
                 <span>{item}</span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

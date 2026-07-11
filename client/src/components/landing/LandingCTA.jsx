@@ -15,12 +15,17 @@ import {
 
 export default function LandingCTA() {
   const navigate = useNavigate();
-  const { heroStagger, staggerItem, scaleIn } = useMotionVariants();
+  const { heroStagger, staggerItem, scaleIn, glowPulse } = useMotionVariants();
+
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-28">
-      {/* Background Glow */}
 
-      <div className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[550px] sm:w-[550px]" />
+      {/* Background Glow — slow opacity pulse */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[550px] sm:w-[550px]"
+        initial={glowPulse.initial}
+        animate={glowPulse.animate}
+      />
 
       <Container>
         <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 px-6 py-16 text-center shadow-2xl sm:rounded-3xl sm:px-10 sm:py-20">
@@ -38,11 +43,7 @@ export default function LandingCTA() {
               variants={scaleIn}
               className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2"
             >
-              <FaGithub
-                size={16}
-                className="text-blue-400"
-              />
-
+              <FaGithub size={16} className="text-blue-400" />
               <span className="text-sm font-medium text-blue-400">
                 Connect Your GitHub Repository
               </span>
@@ -68,14 +69,27 @@ export default function LandingCTA() {
               minutes.
             </motion.p>
 
-            {/* CTA Button */}
+            {/* CTA Button — scale + stronger shadow + arrow nudge */}
             <motion.div
               variants={staggerItem}
               className="mt-10 flex justify-center sm:mt-12"
             >
               <motion.div
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                initial="rest"
+                whileHover="hover"
+                whileTap={{ scale: 0.98 }}
+                variants={{
+                  rest: {
+                    scale: 1,
+                    boxShadow: "0 0px 0px 0px rgba(59, 130, 246, 0)",
+                    transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+                  },
+                  hover: {
+                    scale: 1.03,
+                    boxShadow: "0 16px 40px -8px rgba(59, 130, 246, 0.45)",
+                    transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+                  },
+                }}
               >
                 <Button variant="primary" onClick={() => navigate("/login")}>
                   <div className="flex items-center gap-3">
@@ -83,13 +97,22 @@ export default function LandingCTA() {
 
                     <span>Get Started with GitHub</span>
 
-                    <ArrowRight size={18} />
+                    {/* Arrow inherits hover variant from parent — nudges right */}
+                    <motion.span
+                      className="inline-flex"
+                      variants={{
+                        rest: { x: 0, transition: { duration: 0.15, ease: [0.25, 0.1, 0.25, 1] } },
+                        hover: { x: 4, transition: { duration: 0.15, ease: [0.25, 0.1, 0.25, 1] } },
+                      }}
+                    >
+                      <ArrowRight size={18} />
+                    </motion.span>
                   </div>
                 </Button>
               </motion.div>
             </motion.div>
 
-            {/* Trust Indicators */}
+            {/* Trust Indicators — subtle hover feedback */}
             <motion.div
               variants={staggerItem}
               className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:mt-12 sm:gap-x-8 sm:gap-y-4"
@@ -99,19 +122,19 @@ export default function LandingCTA() {
                 "Secure GitHub OAuth",
                 "No Credit Card Required",
               ].map((item) => (
-                <div
+                <motion.div
                   key={item}
                   className="flex items-center gap-2"
+                  whileHover={{
+                    color: "#cbd5e1",
+                    transition: { duration: 0.15 },
+                  }}
                 >
-                  <Check
-                    size={18}
-                    className="flex-shrink-0 text-green-400"
-                  />
-
+                  <Check size={18} className="flex-shrink-0 text-green-400" />
                   <span className="text-sm text-slate-400">
                     {item}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
 

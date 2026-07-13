@@ -7,6 +7,7 @@ import EngineeringOverview from "../components/dashboard/EngineeringOverview";
 import AttentionPanel from "../components/dashboard/AttentionPanel";
 import RepositoryGrid from "../components/dashboard/RepositoryGrid";
 import RecentActivity from "../components/dashboard/RecentActivity";
+import WorkspaceActions from "../components/dashboard/WorkspaceActions";
 
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
@@ -48,9 +49,11 @@ const Dashboard = () => {
 
       <AttentionPanel />
 
-      <RepositoryGrid repos={repos} />
-
       <RecentActivity />
+
+      <WorkspaceActions />
+
+      <RepositoryGrid repos={repos} />
 
     </DashboardLayout>
   );

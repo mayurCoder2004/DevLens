@@ -28,15 +28,29 @@ const makeGitHubRequest = async ({
 };
 
 const getRepositories = async (githubToken) => {
-  console.log("TOKEN USED:", githubToken);
+  let page = 1;
+  let repositories = [];
 
-  return makeGitHubRequest({
-    url: "https://api.github.com/user/repos",
-    githubToken,
-    params: {
-      per_page: 100,
-    },
-  });
+  while (true) {
+    const repos = await makeGitHubRequest({
+      url: "https://api.github.com/user/repos",
+      githubToken,
+      params: {
+        per_page: 100,
+        page,
+      },
+    });
+
+    repositories.push(...repos);
+
+    if (repos.length < 100) {
+      break;
+    }
+
+    page++;
+  }
+
+  return repositories;
 };
 
 const getRepositoryContents = async (owner, repo, githubToken) => {

@@ -21,16 +21,19 @@ const Login = () => {
   };
 
   const handleGithubLogin = async () => {
-    try {
-      const data = await loginWithGithub();
+  console.log("1. Login button clicked");
 
-      console.log(data);
+  try {
+    const data = await loginWithGithub();
 
-      navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    console.log("2. Login completed");
+    console.log(data);
+
+    navigate("/dashboard");
+  } catch (error) {
+    console.log("Login Error:", error);
+  }
+};
 
   return (
     <div>

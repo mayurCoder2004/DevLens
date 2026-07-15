@@ -9,12 +9,13 @@ import { Link } from "react-router-dom";
 
 export default function RepositoryCard({
   repositoryName,
+  repositoryOwner,
   description,
   language,
   stars,
   engineeringScore,
   lastAnalysis,
-  visibility = "Public",
+  visibility,
   workspaceLink,
 }) {
   // Language color mapping
@@ -84,6 +85,9 @@ export default function RepositoryCard({
           >
             {repositoryName}
           </h3>
+          <p className="mt-1 text-sm text-slate-500">
+            @{repositoryOwner}
+          </p>
         </div>
 
         <span

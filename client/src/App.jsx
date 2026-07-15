@@ -12,6 +12,7 @@ import AIReview from "./pages/AIReview";
 import LandingPage from "./pages/LandingPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
+import Repositories from "./pages/Repositories";
 
 function App() {
   return (
@@ -63,6 +64,11 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/repositories"
+  element={<Repositories />}
+/>
 
       <Route path="/repositories/:id/ai-review" element={<AIReview />} />
     </Routes>

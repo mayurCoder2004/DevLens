@@ -1,12 +1,9 @@
 import { FolderGit2 } from "lucide-react";
 import RepositoryCard from "./RepositoryCard";
-import RepositoryGridHeader from "./RepositoryGridHeader";
 
 export default function RepositoryGrid({ repos = [] }) {
   return (
     <section className="mt-8">
-      <RepositoryGridHeader />
-
       {repos.length === 0 ? (
         <div
           className="
@@ -20,6 +17,7 @@ export default function RepositoryGrid({ repos = [] }) {
             border-dashed
             border-slate-800
             bg-slate-900
+            px-6
             text-center
           "
         >
@@ -43,8 +41,25 @@ export default function RepositoryGrid({ repos = [] }) {
           </h3>
 
           <p className="mt-2 max-w-sm text-sm text-slate-400">
-            Sync your GitHub account to start analyzing repositories.
+            Connect or synchronize your GitHub account to start analyzing your repositories with DevLens.
           </p>
+
+          <button
+            className="
+              mt-6
+              rounded-xl
+              bg-blue-600
+              px-5
+              py-2.5
+              text-sm
+              font-medium
+              text-white
+              transition-colors
+              hover:bg-blue-500
+            "
+          >
+            Sync GitHub
+          </button>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

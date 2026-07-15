@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import AttentionPanel from "../components/dashboard/AttentionPanel";
 import DashboardHero from "../components/dashboard/DashboardHero";
 import DashboardLayout from "../layouts/DashboardLayout";
 import EngineeringOverview from "../components/dashboard/EngineeringOverview";
-import AttentionPanel from "../components/dashboard/AttentionPanel";
-import RepositoryGrid from "../components/dashboard/RepositoryGrid";
-import RecentActivity from "../components/dashboard/RecentActivity";
 import WorkspaceActions from "../components/dashboard/WorkspaceActions";
+import RecentActivity from "../components/dashboard/RecentActivity";
 
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
@@ -26,7 +25,7 @@ const Dashboard = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       setRepos(response.data.repositories);
@@ -37,8 +36,6 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Hero Section */}
-
       <DashboardHero
         totalRepositories={repos.length}
         averageScore={84}
@@ -49,12 +46,9 @@ const Dashboard = () => {
 
       <AttentionPanel />
 
-      <RecentActivity />
-
       <WorkspaceActions />
 
-      <RepositoryGrid repos={repos} />
-
+      <RecentActivity />
     </DashboardLayout>
   );
 };

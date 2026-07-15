@@ -1,10 +1,9 @@
-import {
-  Bell,
-  ChevronDown,
-  Search,
-} from "lucide-react";
+import { Bell, ChevronDown, Search } from "lucide-react";
+import { useState } from "react";
 
 export default function Topbar() {
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   return (
     <header
       className="
@@ -13,86 +12,77 @@ export default function Topbar() {
         z-30
         flex
         h-[68px]
+        flex-shrink-0
         items-center
         justify-between
         border-b
         border-slate-800/80
-        bg-[#0B0F19]/90
+        bg-[#0B0F19]/95
         px-6
         backdrop-blur-xl
       "
     >
-      {/* Left Title / Breadcrumb */}
+      {/* Left - Title */}
       <div className="flex flex-col justify-center">
-        <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold leading-none">
+        <p className="text-[10px] font-semibold uppercase leading-none tracking-wider text-slate-500">
           Dashboard
         </p>
-        <h1 className="mt-1 text-base font-semibold text-white leading-none">
-          Overview
+        <h1 className="mt-1 text-base font-semibold leading-none text-white">
+          Account Overview
         </h1>
       </div>
 
-      {/* Right Controls */}
+      {/* Right - Search, Notifications, Profile */}
       <div className="flex items-center gap-3">
-
-        {/* Search Bar Placeholder */}
+        {/* Search Repositories */}
         <button
           className="
             hidden
-            sm:flex
+            h-9
+            w-[200px]
             items-center
             gap-2.5
-            h-8.5
-            w-[170px]
-            lg:w-[210px]
             rounded-lg
             border
             border-slate-800
             bg-slate-900/40
             px-3
-            py-1.5
+            py-2
             text-left
             transition-all
             duration-200
             hover:border-slate-700
             hover:bg-slate-900/60
+            sm:flex
+            lg:w-[240px]
           "
+          aria-label="Search repositories"
         >
-          <Search size={13} className="text-slate-400" />
-          <span className="flex-1 text-[11px] text-slate-500 font-medium">Search repositories...</span>
-          <kbd className="hidden lg:inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-slate-850 bg-slate-950 px-1.5 font-mono text-[8px] font-semibold text-slate-500">
+          <Search size={14} className="text-slate-400" />
+          <span className="flex-1 text-xs font-medium text-slate-500">
+            Search repositories...
+          </span>
+          <kbd
+            className="
+              hidden
+              h-5
+              select-none
+              items-center
+              gap-0.5
+              rounded
+              border
+              border-slate-800
+              bg-slate-950
+              px-1.5
+              font-mono
+              text-[9px]
+              font-semibold
+              text-slate-500
+              lg:inline-flex
+            "
+          >
             ⌘K
           </kbd>
-        </button>
-
-        {/* Repository Switcher */}
-        <button
-          className="
-            flex
-            items-center
-            gap-3
-            rounded-lg
-            border
-            border-slate-800
-            bg-slate-900/40
-            px-3
-            py-1.5
-            text-left
-            transition-all
-            duration-200
-            hover:border-slate-700
-            hover:bg-slate-900/60
-          "
-        >
-          <div className="flex flex-col text-left">
-            <span className="text-[9px] uppercase tracking-wider text-slate-500 font-bold leading-none">
-              Current Repository
-            </span>
-            <span className="mt-0.5 text-xs font-semibold text-white truncate max-w-[110px]">
-              devlens
-            </span>
-          </div>
-          <ChevronDown size={13} className="text-slate-400 flex-shrink-0" />
         </button>
 
         {/* Notifications */}
@@ -100,8 +90,8 @@ export default function Topbar() {
           className="
             relative
             flex
-            h-8.5
-            w-8.5
+            h-9
+            w-9
             items-center
             justify-center
             rounded-lg
@@ -114,58 +104,109 @@ export default function Topbar() {
             hover:border-slate-700
             hover:bg-slate-900/60
             hover:text-white
+            focus:outline-none
+            focus:ring-2
+            focus:ring-blue-500/40
+            focus:ring-offset-2
+            focus:ring-offset-[#0B0F19]
           "
+          aria-label="Notifications"
         >
-          <Bell size={15} />
-          {/* Subtle unread indicator dot */}
-          <span className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-blue-500 ring-2 ring-slate-950" />
+          <Bell size={16} />
+          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-blue-500 ring-2 ring-slate-950" />
         </button>
 
-        {/* User profile */}
-        <div
-          className="
-            flex
-            items-center
-            gap-2.5
-            rounded-lg
-            border
-            border-slate-800
-            bg-slate-900/40
-            pl-2
-            pr-3
-            py-1
-          "
-        >
-          <div
+        {/* User Profile Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
             className="
               flex
-              h-7.5
-              w-7.5
               items-center
-              justify-center
-              rounded-full
-              bg-blue-600
-              text-[10px]
-              font-bold
-              text-white
+              gap-2.5
+              rounded-lg
+              border
+              border-slate-800
+              bg-slate-900/40
+              py-1.5
+              pl-2
+              pr-3
+              transition-all
+              duration-200
+              hover:border-slate-700
+              hover:bg-slate-900/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-500/40
+              focus:ring-offset-2
+              focus:ring-offset-[#0B0F19]
             "
+            aria-label="User menu"
+            aria-expanded={showProfileMenu}
           >
-            MP
-          </div>
-
-          <div className="text-left leading-none">
-            <p className="text-[11px] font-semibold text-white">
-              Mayur Pawar
-            </p>
-            <div className="mt-0.5 flex items-center gap-1">
-              <span className="h-1 w-1 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[9px] text-slate-400 font-medium">
-                Connected
-              </span>
+            {/* Avatar */}
+            <div
+              className="
+                flex
+                h-7
+                w-7
+                items-center
+                justify-center
+                rounded-full
+                bg-blue-600
+                text-[10px]
+                font-bold
+                text-white
+              "
+            >
+              MP
             </div>
-          </div>
-        </div>
 
+            {/* User Info */}
+            <div className="hidden text-left leading-none sm:block">
+              <p className="text-xs font-semibold text-white">Mayur Pawar</p>
+              <div className="mt-1 flex items-center gap-1">
+                <span className="h-1 w-1 animate-pulse rounded-full bg-green-500" />
+                <span className="text-[9px] font-medium text-slate-400">
+                  Connected
+                </span>
+              </div>
+            </div>
+
+            {/* Dropdown Arrow */}
+            <ChevronDown
+              size={14}
+              className="hidden text-slate-400 sm:block"
+            />
+          </button>
+
+          {/* Dropdown Menu (Placeholder) */}
+          {showProfileMenu && (
+            <div
+              className="
+                absolute
+                right-0
+                top-full
+                mt-2
+                w-56
+                rounded-lg
+                border
+                border-slate-800
+                bg-slate-900
+                py-2
+                shadow-xl
+              "
+            >
+              <button className="w-full px-4 py-2 text-left text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white">
+                Settings
+              </button>
+              <div className="my-1 border-t border-slate-800/50" />
+              <button className="w-full px-4 py-2 text-left text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white">
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

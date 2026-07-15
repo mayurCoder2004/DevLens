@@ -1,11 +1,7 @@
 import {
   LayoutDashboard,
   FolderGit2,
-  Network,
-  Bug,
-  Rocket,
-  Activity,
-  Sparkles,
+  Settings,
   LogOut,
 } from "lucide-react";
 
@@ -25,51 +21,34 @@ const overviewItems = [
   },
 ];
 
-const analysisItems = [
+const accountItems = [
   {
-    label: "Architecture",
-    icon: Network,
-    to: "/architecture",
-  },
-  {
-    label: "Technical Debt",
-    icon: Bug,
-    to: "/technical-debt",
-  },
-  {
-    label: "Deployment",
-    icon: Rocket,
-    to: "/deployment",
-  },
-  {
-    label: "Engineering Health",
-    icon: Activity,
-    to: "/engineering-health",
-  },
-  {
-    label: "AI Review",
-    icon: Sparkles,
-    to: "/ai-review",
+    label: "Settings",
+    icon: Settings,
+    to: "/settings",
   },
 ];
 
 export default function Sidebar() {
   return (
-    <aside className="flex w-[270px] flex-col border-r border-slate-800/80 bg-slate-950">
-      {/* Logo Section - Height matches Topbar (68px) */}
-      <div className="flex h-[68px] items-center border-b border-slate-800/80 px-6">
+    <aside className="flex h-screen w-[270px] flex-shrink-0 flex-col border-r border-slate-800/80 bg-slate-950">
+      {/* Logo */}
+
+      <div className="flex h-[68px] flex-shrink-0 items-center border-b border-slate-800/80 px-6">
         <DevLensLogo />
       </div>
 
-      {/* Navigation Links */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-4">
-        {/* Overview section */}
+      {/* Navigation */}
+
+      <div className="flex-1 overflow-y-auto px-3.5 py-6">
+        {/* Overview */}
+
         <div>
           <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
             Overview
           </p>
 
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {overviewItems.map((item) => (
               <SidebarItem
                 key={item.label}
@@ -79,14 +58,19 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Analysis section */}
-        <div className="mt-5">
+        {/* Section Separator */}
+
+        <div className="my-6 border-t border-slate-800/50" />
+
+        {/* Account */}
+
+        <div>
           <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-            Analysis
+            Account
           </p>
 
-          <div className="space-y-0.5">
-            {analysisItems.map((item) => (
+          <div className="space-y-1">
+            {accountItems.map((item) => (
               <SidebarItem
                 key={item.label}
                 {...item}
@@ -96,8 +80,9 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Bottom Panel */}
-      <div className="border-t border-slate-800/80 p-3">
+      {/* Logout */}
+
+      <div className="flex-shrink-0 border-t border-slate-800/80 p-3">
         <button
           className="
             flex
@@ -112,12 +97,17 @@ export default function Sidebar() {
             text-slate-400
             transition-all
             duration-200
-            hover:bg-slate-900
             hover:translate-x-0.5
+            hover:bg-slate-900
             hover:text-white
           "
+          aria-label="Logout"
         >
-          <LogOut size={18} className="text-slate-400" />
+          <LogOut
+            size={18}
+            className="text-slate-400"
+          />
+
           <span>Logout</span>
         </button>
       </div>

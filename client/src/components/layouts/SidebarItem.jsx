@@ -1,10 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-export default function SidebarItem({
-  to,
-  icon: Icon,
-  label,
-}) {
+export default function SidebarItem({ to, icon: Icon, label }) {
   return (
     <NavLink
       to={to}
@@ -16,7 +12,7 @@ export default function SidebarItem({
           gap-3
           rounded-lg
           px-3.5
-          py-2
+          py-2.5
           text-[13px]
           font-medium
           transition-all
@@ -25,18 +21,25 @@ export default function SidebarItem({
           hover:translate-x-0.5
           ${
             isActive
-              ? "bg-blue-500/10 text-white border border-blue-500/20 shadow-[0_0_14px_-2px_rgba(59,130,246,0.22)]"
-              : "text-slate-400 border border-transparent hover:bg-slate-900 hover:text-white"
+              ? "border-l-2 border-blue-500 bg-blue-500/10 pl-[13px] text-white shadow-[0_0_14px_-2px_rgba(59,130,246,0.2)]"
+              : "border-l-2 border-transparent pl-[13px] text-slate-400 hover:border-slate-700 hover:bg-slate-900 hover:text-white"
           }
         `
       }
     >
-      <Icon
-        size={18}
-        className="transition-colors duration-200 text-slate-400 group-hover:text-white"
-      />
-
-      <span className="truncate">{label}</span>
+      {({ isActive }) => (
+        <>
+          <Icon
+            size={18}
+            className={`transition-colors duration-200 ${
+              isActive
+                ? "text-blue-400"
+                : "text-slate-400 group-hover:text-white"
+            }`}
+          />
+          <span className="truncate">{label}</span>
+        </>
+      )}
     </NavLink>
   );
 }

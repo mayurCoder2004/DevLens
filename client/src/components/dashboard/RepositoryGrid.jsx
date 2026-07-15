@@ -65,17 +65,17 @@ export default function RepositoryGrid({ repos = [] }) {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {repos.map((repo) => (
             <RepositoryCard
-  key={repo.id}
-  repositoryName={repo.name}
-  repositoryOwner={repo.owner}
-  description={repo.description}
-  language={repo.language}
-  stars={repo.stars}
-  engineeringScore={84}
-  lastAnalysis="2 hours ago"
-  visibility={repo.private ? "Private" : "Public"}
-  workspaceLink={`/repository/${repo.id}`}
-/>
+              key={repo.id}
+              repositoryName={repo.name}
+              repositoryOwner={repo.owner}
+              description={repo.description}
+              language={repo.language}
+              stars={repo.stars}
+              engineeringScore={84}
+              lastUpdated={repo.updatedAtGithub || repo.createdAt}
+              visibility={repo.private ? "Private" : "Public"}
+              workspaceLink={`/repository/${repo.id}`}
+            />
           ))}
         </div>
       )}

@@ -40,6 +40,7 @@ const syncRepositories = async (req, res) => {
           private: repo.private,
           repoUrl: repo.html_url,
           defaultBranch: repo.default_branch,
+          updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
         },
 
         create: {
@@ -53,6 +54,7 @@ const syncRepositories = async (req, res) => {
           repoUrl: repo.html_url,
           defaultBranch: repo.default_branch,
           userId: user.id,
+          updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
         },
       });
     }

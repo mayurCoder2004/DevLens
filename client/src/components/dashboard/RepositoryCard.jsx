@@ -14,7 +14,7 @@ export default function RepositoryCard({
   language,
   stars,
   engineeringScore,
-  lastAnalysis,
+  lastUpdated,
   visibility,
   workspaceLink,
 }) {
@@ -57,6 +57,25 @@ export default function RepositoryCard({
   };
 
   const isPrivate = visibility.toLowerCase() === "private";
+
+  const formatLastUpdated = (date) => {
+  if (!date) return "Unknown";
+
+  const diff =
+    Date.now() - new Date(date).getTime();
+
+  const days = Math.floor(
+    diff / (1000 * 60 * 60 * 24)
+  );
+
+  if (days === 0) return "Today";
+
+  if (days === 1) return "Yesterday";
+
+  if (days < 30) return `${days} days ago`;
+
+  return new Date(date).toLocaleDateString();
+};
 
   return (
     <article
@@ -145,10 +164,10 @@ export default function RepositoryCard({
           <span>{stars?.toLocaleString() || 0}</span>
         </div>
 
-        {/* Last Analysis */}
+        {/* Last Updated */}
         <div className="flex items-center gap-1.5">
           <Clock size={14} className="text-slate-500" aria-hidden="true" />
-          <span>{lastAnalysis || "Never"}</span>
+          <span>{formatLastUpdated(lastUpdated)}</span>
         </div>
       </div>
 

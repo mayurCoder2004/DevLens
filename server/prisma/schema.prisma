@@ -47,6 +47,7 @@ model Repository {
   pullRequestAnalyses PullRequestAnalysis[]
   aiReview RepositoryAIReview?
 
+  updatedAtGithub DateTime?
   createdAt DateTime @default(now())
 }
 

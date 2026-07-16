@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import Repositories from "./pages/Repositories";
+import RepositoryWorkspace from "./pages/RepositoryWorkspace";
 
 function App() {
   return (
@@ -35,13 +36,13 @@ function App() {
       />
 
       <Route
-        path="/repository/:id"
-        element={
-          <ProtectedRoute>
-            <RepositoryDetails />
-          </ProtectedRoute>
-        }
-      />
+  path="/repository/:id"
+  element={
+    <ProtectedRoute>
+      <RepositoryWorkspace />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/architecture/:repositoryId"
@@ -66,9 +67,9 @@ function App() {
       />
 
       <Route
-  path="/repositories"
-  element={<Repositories />}
-/>
+        path="/repositories"
+        element={<Repositories />}
+      />
 
       <Route path="/repositories/:id/ai-review" element={<AIReview />} />
     </Routes>

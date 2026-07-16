@@ -4,7 +4,6 @@ import axios from "axios";
 
 import RepositoryLayout from "../layouts/RepositoryLayout";
 import RepositoryHero from "../components/repository/RepositoryHero";
-import RepositoryNavigation from "../components/repository/RepositoryNavigation";
 
 export default function RepositoryWorkspace() {
   const { id } = useParams();
@@ -34,28 +33,27 @@ export default function RepositoryWorkspace() {
     }
   };
 
+  if (!repository) {
+    return (
+      <RepositoryLayout repository={null}>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
+          Loading repository...
+        </div>
+      </RepositoryLayout>
+    );
+  }
+
   return (
-    <RepositoryLayout
-      repositoryHero={
-        repository ? (
-          <RepositoryHero repository={repository} />
-        ) : (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-            Loading repository...
-          </div>
-        )
-      }
-      repositoryNavigation={
-        <RepositoryNavigation repositoryId={id} />
-      }
-    >
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-        <h2 className="text-xl font-semibold text-white">
+    <RepositoryLayout repository={repository}>
+      <RepositoryHero repository={repository} />
+
+      <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-8">
+        <h2 className="text-2xl font-semibold text-white">
           Repository Overview
         </h2>
 
-        <p className="mt-2 text-slate-400">
-          Repository overview will be implemented in the next commit.
+        <p className="mt-3 text-slate-400">
+          Repository overview dashboard will be implemented in the next commit.
         </p>
       </div>
     </RepositoryLayout>

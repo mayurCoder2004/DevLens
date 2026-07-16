@@ -1,25 +1,52 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 import RepositoryLayout from "../layouts/RepositoryLayout";
+import RepositoryHero from "../components/repository/RepositoryHero";
+import RepositoryNavigation from "../components/repository/RepositoryNavigation";
 
 export default function RepositoryWorkspace() {
+  const { id } = useParams();
+
+  const [repository, setRepository] = useState(null);
+
+  useEffect(() => {
+    fetchRepository();
+  }, [id]);
+
+  const fetchRepository = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `http://localhost:5000/api/repositories/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setRepository(response.data.repository);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <RepositoryLayout
       repositoryHero={
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h1 className="text-2xl font-bold text-white">
-            Repository Hero
-          </h1>
-
-          <p className="mt-2 text-slate-400">
-            Repository information will appear here.
-          </p>
-        </div>
+        repository ? (
+          <RepositoryHero repository={repository} />
+        ) : (
+          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
+            Loading repository...
+          </div>
+        )
       }
       repositoryNavigation={
-        <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-white">
-            Repository Navigation
-          </p>
-        </div>
+        <RepositoryNavigation repositoryId={id} />
       }
     >
       <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
@@ -28,8 +55,7 @@ export default function RepositoryWorkspace() {
         </h2>
 
         <p className="mt-2 text-slate-400">
-          This is the repository workspace. The overview will be
-          implemented in the next steps.
+          Repository overview will be implemented in the next commit.
         </p>
       </div>
     </RepositoryLayout>

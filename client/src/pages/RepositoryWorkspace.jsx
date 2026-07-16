@@ -6,7 +6,7 @@ import RepositoryLayout from "../layouts/RepositoryLayout";
 
 import RepositoryHero from "../components/repository/RepositoryHero";
 
-import RepositoryOverview from "../components/repository/workspace/RepositoryOverview";
+import RepositoryOverview from "../components/repository/overview/RepositoryOverview";
 import RepositoryArchitecture from "../components/repository/workspace/RepositoryArchitecture";
 import RepositoryTechnicalDebt from "../components/repository/workspace/RepositoryTechnicalDebt";
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";

@@ -13,29 +13,39 @@ import {
 
 import { NavLink } from "react-router-dom";
 
-export default function RepositorySidebar({ repository }) {
+export default function RepositorySidebar({
+  repository,
+  activeSection,
+  onSectionChange,
+}) {
   const navigation = [
     {
+      id: "overview",
       label: "Overview",
       icon: LayoutDashboard,
     },
     {
+      id: "architecture",
       label: "Architecture",
       icon: Boxes,
     },
     {
+      id: "technical-debt",
       label: "Technical Debt",
       icon: Wrench,
     },
     {
+      id: "deployment",
       label: "Deployment",
       icon: Rocket,
     },
     {
+      id: "engineering-health",
       label: "Engineering Health",
       icon: Activity,
     },
     {
+      id: "ai-review",
       label: "AI Review",
       icon: Sparkles,
     },
@@ -94,7 +104,7 @@ export default function RepositorySidebar({ repository }) {
         )}
       </div>
 
-      {/* Back Button */}
+      {/* Back */}
 
       <div className="border-b border-slate-800 p-4">
         <NavLink
@@ -114,12 +124,11 @@ export default function RepositorySidebar({ repository }) {
           "
         >
           <ArrowLeft size={16} />
-
           Back to Repositories
         </NavLink>
       </div>
 
-      {/* Navigation */}
+      {/* Workspace */}
 
       <div className="flex-1 p-4">
         <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-500">
@@ -127,29 +136,36 @@ export default function RepositorySidebar({ repository }) {
         </h3>
 
         <nav className="space-y-2">
-          {navigation.map(({ label, icon: Icon }) => (
-            <button
-              key={label}
-              className="
-                flex
-                w-full
-                items-center
-                gap-3
-                rounded-xl
-                px-4
-                py-3
-                text-left
-                text-slate-300
-                transition-all
-                hover:bg-slate-800
-                hover:text-white
-              "
-            >
-              <Icon size={18} />
+          {navigation.map(({ id, label, icon: Icon }) => {
+            const isActive = activeSection === id;
 
-              <span>{label}</span>
-            </button>
-          ))}
+            return (
+              <button
+                key={id}
+                onClick={() => onSectionChange(id)}
+                className={`
+                  flex
+                  w-full
+                  items-center
+                  gap-3
+                  rounded-xl
+                  px-4
+                  py-3
+                  text-left
+                  transition-all
+                  ${
+                    isActive
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  }
+                `}
+              >
+                <Icon size={18} />
+
+                <span>{label}</span>
+              </button>
+            );
+          })}
         </nav>
       </div>
     </aside>

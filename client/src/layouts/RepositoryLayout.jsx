@@ -3,13 +3,19 @@ import RepositorySidebar from "../components/repository/RepositorySidebar";
 
 export default function RepositoryLayout({
   repository,
+  activeSection,
+  onSectionChange,
   children,
 }) {
   return (
     <div className="flex h-screen overflow-hidden bg-[#0B0F19]">
       {/* Repository Sidebar */}
 
-      <RepositorySidebar repository={repository} />
+      <RepositorySidebar
+        repository={repository}
+        activeSection={activeSection}
+        onSectionChange={onSectionChange}
+      />
 
       {/* Main Content */}
 
@@ -18,7 +24,7 @@ export default function RepositoryLayout({
 
         <Topbar />
 
-        {/* Scrollable Workspace */}
+        {/* Workspace */}
 
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto w-full max-w-[1700px] p-8">

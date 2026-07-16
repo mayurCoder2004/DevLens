@@ -7,7 +7,7 @@ import RepositoryLayout from "../layouts/RepositoryLayout";
 import RepositoryHero from "../components/repository/RepositoryHero";
 
 import RepositoryOverview from "../components/repository/overview/RepositoryOverview";
-import RepositoryArchitecture from "../components/repository/workspace/RepositoryArchitecture";
+import RepositoryArchitecture from "../components/repository/architecture/RepositoryArchitecture";
 import RepositoryTechnicalDebt from "../components/repository/workspace/RepositoryTechnicalDebt";
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
 import RepositoryEngineeringHealth from "../components/repository/workspace/RepositoryEngineeringHealth";
@@ -17,13 +17,15 @@ export default function RepositoryWorkspace() {
   const { id } = useParams();
 
   const [repository, setRepository] = useState(null);
+  const [architecture, setArchitecture] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
 
   useEffect(() => {
-    fetchRepository();
-  }, [id]);
+  fetchRepository();
+  fetchArchitecture();
+}, [id]);
 
   const fetchRepository = async () => {
     try {
@@ -44,6 +46,25 @@ export default function RepositoryWorkspace() {
     }
   };
 
+  const fetchArchitecture = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(
+      `http://localhost:5000/api/repositories/${id}/architecture`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setArchitecture(response.data.architecture);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   const renderWorkspace = () => {
     switch (activeSection) {
       case "overview":
@@ -57,7 +78,11 @@ export default function RepositoryWorkspace() {
         );
 
       case "architecture":
-        return <RepositoryArchitecture />;
+  return (
+    <RepositoryArchitecture
+      architecture={architecture}
+    />
+  );
 
       case "technical-debt":
         return <RepositoryTechnicalDebt />;

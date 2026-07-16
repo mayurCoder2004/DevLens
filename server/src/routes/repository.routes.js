@@ -7,12 +7,19 @@ const authMiddleware = require("../middleware/auth.middleware");
 const {
   syncRepositories,
   getUserRepositories,
-  getRepositoryById
+  getRepositoryById,
+  getRepositoryArchitecture
 } = require("../controllers/repository.controller");
 
 router.post("/sync", authMiddleware, syncRepositories);
 
 router.get("/", authMiddleware, getUserRepositories);
+
+router.get(
+  "/:id/architecture",
+  authMiddleware,
+  getRepositoryArchitecture
+);
 
 router.get("/:id", authMiddleware, getRepositoryById);
 

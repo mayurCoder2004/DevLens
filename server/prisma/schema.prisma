@@ -20,35 +20,28 @@ model User {
 }
 
 model Repository {
-  id String @id @default(cuid())
-
-  githubRepoId Int     @unique
-  name         String
-  owner        String
-  description  String?
-  language     String?
-  stars        Int     @default(0)
-
-  private Boolean
-
-  repoUrl       String
-  defaultBranch String
-
-  userId String
-
-  user User @relation(fields: [userId], references: [id])
-
-  analytics     RepositoryAnalytics?
-  techStack     RepositoryTechStack?
-  health        RepositoryHealth?
-  architecture  RepositoryArchitecture?
-  technicalDebt RepositoryTechnicalDebt?
-  deployment RepositoryDeployment?
+  id                  String                   @id @default(cuid())
+  githubRepoId        Int                      @unique
+  name                String
+  owner               String
+  description         String?
+  language            String?
+  stars               Int                      @default(0)
+  private             Boolean
+  repoUrl             String
+  defaultBranch       String
+  userId              String
+  createdAt           DateTime                 @default(now())
+  updatedAtGithub     DateTime?
   pullRequestAnalyses PullRequestAnalysis[]
-  aiReview RepositoryAIReview?
-
-  updatedAtGithub DateTime?
-  createdAt DateTime @default(now())
+  user                User                     @relation(fields: [userId], references: [id])
+  aiReview            RepositoryAIReview?
+  analytics           RepositoryAnalytics?
+  architecture        RepositoryArchitecture?
+  deployment          RepositoryDeployment?
+  health              RepositoryHealth?
+  techStack           RepositoryTechStack?
+  technicalDebt       RepositoryTechnicalDebt?
 }
 
 model RepositoryAnalytics {
@@ -68,171 +61,116 @@ model RepositoryAnalytics {
 }
 
 model RepositoryTechStack {
-  id String @id @default(cuid())
-
-  repositoryId String @unique
-
+  id           String     @id @default(cuid())
+  repositoryId String     @unique
   technologies Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model RepositoryHealth {
-  id String @id @default(cuid())
-
-  repositoryId String     @unique
-  repository   Repository @relation(fields: [repositoryId], references: [id])
-
+  id                 String     @id @default(cuid())
+  repositoryId       String     @unique
   healthScore        Int
   activityScore      Int
   documentationScore Int
   maintenanceScore   Int
   openSourceScore    Int
-
-  recommendations Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  recommendations    Json
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  repository         Repository @relation(fields: [repositoryId], references: [id])
 }
 
 model RepositoryArchitecture {
-  id String @id @default(cuid())
-
-  repositoryId String @unique
-
-  graph Json
-
-  nodeCount Int
-
-  edgeCount Int
-
-  complexityScore Int
-
+  id                    String     @id @default(cuid())
+  repositoryId          String     @unique
+  graph                 Json
+  nodeCount             Int
+  edgeCount             Int
+  complexityScore       Int
   hasCircularDependency Boolean
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  repository            Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model RepositoryTechnicalDebt {
-  id String @id @default(cuid())
-
-  repositoryId String     @unique
-  repository   Repository @relation(fields: [repositoryId], references: [id])
-
-  technicalDebtScore   Int
-  maintainabilityScore Int
-
-  largeFileCount           Int @default(0)
-  deadFileCount            Int @default(0)
-  circularDependencyCount  Int @default(0)
-  deepDependencyChainCount Int @default(0)
-
-  largeFiles           Json
-  deadFiles            Json
-  deepDependencyChains Json
-
-  recommendations Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                       String     @id @default(cuid())
+  repositoryId             String     @unique
+  technicalDebtScore       Int
+  maintainabilityScore     Int
+  largeFileCount           Int        @default(0)
+  deadFileCount            Int        @default(0)
+  circularDependencyCount  Int        @default(0)
+  deepDependencyChainCount Int        @default(0)
+  largeFiles               Json
+  deadFiles                Json
+  deepDependencyChains     Json
+  recommendations          Json
+  createdAt                DateTime   @default(now())
+  updatedAt                DateTime   @updatedAt
+  repository               Repository @relation(fields: [repositoryId], references: [id])
 }
 
 model RepositoryDeployment {
-  id String @id @default(cuid())
-
-  repositoryId String @unique
-  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
-
-  deploymentScore Int
-  deploymentStatus String
-
+  id                  String     @id @default(cuid())
+  repositoryId        String     @unique
+  deploymentScore     Int
   infrastructureScore Int
-  configurationScore Int
+  configurationScore  Int
   buildReadinessScore Int
-  ciCdScore Int
-
-  // Phase 5B
-
-  platforms Json?
-
-  dockerQuality Json?
-
-  workflowQuality Json?
-
-  lockFiles Json?
-
-  runtime Json?
-
-  strengths Json
-  warnings Json
-  criticalIssues Json
-  recommendations Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  ciCdScore           Int
+  strengths           Json
+  warnings            Json
+  criticalIssues      Json
+  recommendations     Json
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  deploymentStatus    String
+  dockerQuality       Json?
+  lockFiles           Json?
+  platforms           Json?
+  runtime             Json?
+  workflowQuality     Json?
+  repository          Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model PullRequestAnalysis {
-  id           String @id @default(cuid())
-
-  repositoryId String
-  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
-
-  // Pull Request Details
-  prNumber Int
-  title    String
-
-  // Risk Analysis
-  riskScore Int
-  riskLevel String
-
-  riskBreakdown Json
-
-  // Pull Request Statistics
-  totalFiles  Int
-  additions   Int
-  deletions   Int
-  totalChanges Int
-
-  // File Analysis
-  changedFiles  Json
-  criticalFiles Json
-
-  // Flags
-  hasDependencyChanges    Boolean @default(false)
-  hasConfigurationChanges Boolean @default(false)
-
-  // Recommendations
-  recommendations Json
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      String     @id @default(cuid())
+  repositoryId            String
+  prNumber                Int
+  title                   String
+  riskScore               Int
+  riskLevel               String
+  changedFiles            Json
+  criticalFiles           Json
+  hasDependencyChanges    Boolean    @default(false)
+  hasConfigurationChanges Boolean    @default(false)
+  recommendations         Json
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
+  additions               Int
+  deletions               Int
+  riskBreakdown           Json
+  totalChanges            Int
+  totalFiles              Int
+  repository              Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 
   @@unique([repositoryId, prNumber])
 }
 
 model RepositoryAIReview {
-  id String @id @default(cuid())
-
-  repositoryId String @unique
-  repository Repository @relation(fields: [repositoryId], references: [id])
-
-  overallSummary String @db.Text
-
-  strengths Json
-  weaknesses Json
-  recommendations Json
-
-  engineeringSummary String @db.Text
-
-  modelUsed String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String     @id @default(cuid())
+  repositoryId       String     @unique
+  overallSummary     String
+  strengths          Json
+  weaknesses         Json
+  recommendations    Json
+  engineeringSummary String
+  modelUsed          String?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  repository         Repository @relation(fields: [repositoryId], references: [id])
 }

@@ -129,8 +129,42 @@ const getRepositoryById = async (req, res) => {
   }
 };
 
+const getRepositoryArchitecture = async (req, res) => {
+  try {
+    const repository = await prisma.repository.findFirst({
+      where: {
+        id: req.params.id,
+        userId: req.user.userId,
+      },
+      include: {
+        architecture: true,
+      },
+    });
+
+    if (!repository) {
+      return res.status(404).json({
+        success: false,
+        message: "Repository not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      architecture: repository.architecture,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   syncRepositories,
   getUserRepositories,
-  getRepositoryById
+  getRepositoryById,
+  getRepositoryArchitecture
 };

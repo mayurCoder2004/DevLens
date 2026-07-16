@@ -18,6 +18,7 @@ export default function RepositoryWorkspace() {
 
   const [repository, setRepository] = useState(null);
   const [architecture, setArchitecture] = useState(null);
+  const [analytics, setAnalytics] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
@@ -60,6 +61,7 @@ export default function RepositoryWorkspace() {
     );
 
     setArchitecture(response.data.architecture);
+setAnalytics(response.data.analytics);
   } catch (error) {
     console.error(error);
   }
@@ -80,8 +82,9 @@ export default function RepositoryWorkspace() {
       case "architecture":
   return (
     <RepositoryArchitecture
-      architecture={architecture}
-    />
+  architecture={architecture}
+  analytics={analytics}
+/>
   );
 
       case "technical-debt":

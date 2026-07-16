@@ -2,25 +2,31 @@ import ArchitectureSummaryCards from "./ArchitectureSummaryCards";
 import ArchitectureGraphCard from "./ArchitectureGraphCard";
 import ArchitectureInsights from "./ArchitectureInsights";
 import ArchitectureRecommendations from "./ArchitectureRecommendations";
+import ArchitectureAnalytics from "./ArchitectureAnalytics";
 
 export default function RepositoryArchitecture({
   architecture,
+  analytics,
 }) {
   return (
     <div className="space-y-8">
-      <ArchitectureSummaryCards
-        architecture={architecture}
-      />
+  <ArchitectureSummaryCards
+    architecture={architecture}
+  />
 
-      <ArchitectureGraphCard
-  architecture={architecture}
-/>
+  <ArchitectureGraphCard
+    architecture={architecture}
+  />
 
-      <div className="grid gap-8 lg:grid-cols-2">
-        <ArchitectureInsights />
+  <ArchitectureAnalytics
+    analytics={analytics}
+  />
 
-        <ArchitectureRecommendations />
-      </div>
-    </div>
+  <div className="grid gap-8 lg:grid-cols-2">
+    <ArchitectureInsights />
+
+    <ArchitectureRecommendations />
+  </div>
+</div>
   );
 }

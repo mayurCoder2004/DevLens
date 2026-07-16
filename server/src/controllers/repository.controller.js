@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma");
+const architectureAnalytics = require("../services/architecture/architectureAnalytics");
 
 const {
   getRepositories: fetchGithubRepositories,
@@ -148,10 +149,15 @@ const getRepositoryArchitecture = async (req, res) => {
       });
     }
 
+    const analytics = repository.architecture
+  ? architectureAnalytics.calculate(repository.architecture.graph)
+  : null;
+
     return res.status(200).json({
-      success: true,
-      architecture: repository.architecture,
-    });
+  success: true,
+  architecture: repository.architecture,
+  analytics,
+});
   } catch (error) {
     console.error(error);
 

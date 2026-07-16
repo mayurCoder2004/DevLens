@@ -6,6 +6,8 @@ const architectureMetrics = require("./architectureMetrics");
 
 const circularDependencyDetector = require("./circularDependencyDetector");
 
+const architectureAnalytics = require("./architectureAnalytics");
+
 class ArchitecturePersistenceService {
   async analyzeAndStore(repositoryId) {
     const repository = await prisma.repository.findUnique({
@@ -30,6 +32,10 @@ class ArchitecturePersistenceService {
     const metrics = architectureMetrics.calculate(graph);
 
     const hasCircularDependency = circularDependencyDetector.detect(graph);
+
+    const analytics = architectureAnalytics.calculate(graph);
+
+
 
     await prisma.repositoryArchitecture.upsert({
       where: {
@@ -60,10 +66,11 @@ class ArchitecturePersistenceService {
     });
 
     return {
-      graph,
-      metrics,
-      hasCircularDependency,
-    };
+  graph,
+  metrics,
+  hasCircularDependency,
+  analytics,
+};
   }
 
   async getArchitecture(repositoryId) {

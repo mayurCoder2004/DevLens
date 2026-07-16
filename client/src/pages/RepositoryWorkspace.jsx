@@ -19,6 +19,7 @@ export default function RepositoryWorkspace() {
   const [repository, setRepository] = useState(null);
   const [architecture, setArchitecture] = useState(null);
   const [analytics, setAnalytics] = useState(null);
+  const [insights, setInsights] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
@@ -62,6 +63,7 @@ export default function RepositoryWorkspace() {
 
     setArchitecture(response.data.architecture);
 setAnalytics(response.data.analytics);
+setInsights(response.data.insights);
   } catch (error) {
     console.error(error);
   }
@@ -84,6 +86,7 @@ setAnalytics(response.data.analytics);
     <RepositoryArchitecture
   architecture={architecture}
   analytics={analytics}
+  insights={insights}
 />
   );
 

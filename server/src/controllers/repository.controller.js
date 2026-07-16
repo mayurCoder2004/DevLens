@@ -1,5 +1,6 @@
 const prisma = require("../config/prisma");
 const architectureAnalytics = require("../services/architecture/architectureAnalytics");
+const architectureInsights = require("../services/architecture/architectureInsights");
 
 const {
   getRepositories: fetchGithubRepositories,
@@ -149,15 +150,34 @@ const getRepositoryArchitecture = async (req, res) => {
       });
     }
 
-    const analytics = repository.architecture
-  ? architectureAnalytics.calculate(repository.architecture.graph)
-  : null;
+    if (!repository.architecture) {
+      return res.status(404).json({
+        success: false,
+        message: "Architecture analysis not found",
+      });
+    }
+
+    const analytics = architectureAnalytics.calculate(
+      repository.architecture.graph,
+    );
+
+    const insights = architectureInsights.generate({
+      metrics: {
+        nodeCount: repository.architecture.nodeCount,
+        edgeCount: repository.architecture.edgeCount,
+        complexityScore: repository.architecture.complexityScore,
+      },
+      analytics,
+      hasCircularDependency:
+        repository.architecture.hasCircularDependency,
+    });
 
     return res.status(200).json({
-  success: true,
-  architecture: repository.architecture,
-  analytics,
-});
+      success: true,
+      architecture: repository.architecture,
+      analytics,
+      insights,
+    });
   } catch (error) {
     console.error(error);
 

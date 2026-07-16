@@ -7,6 +7,7 @@ import ArchitectureAnalytics from "./ArchitectureAnalytics";
 export default function RepositoryArchitecture({
   architecture,
   analytics,
+  insights,
 }) {
   return (
     <div className="space-y-8">
@@ -23,7 +24,9 @@ export default function RepositoryArchitecture({
   />
 
   <div className="grid gap-8 lg:grid-cols-2">
-    <ArchitectureInsights />
+    <ArchitectureInsights
+  insights={insights}
+/>
 
     <ArchitectureRecommendations />
   </div>

@@ -8,6 +8,7 @@ export default function RepositoryArchitecture({
   architecture,
   analytics,
   insights,
+  recommendations,
 }) {
   return (
     <div className="space-y-8">
@@ -28,7 +29,9 @@ export default function RepositoryArchitecture({
   insights={insights}
 />
 
-    <ArchitectureRecommendations />
+    <ArchitectureRecommendations
+  recommendations={recommendations}
+/>
   </div>
 </div>
   );

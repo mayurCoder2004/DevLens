@@ -17,9 +17,10 @@ export default function RepositoryWorkspace() {
   const { id } = useParams();
 
   const [repository, setRepository] = useState(null);
-  const [architecture, setArchitecture] = useState(null);
-  const [analytics, setAnalytics] = useState(null);
-  const [insights, setInsights] = useState(null);
+const [architecture, setArchitecture] = useState(null);
+const [analytics, setAnalytics] = useState(null);
+const [insights, setInsights] = useState(null);
+const [recommendations, setRecommendations] = useState([]);
 
   const [activeSection, setActiveSection] =
     useState("overview");
@@ -53,17 +54,20 @@ export default function RepositoryWorkspace() {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      `http://localhost:5000/api/repositories/${id}/architecture`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  `http://localhost:5000/api/repositories/${id}/architecture`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+console.log("Architecture API Response:", response.data);
 
     setArchitecture(response.data.architecture);
 setAnalytics(response.data.analytics);
 setInsights(response.data.insights);
+setRecommendations(response.data.recommendations);
   } catch (error) {
     console.error(error);
   }
@@ -87,6 +91,7 @@ setInsights(response.data.insights);
   architecture={architecture}
   analytics={analytics}
   insights={insights}
+  recommendations={recommendations}
 />
   );
 

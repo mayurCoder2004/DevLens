@@ -1,3 +1,9 @@
+const SEVERITY = {
+  HIGH: 3,
+  MEDIUM: 2,
+  LOW: 1,
+};
+
 class ArchitectureInsights {
   generate({
     metrics,
@@ -12,6 +18,7 @@ class ArchitectureInsights {
 
     if (hasCircularDependency) {
       insights.push({
+        severity: SEVERITY.HIGH,
         type: "warning",
         title: "Circular Dependencies Detected",
         description:
@@ -19,6 +26,7 @@ class ArchitectureInsights {
       });
     } else {
       insights.push({
+        severity: SEVERITY.MEDIUM,
         type: "success",
         title: "Healthy Dependency Structure",
         description:
@@ -33,6 +41,7 @@ class ArchitectureInsights {
     switch (analytics.architectureGrade) {
       case "A":
         insights.push({
+          severity: SEVERITY.MEDIUM,
           type: "success",
           title: "Excellent Modularity",
           description:
@@ -42,6 +51,7 @@ class ArchitectureInsights {
 
       case "B":
         insights.push({
+          severity: SEVERITY.LOW,
           type: "info",
           title: "Well Structured Repository",
           description:
@@ -51,6 +61,7 @@ class ArchitectureInsights {
 
       case "C":
         insights.push({
+          severity: SEVERITY.HIGH,
           type: "warning",
           title: "Moderate Architectural Complexity",
           description:
@@ -60,6 +71,7 @@ class ArchitectureInsights {
 
       default:
         insights.push({
+          severity: SEVERITY.HIGH,
           type: "warning",
           title: "Architecture Requires Attention",
           description:
@@ -73,18 +85,21 @@ class ArchitectureInsights {
 
     if (analytics.highestFanOut.count >= 15) {
       insights.push({
+        severity: SEVERITY.HIGH,
         type: "warning",
         title: "High Coupling Risk",
         description: `${analytics.highestFanOut.name} imports ${analytics.highestFanOut.count} internal modules, making it a central dependency hub. Consider extracting orchestration logic into dedicated services.`,
       });
     } else if (analytics.highestFanOut.count >= 8) {
       insights.push({
+        severity: SEVERITY.MEDIUM,
         type: "info",
         title: "Moderate Dependency Hub",
         description: `${analytics.highestFanOut.name} coordinates several modules. Monitor this file as the project grows to avoid excessive coupling.`,
       });
     } else {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "success",
         title: "Balanced Dependencies",
         description:
@@ -100,6 +115,7 @@ class ArchitectureInsights {
 
     if (avg <= 2) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "success",
         title: "Low Coupling",
         description:
@@ -107,6 +123,7 @@ class ArchitectureInsights {
       });
     } else if (avg <= 4) {
       insights.push({
+        severity: SEVERITY.MEDIUM,
         type: "info",
         title: "Moderate Coupling",
         description:
@@ -114,6 +131,7 @@ class ArchitectureInsights {
       });
     } else {
       insights.push({
+        severity: SEVERITY.HIGH,
         type: "warning",
         title: "High Coupling",
         description:
@@ -127,6 +145,7 @@ class ArchitectureInsights {
 
     if (analytics.rootModules === 1) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "success",
         title: "Single Entry Point",
         description:
@@ -134,6 +153,7 @@ class ArchitectureInsights {
       });
     } else if (analytics.rootModules <= 3) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "info",
         title: "Multiple Entry Points",
         description:
@@ -141,6 +161,7 @@ class ArchitectureInsights {
       });
     } else {
       insights.push({
+        severity: SEVERITY.MEDIUM,
         type: "warning",
         title: "Many Entry Points",
         description:
@@ -157,6 +178,7 @@ class ArchitectureInsights {
 
     if (leafRatio >= 0.6) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "success",
         title: "Well Isolated Components",
         description:
@@ -164,6 +186,7 @@ class ArchitectureInsights {
       });
     } else if (leafRatio >= 0.4) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "info",
         title: "Moderately Modular Design",
         description:
@@ -171,6 +194,7 @@ class ArchitectureInsights {
       });
     } else {
       insights.push({
+        severity: SEVERITY.MEDIUM,
         type: "warning",
         title: "Low Component Isolation",
         description:
@@ -184,6 +208,7 @@ class ArchitectureInsights {
 
     if (metrics.nodeCount >= 100) {
       insights.push({
+        severity: SEVERITY.LOW,
         type: "info",
         title: "Large Codebase",
         description:
@@ -191,7 +216,13 @@ class ArchitectureInsights {
       });
     }
 
-    return insights;
+    // ---------------------------------
+    // Sort by Severity
+    // ---------------------------------
+
+    return insights.sort(
+      (a, b) => b.severity - a.severity,
+    );
   }
 }
 

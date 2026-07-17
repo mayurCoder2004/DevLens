@@ -12,7 +12,7 @@ class GeminiProvider extends AIProvider {
     this.model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   }
 
-  async generateRepositoryReview(prompt) {
+  async generateStructuredResponse(prompt) {
     try {
       const response = await this.client.models.generateContent({
         model: this.model,
@@ -35,7 +35,7 @@ class GeminiProvider extends AIProvider {
     } catch (error) {
       console.error("Gemini Provider Error:", error);
 
-      throw new Error("Failed to generate AI repository review.");
+      throw new Error("Failed to generate AI response.");
     }
   }
 }

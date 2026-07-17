@@ -1,5 +1,6 @@
 const architectureAnalytics = require("./architectureAnalytics");
 const architectureInsights = require("./architectureInsights");
+const architectureRecommendations = require("./architectureRecommendations");
 
 class ArchitectureIntelligenceService {
   /**
@@ -21,10 +22,16 @@ class ArchitectureIntelligenceService {
       hasCircularDependency,
     } = repositoryArchitecture;
 
-    // Generate analytics from dependency graph
+    // -----------------------------------------------------
+    // Analytics
+    // -----------------------------------------------------
+
     const analytics = architectureAnalytics.calculate(graph);
 
-    // Generate engineering insights
+    // -----------------------------------------------------
+    // Insights
+    // -----------------------------------------------------
+
     const insights = architectureInsights.generate({
       metrics: {
         nodeCount,
@@ -35,18 +42,16 @@ class ArchitectureIntelligenceService {
       hasCircularDependency,
     });
 
-    /**
-     * Placeholder for AI-powered recommendations.
-     * In the next commit, this will be replaced with:
-     *
-     * const recommendations =
-     *   await architectureRecommendations.generate({
-     *     architecture: repositoryArchitecture,
-     *     analytics,
-     *     insights,
-     *   });
-     */
-    const recommendations = [];
+    // -----------------------------------------------------
+    // Recommendations
+    // -----------------------------------------------------
+
+    const recommendations =
+      await architectureRecommendations.generate({
+        architecture: repositoryArchitecture,
+        analytics,
+        insights,
+      });
 
     return {
       analytics,

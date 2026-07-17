@@ -1,6 +1,8 @@
 class AIProvider {
-  async generateRepositoryReview(prompt) {
-    throw new Error("generateRepositoryReview() must be implemented.");
+  async generateStructuredResponse(prompt) {
+    throw new Error(
+      "generateStructuredResponse() must be implemented."
+    );
   }
 }
 

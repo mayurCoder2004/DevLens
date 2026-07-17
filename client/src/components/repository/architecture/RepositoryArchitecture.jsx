@@ -1,8 +1,9 @@
 import ArchitectureSummaryCards from "./ArchitectureSummaryCards";
 import ArchitectureGraphCard from "./ArchitectureGraphCard";
+import ArchitectureAnalytics from "./ArchitectureAnalytics";
 import ArchitectureInsights from "./ArchitectureInsights";
 import ArchitectureRecommendations from "./ArchitectureRecommendations";
-import ArchitectureAnalytics from "./ArchitectureAnalytics";
+import ArchitectureRecommendationOverview from "./ArchitectureRecommendationOverview";
 
 export default function RepositoryArchitecture({
   architecture,
@@ -12,27 +13,36 @@ export default function RepositoryArchitecture({
 }) {
   return (
     <div className="space-y-8">
-  <ArchitectureSummaryCards
-    architecture={architecture}
-  />
+      {/* Repository Summary */}
+      <ArchitectureSummaryCards
+        architecture={architecture}
+      />
 
-  <ArchitectureGraphCard
-    architecture={architecture}
-  />
+      {/* Architecture Graph */}
+      <ArchitectureGraphCard
+        architecture={architecture}
+      />
 
-  <ArchitectureAnalytics
-    analytics={analytics}
-  />
+      {/* Analytics */}
+      <ArchitectureAnalytics
+        analytics={analytics}
+      />
 
-  <div className="grid gap-8 lg:grid-cols-2">
-    <ArchitectureInsights
-  insights={insights}
-/>
+      {/* NEW: Full Width AI Overview */}
+      <ArchitectureRecommendationOverview
+        recommendations={recommendations}
+      />
 
-    <ArchitectureRecommendations
-  recommendations={recommendations}
-/>
-  </div>
-</div>
+      {/* Details Section */}
+      <div className="grid gap-8 xl:grid-cols-2">
+        <ArchitectureInsights
+          insights={insights}
+        />
+
+        <ArchitectureRecommendations
+          recommendations={recommendations}
+        />
+      </div>
+    </div>
   );
 }

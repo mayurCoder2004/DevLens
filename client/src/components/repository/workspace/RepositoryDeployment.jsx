@@ -1,6 +1,7 @@
 import DeploymentSummaryCards from "../deployment/DeploymentSummaryCards";
 import DeploymentAnalytics from "../deployment/DeploymentAnalytics";
 import DeploymentOverview from "../deployment/DeploymentOverview";
+import DeploymentInsights from "../deployment/DeploymentInsights";
 
 export default function RepositoryDeployment({ deployment }) {
   if (!deployment) {
@@ -13,11 +14,13 @@ export default function RepositoryDeployment({ deployment }) {
 
   return (
     <div className="space-y-8">
-      <DeploymentSummaryCards deployment={deployment} />
+  <DeploymentSummaryCards deployment={deployment} />
 
-      <DeploymentAnalytics deployment={deployment} />
+  <DeploymentAnalytics deployment={deployment} />
 
-      <DeploymentOverview deployment={deployment} />
-    </div>
+  <DeploymentOverview deployment={deployment} />
+
+  <DeploymentInsights deployment={deployment} />
+</div>
   );
 }

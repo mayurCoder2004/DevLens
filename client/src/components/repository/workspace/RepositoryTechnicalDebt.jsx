@@ -3,6 +3,7 @@ import TechnicalDebtAnalytics from "../technicalDebt/TechnicalDebtAnalytics";
 import TechnicalDebtOverview from "../technicalDebt/TechnicalDebtOverview";
 import TechnicalDebtInsights from "../technicalDebt/TechnicalDebtInsights";
 import TechnicalDebtRecommendations from "../technicalDebt/TechnicalDebtRecommendations";
+import TechnicalDebtFileBreakdown from "../technicalDebt/TechnicalDebtFileBreakdown";
 
 export default function RepositoryTechnicalDebt({ technicalDebt }) {
   if (!technicalDebt) {
@@ -26,6 +27,7 @@ export default function RepositoryTechnicalDebt({ technicalDebt }) {
 
   <TechnicalDebtRecommendations technicalDebt={technicalDebt} />
 </div>
+    <TechnicalDebtFileBreakdown technicalDebt={technicalDebt} />
 </div>
   );
 }

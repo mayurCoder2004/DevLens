@@ -1,5 +1,6 @@
 import DeploymentSummaryCards from "../deployment/DeploymentSummaryCards";
 import DeploymentAnalytics from "../deployment/DeploymentAnalytics";
+import DeploymentOverview from "../deployment/DeploymentOverview";
 
 export default function RepositoryDeployment({ deployment }) {
   if (!deployment) {
@@ -15,6 +16,8 @@ export default function RepositoryDeployment({ deployment }) {
       <DeploymentSummaryCards deployment={deployment} />
 
       <DeploymentAnalytics deployment={deployment} />
+
+      <DeploymentOverview deployment={deployment} />
     </div>
   );
 }

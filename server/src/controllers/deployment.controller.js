@@ -47,6 +47,8 @@ async function getDeploymentReport(req, res) {
       },
     });
 
+    console.log(report);
+
     if (!report) {
       return res.status(404).json({
         success: false,

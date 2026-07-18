@@ -3,6 +3,7 @@ import DeploymentAnalytics from "../deployment/DeploymentAnalytics";
 import DeploymentOverview from "../deployment/DeploymentOverview";
 import DeploymentInsights from "../deployment/DeploymentInsights";
 import DeploymentRecommendations from "../deployment/DeploymentRecommendations";
+import DeploymentConfigurationBreakdown from "../deployment/DeploymentConfigurationBreakdown";
 
 export default function RepositoryDeployment({ deployment }) {
   if (!deployment) {
@@ -24,6 +25,8 @@ export default function RepositoryDeployment({ deployment }) {
   <DeploymentInsights deployment={deployment} />
 
   <DeploymentRecommendations deployment={deployment} />
+
+  <DeploymentConfigurationBreakdown deployment={deployment} />
 </div>
   );
 }

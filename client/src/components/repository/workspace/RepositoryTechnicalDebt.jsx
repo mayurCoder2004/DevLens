@@ -1,6 +1,7 @@
 import TechnicalDebtSummaryCards from "../technicalDebt/TechnicalDebtSummaryCards";
 import TechnicalDebtAnalytics from "../technicalDebt/TechnicalDebtAnalytics";
 import TechnicalDebtOverview from "../technicalDebt/TechnicalDebtOverview";
+import TechnicalDebtInsights from "../technicalDebt/TechnicalDebtInsights";
 
 export default function RepositoryTechnicalDebt({ technicalDebt }) {
   if (!technicalDebt) {
@@ -13,11 +14,13 @@ export default function RepositoryTechnicalDebt({ technicalDebt }) {
 
   return (
     <div className="space-y-8">
-      <TechnicalDebtSummaryCards technicalDebt={technicalDebt} />
+  <TechnicalDebtSummaryCards technicalDebt={technicalDebt} />
 
-      <TechnicalDebtAnalytics technicalDebt={technicalDebt} />
+  <TechnicalDebtAnalytics technicalDebt={technicalDebt} />
 
-      <TechnicalDebtOverview technicalDebt={technicalDebt} />
-    </div>
+  <TechnicalDebtOverview technicalDebt={technicalDebt} />
+
+  <TechnicalDebtInsights technicalDebt={technicalDebt} />
+</div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -24,6 +24,7 @@ const [analytics, setAnalytics] = useState(null);
 const [insights, setInsights] = useState(null);
 const [recommendations, setRecommendations] = useState([]);
 const [technicalDebt, setTechnicalDebt] = useState(null);
+const [deployment, setDeployment] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
@@ -49,10 +50,23 @@ const [technicalDebt, setTechnicalDebt] = useState(null);
   }
 };
 
+const fetchDeployment = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/deployment/${id}`
+    );
+
+    setDeployment(response.data.data);
+  } catch (error) {
+    console.error("Error fetching deployment analysis:", error);
+  }
+}, [id]);
+
   useEffect(() => {
   fetchRepository();
   fetchArchitecture();
   fetchTechnicalDebt();
+  fetchDeployment();
 }, [id]);
 
   const fetchRepository = async () => {
@@ -128,7 +142,7 @@ setRecommendations(response.data.recommendations);
   );
 
       case "deployment":
-        return <RepositoryDeployment />;
+  return <RepositoryDeployment deployment={deployment} />;
 
       case "engineering-health":
         return <RepositoryEngineeringHealth />;

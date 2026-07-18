@@ -54,10 +54,49 @@ async function getDeploymentReport(req, res) {
       });
     }
 
-    return res.json({
-      success: true,
-      data: report,
-    });
+    const formattedReport = {
+  deploymentScore: report.deploymentScore,
+  status: report.deploymentStatus,
+
+  infrastructure: {
+    score: report.infrastructureScore,
+  },
+
+  configuration: {
+    score: report.configurationScore,
+  },
+
+  buildReadiness: {
+    score: report.buildReadinessScore,
+  },
+
+  ciCd: {
+    score: report.ciCdScore,
+  },
+
+  runtime: report.runtime,
+
+  lockFiles: report.lockFiles,
+
+  dockerQuality: report.dockerQuality,
+
+  workflowQuality: report.workflowQuality,
+
+  platforms: report.platforms,
+
+  strengths: report.strengths,
+
+  warnings: report.warnings,
+
+  criticalIssues: report.criticalIssues,
+
+  recommendations: report.recommendations,
+};
+
+return res.json({
+  success: true,
+  data: formattedReport,
+});
   } catch (error) {
     console.error(error);
 

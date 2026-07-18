@@ -1,6 +1,7 @@
 import EngineeringHealthOverview from "../engineeringHealth/EngineeringHealthOverview";
 import EngineeringHealthSummaryCards from "../engineeringHealth/EngineeringHealthSummaryCards";
 import EngineeringInsights from "../engineeringHealth/EngineeringInsights";
+import EngineeringRecommendations from "../engineeringHealth/EngineeringRecommendations";
 import EngineeringScoreBreakdown from "../engineeringHealth/EngineeringScoreBreakdown";
 
 export default function RepositoryEngineeringHealth({
@@ -21,6 +22,10 @@ export default function RepositoryEngineeringHealth({
   />
 
   <EngineeringInsights
+    engineeringHealth={engineeringHealth}
+  />
+
+  <EngineeringRecommendations
     engineeringHealth={engineeringHealth}
   />
 </div>

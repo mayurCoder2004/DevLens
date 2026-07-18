@@ -1,3 +1,4 @@
+import TechnicalDebtAnalytics from "../technicalDebt/TechnicalDebtAnalytics";
 import TechnicalDebtSummaryCards from "../technicalDebt/TechnicalDebtSummaryCards";
 
 export default function RepositoryTechnicalDebt({ technicalDebt }) {
@@ -12,6 +13,8 @@ export default function RepositoryTechnicalDebt({ technicalDebt }) {
   return (
     <div className="space-y-8">
       <TechnicalDebtSummaryCards technicalDebt={technicalDebt} />
+
+      <TechnicalDebtAnalytics technicalDebt={technicalDebt} />
     </div>
   );
 }

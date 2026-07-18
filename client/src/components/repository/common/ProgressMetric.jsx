@@ -4,7 +4,11 @@ export default function ProgressMetric({
   status,
   color = "blue",
 }) {
-  const percentage = Math.max(0, Math.min(value, 100));
+  const isAvailable = value !== null && value !== undefined;
+
+const percentage = isAvailable
+  ? Math.max(0, Math.min(value, 100))
+  : 0;
 
   const colorClasses = {
     blue: "bg-blue-500",
@@ -28,21 +32,25 @@ export default function ProgressMetric({
           </h4>
 
           <p className="mt-1 text-xs text-slate-400">
-            {status}
-          </p>
+  {isAvailable ? status : "Not Analyzed"}
+</p>
         </div>
 
         <span className="text-lg font-bold text-white">
-          {percentage}%
-        </span>
+  {isAvailable ? `${percentage}%` : "N/A"}
+</span>
       </div>
 
       <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
-        <div
-          className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
+  {isAvailable ? (
+    <div
+      className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
+      style={{ width: `${percentage}%` }}
+    />
+  ) : (
+    <div className="h-full rounded-full bg-slate-700" />
+  )}
+</div>
     </div>
   );
 }

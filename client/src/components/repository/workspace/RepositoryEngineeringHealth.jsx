@@ -1,4 +1,5 @@
 import EngineeringHealthSummaryCards from "../engineeringHealth/EngineeringHealthSummaryCards";
+import EngineeringScoreBreakdown from "../engineeringHealth/EngineeringScoreBreakdown";
 
 export default function RepositoryEngineeringHealth({
   engineeringHealth,
@@ -6,6 +7,10 @@ export default function RepositoryEngineeringHealth({
   return (
     <div className="space-y-8">
   <EngineeringHealthSummaryCards
+    engineeringHealth={engineeringHealth}
+  />
+
+  <EngineeringScoreBreakdown
     engineeringHealth={engineeringHealth}
   />
 </div>

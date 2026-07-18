@@ -1,3 +1,4 @@
+import EngineeringHealthBreakdown from "../engineeringHealth/EngineeringHealthBreakdown";
 import EngineeringHealthOverview from "../engineeringHealth/EngineeringHealthOverview";
 import EngineeringHealthSummaryCards from "../engineeringHealth/EngineeringHealthSummaryCards";
 import EngineeringInsights from "../engineeringHealth/EngineeringInsights";
@@ -28,6 +29,10 @@ export default function RepositoryEngineeringHealth({
   <EngineeringRecommendations
     engineeringHealth={engineeringHealth}
   />
+
+  <EngineeringHealthBreakdown
+  engineeringHealth={engineeringHealth}
+/>
 </div>
   );
 }

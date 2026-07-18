@@ -1,4 +1,5 @@
 import DeploymentSummaryCards from "../deployment/DeploymentSummaryCards";
+import DeploymentAnalytics from "../deployment/DeploymentAnalytics";
 
 export default function RepositoryDeployment({ deployment }) {
   if (!deployment) {
@@ -12,6 +13,8 @@ export default function RepositoryDeployment({ deployment }) {
   return (
     <div className="space-y-8">
       <DeploymentSummaryCards deployment={deployment} />
+
+      <DeploymentAnalytics deployment={deployment} />
     </div>
   );
 }

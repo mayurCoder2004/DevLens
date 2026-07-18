@@ -16,18 +16,43 @@ import RepositoryAIReview from "../components/repository/workspace/RepositoryAIR
 export default function RepositoryWorkspace() {
   const { id } = useParams();
 
+  console.log(id);
+
   const [repository, setRepository] = useState(null);
 const [architecture, setArchitecture] = useState(null);
 const [analytics, setAnalytics] = useState(null);
 const [insights, setInsights] = useState(null);
 const [recommendations, setRecommendations] = useState([]);
+const [technicalDebt, setTechnicalDebt] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
 
+    const fetchTechnicalDebt = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(
+      `http://localhost:5000/api/technical-debt/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log("Technical Debt API Response:", response.data);
+
+    setTechnicalDebt(response.data.data);
+  } catch (error) {
+    console.error("Technical Debt Error:", error);
+  }
+};
+
   useEffect(() => {
   fetchRepository();
   fetchArchitecture();
+  fetchTechnicalDebt();
 }, [id]);
 
   const fetchRepository = async () => {
@@ -96,7 +121,11 @@ setRecommendations(response.data.recommendations);
   );
 
       case "technical-debt":
-        return <RepositoryTechnicalDebt />;
+  return (
+    <RepositoryTechnicalDebt
+      technicalDebt={technicalDebt}
+    />
+  );
 
       case "deployment":
         return <RepositoryDeployment />;

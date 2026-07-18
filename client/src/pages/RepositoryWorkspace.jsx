@@ -25,6 +25,7 @@ const [insights, setInsights] = useState(null);
 const [recommendations, setRecommendations] = useState([]);
 const [technicalDebt, setTechnicalDebt] = useState(null);
 const [deployment, setDeployment] = useState(null);
+const [engineeringHealth, setEngineeringHealth] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
@@ -50,6 +51,20 @@ const [deployment, setDeployment] = useState(null);
   }
 };
 
+const fetchEngineeringHealth = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineering-health/${id}`
+    );
+
+    console.log("Engineering Health:", response.data);
+
+    setEngineeringHealth(response.data.data);
+  } catch (error) {
+    console.error("Error fetching engineering health:", error);
+  }
+}, [id]);
+
 const fetchDeployment = useCallback(async () => {
   try {
     const response = await axios.get(
@@ -67,6 +82,7 @@ const fetchDeployment = useCallback(async () => {
   fetchArchitecture();
   fetchTechnicalDebt();
   fetchDeployment();
+  fetchEngineeringHealth();
 }, [id]);
 
   const fetchRepository = async () => {
@@ -145,7 +161,11 @@ setRecommendations(response.data.recommendations);
   return <RepositoryDeployment deployment={deployment} />;
 
       case "engineering-health":
-        return <RepositoryEngineeringHealth />;
+  return (
+    <RepositoryEngineeringHealth
+      engineeringHealth={engineeringHealth}
+    />
+  );
 
       case "ai-review":
         return <RepositoryAIReview />;

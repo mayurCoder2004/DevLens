@@ -3,6 +3,7 @@ import AIExecutiveSummary from "../aiReview/AIExecutiveSummary";
 import CriticalIssues from "../aiReview/CriticalIssues";
 import EngineeringScore from "../aiReview/EngineeringScore";
 import Strengths from "../aiReview/Strengths";
+import TechnologyInsights from "../aiReview/TechnologyInsights";
 
 export default function RepositoryAIReview() {
   return (
@@ -16,6 +17,8 @@ export default function RepositoryAIReview() {
       <Strengths />
 
       <ActionPlan />
+
+      <TechnologyInsights />
     </div>
   );
 }

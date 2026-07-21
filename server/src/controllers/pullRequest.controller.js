@@ -8,6 +8,8 @@ const {
   savePullRequestAnalysis,
 } = require("../services/pullRequestPersistence.service");
 
+const { Octokit } = require("@octokit/rest");
+
 const analyzePullRequestController = async (req, res) => {
   try {
     const { repositoryId, prNumber } = req.params;
@@ -82,11 +84,27 @@ const getPullRequestAnalysis = async (req, res) => {
       });
     }
 
+    const repository = await prisma.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!repository) {
+      return res.status(404).json({
+        success: false,
+        message: "Repository not found.",
+      });
+    }
+
     const analysis = await prisma.pullRequestAnalysis.findUnique({
       where: {
         repositoryId_prNumber: {
           repositoryId,
-          prNumber: Number(prNumber),
+          prNumber: prNumberInt,
         },
       },
     });
@@ -98,9 +116,36 @@ const getPullRequestAnalysis = async (req, res) => {
       });
     }
 
+    const octokit = new Octokit({
+      auth: repository.user.githubToken,
+    });
+
+    const { data: pullRequest } =
+      await octokit.pulls.get({
+        owner: repository.owner,
+        repo: repository.name,
+        pull_number: prNumberInt,
+      });
+
     return res.json({
       success: true,
-      data: analysis,
+      data: {
+        ...analysis,
+
+        state: pullRequest.state,
+        author: pullRequest.user.login,
+        authorAvatar: pullRequest.user.avatar_url,
+
+        baseBranch: pullRequest.base.ref,
+        headBranch: pullRequest.head.ref,
+
+        merged: pullRequest.merged,
+
+        url: pullRequest.html_url,
+
+        createdAt: pullRequest.created_at,
+        updatedAt: pullRequest.updated_at,
+      },
     });
   } catch (error) {
     console.error(error);

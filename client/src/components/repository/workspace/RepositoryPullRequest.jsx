@@ -1,3 +1,4 @@
+import PullRequestOverview from "../pullRequest/PullRequestOverview";
 import PullRequestRiskBreakdown from "../pullRequest/PullRequestRiskBreakdown";
 import PullRequestSummaryCards from "../pullRequest/PullRequestSummaryCards";
 
@@ -13,6 +14,10 @@ export default function RepositoryPullRequest({
       />
 
       <PullRequestRiskBreakdown
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
+
+      <PullRequestOverview
         pullRequestAnalysis={pullRequestAnalysis}
       />
     </div>

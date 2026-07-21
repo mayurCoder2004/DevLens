@@ -1,5 +1,6 @@
 import ActionPlan from "../aiReview/ActionPlan";
 import AIExecutiveSummary from "../aiReview/AIExecutiveSummary";
+import ArchitectureSuggestions from "../aiReview/ArchitectureSuggestions";
 import CriticalIssues from "../aiReview/CriticalIssues";
 import EngineeringScore from "../aiReview/EngineeringScore";
 import Strengths from "../aiReview/Strengths";
@@ -19,6 +20,8 @@ export default function RepositoryAIReview() {
       <ActionPlan />
 
       <TechnologyInsights />
+
+      <ArchitectureSuggestions />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import ActionPlan from "../aiReview/ActionPlan";
 import AIExecutiveSummary from "../aiReview/AIExecutiveSummary";
 import CriticalIssues from "../aiReview/CriticalIssues";
 import EngineeringScore from "../aiReview/EngineeringScore";
@@ -13,6 +14,8 @@ export default function RepositoryAIReview() {
       <CriticalIssues />
 
       <Strengths />
+
+      <ActionPlan />
     </div>
   );
 }

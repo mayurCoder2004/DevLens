@@ -2,30 +2,22 @@ const prisma = require("../config/prisma");
 
 class RepositoryAIReviewRepository {
   async saveReview(repositoryId, review, modelUsed) {
-    const savedReview = await prisma.repositoryAIReview.upsert({
+    return prisma.repositoryAIReview.upsert({
       where: {
         repositoryId,
       },
       update: {
-        overallSummary: review.overallSummary,
-        strengths: review.strengths,
-        weaknesses: review.weaknesses,
-        recommendations: review.recommendations,
-        engineeringSummary: review.engineeringSummary,
+        review,
         modelUsed,
+        promptVersion: "v2",
       },
       create: {
         repositoryId,
-        overallSummary: review.overallSummary,
-        strengths: review.strengths,
-        weaknesses: review.weaknesses,
-        recommendations: review.recommendations,
-        engineeringSummary: review.engineeringSummary,
+        review,
         modelUsed,
+        promptVersion: "v2",
       },
     });
-
-    return savedReview;
   }
 
   async getReviewByRepositoryId(repositoryId) {

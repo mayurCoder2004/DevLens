@@ -162,15 +162,15 @@ model PullRequestAnalysis {
 }
 
 model RepositoryAIReview {
-  id                 String     @id @default(cuid())
-  repositoryId       String     @unique
-  overallSummary     String
-  strengths          Json
-  weaknesses         Json
-  recommendations    Json
-  engineeringSummary String
-  modelUsed          String?
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-  repository         Repository @relation(fields: [repositoryId], references: [id])
+  id           String   @id @default(cuid())
+  repositoryId String   @unique
+
+  review        Json
+  modelUsed     String?
+  promptVersion String? @default("v2")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }

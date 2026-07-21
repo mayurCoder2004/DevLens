@@ -12,6 +12,7 @@ import RepositoryTechnicalDebt from "../components/repository/workspace/Reposito
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
 import RepositoryEngineeringHealth from "../components/repository/workspace/RepositoryEngineeringHealth";
 import RepositoryAIReview from "../components/repository/workspace/RepositoryAIReview";
+import RepositoryPullRequest from "../components/repository/workspace/RepositoryPullRequest";
 
 export default function RepositoryWorkspace() {
   const { id } = useParams();
@@ -26,9 +27,28 @@ const [recommendations, setRecommendations] = useState([]);
 const [technicalDebt, setTechnicalDebt] = useState(null);
 const [deployment, setDeployment] = useState(null);
 const [engineeringHealth, setEngineeringHealth] = useState(null);
+const [pullRequestAnalysis, setPullRequestAnalysis] = useState(null);
 
   const [activeSection, setActiveSection] =
     useState("overview");
+
+    const fetchPullRequestAnalysis = useCallback(async () => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/pull-request/${id}`
+    );
+
+    console.log("Pull Request:", response.data);
+
+    setPullRequestAnalysis(response.data.data);
+  } catch (error) {
+    console.error(
+      "Error fetching pull request analysis:",
+      error
+    );
+  }
+}, [id]);
+
 
     const fetchTechnicalDebt = async () => {
   try {
@@ -83,6 +103,7 @@ const fetchDeployment = useCallback(async () => {
   fetchTechnicalDebt();
   fetchDeployment();
   fetchEngineeringHealth();
+  fetchPullRequestAnalysis();
 }, [id]);
 
   const fetchRepository = async () => {
@@ -164,6 +185,13 @@ setRecommendations(response.data.recommendations);
   return (
     <RepositoryEngineeringHealth
       engineeringHealth={engineeringHealth}
+    />
+  );
+
+      case "pull-requests":
+  return (
+    <RepositoryPullRequest
+      pullRequestAnalysis={pullRequestAnalysis}
     />
   );
 

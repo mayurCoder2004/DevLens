@@ -25,19 +25,65 @@ class GeminiProvider extends AIProvider {
         .trim();
 
       try {
-        return JSON.parse(cleanedResponse);
-      } catch (error) {
-        console.error("Invalid Gemini JSON Response:");
-        console.error(cleanedResponse);
+  const parsedResponse = JSON.parse(cleanedResponse);
 
-        throw new Error("Gemini returned an invalid JSON response.");
-      }
+  this.validateRepositoryReview(parsedResponse);
+
+  return parsedResponse;
+} catch (error) {
+  console.error("Invalid Gemini JSON Response:");
+  console.error(cleanedResponse);
+
+  throw new Error(
+    `Gemini returned an invalid structured response: ${error.message}`,
+  );
+}
     } catch (error) {
       console.error("Gemini Provider Error:", error);
 
       throw new Error("Failed to generate AI response.");
     }
   }
+
+  validateRepositoryReview(review) {
+  const requiredFields = [
+    "executiveSummary",
+    "engineeringScore",
+    "strengths",
+    "criticalIssues",
+    "actionPlan",
+    "technologyInsights",
+    "architectureSuggestions",
+  ];
+
+  for (const field of requiredFields) {
+    if (!(field in review)) {
+      throw new Error(
+        `Gemini response is missing required field: ${field}`,
+      );
+    }
+  }
+
+  if (!Array.isArray(review.strengths)) {
+    throw new Error("strengths must be an array.");
+  }
+
+  if (!Array.isArray(review.criticalIssues)) {
+    throw new Error("criticalIssues must be an array.");
+  }
+
+  if (!Array.isArray(review.actionPlan)) {
+    throw new Error("actionPlan must be an array.");
+  }
+
+  if (!Array.isArray(review.technologyInsights)) {
+    throw new Error("technologyInsights must be an array.");
+  }
+
+  if (!Array.isArray(review.architectureSuggestions)) {
+    throw new Error("architectureSuggestions must be an array.");
+  }
+}
 }
 
 module.exports = GeminiProvider;

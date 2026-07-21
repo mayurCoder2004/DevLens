@@ -59,7 +59,7 @@ class AIReviewService {
 
     const prompt = buildRepositoryReviewPrompt(analysis);
 
-    const review = await this.provider.generateRepositoryReview(prompt);
+    const review = await this.provider.generateStructuredResponse(prompt);
 
     const savedReview = await this.repositoryAIReviewRepository.saveReview(
       repositoryId,
@@ -92,7 +92,7 @@ class AIReviewService {
 
     const prompt = buildRepositoryReviewPrompt(analysis);
 
-    const review = await this.provider.generateRepositoryReview(prompt);
+    const review = await this.provider.generateStructuredResponse(prompt);
 
     return await this.repositoryAIReviewRepository.saveReview(
       repositoryId,

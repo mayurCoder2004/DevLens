@@ -1,3 +1,4 @@
+import PullRequestChangedFiles from "../pullRequest/PullRequestChangedFiles";
 import PullRequestOverview from "../pullRequest/PullRequestOverview";
 import PullRequestRecommendations from "../pullRequest/PullRequestRecommendations";
 import PullRequestRiskBreakdown from "../pullRequest/PullRequestRiskBreakdown";
@@ -23,6 +24,10 @@ export default function RepositoryPullRequest({
       />
 
       <PullRequestRecommendations
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
+
+      <PullRequestChangedFiles
         pullRequestAnalysis={pullRequestAnalysis}
       />
     </div>

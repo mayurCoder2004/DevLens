@@ -1,10 +1,12 @@
 import {
   ArrowLeft,
   LayoutDashboard,
+  ChartColumn,
   Boxes,
   Wrench,
   Rocket,
   Activity,
+  GitPullRequest,
   Sparkles,
   Globe,
   Lock,
@@ -23,6 +25,11 @@ export default function RepositorySidebar({
       id: "overview",
       label: "Overview",
       icon: LayoutDashboard,
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: ChartColumn,
     },
     {
       id: "architecture",
@@ -45,6 +52,11 @@ export default function RepositorySidebar({
       icon: Activity,
     },
     {
+      id: "pull-requests",
+      label: "Pull Requests",
+      icon: GitPullRequest,
+    },
+    {
       id: "ai-review",
       label: "AI Review",
       icon: Sparkles,
@@ -54,7 +66,6 @@ export default function RepositorySidebar({
   return (
     <aside className="flex w-72 flex-col border-r border-slate-800 bg-[#0F172A]">
       {/* Repository Header */}
-
       <div className="border-b border-slate-800 p-6">
         {repository ? (
           <>
@@ -105,7 +116,6 @@ export default function RepositorySidebar({
       </div>
 
       {/* Back */}
-
       <div className="border-b border-slate-800 p-4">
         <NavLink
           to="/repositories"
@@ -129,7 +139,6 @@ export default function RepositorySidebar({
       </div>
 
       {/* Workspace */}
-
       <div className="flex-1 p-4">
         <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-500">
           Workspace
@@ -143,25 +152,13 @@ export default function RepositorySidebar({
               <button
                 key={id}
                 onClick={() => onSectionChange(id)}
-                className={`
-                  flex
-                  w-full
-                  items-center
-                  gap-3
-                  rounded-xl
-                  px-4
-                  py-3
-                  text-left
-                  transition-all
-                  ${
-                    isActive
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  }
-                `}
+                className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                }`}
               >
                 <Icon size={18} />
-
                 <span>{label}</span>
               </button>
             );

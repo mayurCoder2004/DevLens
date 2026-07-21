@@ -13,9 +13,6 @@ export default function PullRequestSummaryCards({
 }) {
   if (!pullRequestAnalysis) return null;
 
-  const { risk, summary, classification } =
-    pullRequestAnalysis;
-
   return (
     <section>
       <div className="mb-8">
@@ -32,8 +29,8 @@ export default function PullRequestSummaryCards({
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <SummaryMetricCard
           title="Risk Score"
-          value={risk.score}
-          subtitle={`${risk.level} Risk`}
+          value={pullRequestAnalysis.riskScore}
+          subtitle={`${pullRequestAnalysis.riskLevel} Risk`}
           icon={ShieldCheck}
           iconBg="bg-red-500/10"
           iconColor="text-red-400"
@@ -41,14 +38,14 @@ export default function PullRequestSummaryCards({
 
         <SummaryMetricCard
           title="Files Changed"
-          value={summary.totalFiles}
+          value={pullRequestAnalysis.totalFiles}
           subtitle="Modified Files"
           icon={Files}
         />
 
         <SummaryMetricCard
           title="Total Changes"
-          value={summary.totalChanges}
+          value={pullRequestAnalysis.totalChanges}
           subtitle="Lines Changed"
           icon={GitCompareArrows}
           iconBg="bg-violet-500/10"
@@ -57,7 +54,7 @@ export default function PullRequestSummaryCards({
 
         <SummaryMetricCard
           title="Critical Files"
-          value={classification.summary.criticalCount}
+          value={pullRequestAnalysis.criticalFiles.length}
           subtitle="Sensitive Files"
           icon={ShieldAlert}
           iconBg="bg-orange-500/10"
@@ -67,9 +64,11 @@ export default function PullRequestSummaryCards({
         <SummaryMetricCard
           title="Infrastructure"
           value={
-            classification.summary.infrastructureCount
+            pullRequestAnalysis.hasConfigurationChanges
+              ? 1
+              : 0
           }
-          subtitle="Infrastructure Files"
+          subtitle="Infrastructure Changes"
           icon={ServerCog}
           iconBg="bg-cyan-500/10"
           iconColor="text-cyan-400"
@@ -77,7 +76,7 @@ export default function PullRequestSummaryCards({
 
         <SummaryMetricCard
           title="Risk Level"
-          value={risk.level}
+          value={pullRequestAnalysis.riskLevel}
           subtitle="Overall Classification"
           icon={ShieldCheck}
           iconBg="bg-emerald-500/10"

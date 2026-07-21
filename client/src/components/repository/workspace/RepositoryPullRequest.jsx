@@ -1,3 +1,4 @@
+import PullRequestRiskBreakdown from "../pullRequest/PullRequestRiskBreakdown";
 import PullRequestSummaryCards from "../pullRequest/PullRequestSummaryCards";
 
 export default function RepositoryPullRequest({
@@ -8,6 +9,10 @@ export default function RepositoryPullRequest({
   return (
     <div className="space-y-8">
       <PullRequestSummaryCards
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
+
+      <PullRequestRiskBreakdown
         pullRequestAnalysis={pullRequestAnalysis}
       />
     </div>

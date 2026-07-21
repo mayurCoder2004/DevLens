@@ -35,12 +35,12 @@ const [pullRequestAnalysis, setPullRequestAnalysis] = useState(null);
     const fetchPullRequestAnalysis = useCallback(async () => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/pull-request/${id}`
-    );
+  `${import.meta.env.VITE_API_URL}/pull-requests/${id}/1`
+);
 
-    console.log("Pull Request:", response.data);
+console.log(response.data);
 
-    setPullRequestAnalysis(response.data.data);
+setPullRequestAnalysis(response.data.data);
   } catch (error) {
     console.error(
       "Error fetching pull request analysis:",

@@ -46,6 +46,10 @@ services:
       - postgres
       - redis
 
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
   worker:
     build:
       context: ./server
@@ -62,6 +66,28 @@ services:
     depends_on:
       - postgres
       - redis
+
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+
+    container_name: devlens-frontend
+    restart: unless-stopped
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - backend
+
+    volumes:
+      - ./client:/app
+      - /app/node_modules
 
 volumes:
   postgres-data:

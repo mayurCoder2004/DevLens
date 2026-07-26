@@ -1,187 +1,157 @@
 const prisma = require("../config/prisma");
 
 const architectureIntelligenceService = require(
-  "../services/architecture/architectureIntelligence.service",
+  "../services/architecture/architectureIntelligence.service"
 );
 
 const {
   getRepositories: fetchGithubRepositories,
 } = require("../services/github.service");
 
-const syncRepositories = async (req, res) => {
-  try {
-    const user = await prisma.user.findUnique({
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
+
+// ============================
+// Sync GitHub Repositories
+// ============================
+
+const syncRepositories = asyncHandler(async (req, res) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.user.userId,
+    },
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const repos = await fetchGithubRepositories(user.githubToken);
+
+  for (const repo of repos) {
+    await prisma.repository.upsert({
       where: {
-        id: req.user.userId,
+        githubRepoId: repo.id,
       },
-    });
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+      update: {
+        name: repo.name,
+        owner: repo.owner.login,
+        description: repo.description,
+        language: repo.language,
+        stars: repo.stargazers_count,
+        private: repo.private,
+        repoUrl: repo.html_url,
+        defaultBranch: repo.default_branch,
+        updatedAtGithub: repo.updated_at
+          ? new Date(repo.updated_at)
+          : null,
+      },
 
-    console.log("DB TOKEN:", user.githubToken);
-
-    const repos = await fetchGithubRepositories(user.githubToken);
-
-    console.log("Repos fetched from GitHub:", repos.length);
-
-    for (const repo of repos) {
-      await prisma.repository.upsert({
-        where: {
-          githubRepoId: repo.id,
-        },
-
-        update: {
-          name: repo.name,
-          owner: repo.owner.login,
-          description: repo.description,
-          language: repo.language,
-          stars: repo.stargazers_count,
-          private: repo.private,
-          repoUrl: repo.html_url,
-          defaultBranch: repo.default_branch,
-          updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
-        },
-
-        create: {
-          githubRepoId: repo.id,
-          name: repo.name,
-          owner: repo.owner.login,
-          description: repo.description,
-          language: repo.language,
-          stars: repo.stargazers_count,
-          private: repo.private,
-          repoUrl: repo.html_url,
-          defaultBranch: repo.default_branch,
-          userId: user.id,
-          updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
-        },
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      count: repos.length,
-    });
-  } catch (error) {
-    console.log(error);
-
-    return res.status(500).json({
-      success: false,
-      message: error.message,
+      create: {
+        githubRepoId: repo.id,
+        name: repo.name,
+        owner: repo.owner.login,
+        description: repo.description,
+        language: repo.language,
+        stars: repo.stargazers_count,
+        private: repo.private,
+        repoUrl: repo.html_url,
+        defaultBranch: repo.default_branch,
+        userId: user.id,
+        updatedAtGithub: repo.updated_at
+          ? new Date(repo.updated_at)
+          : null,
+      },
     });
   }
-};
 
-const getUserRepositories = async (req, res) => {
-  try {
-    const repos = await prisma.repository.findMany({
-      where: {
-        userId: req.user.userId,
-      },
+  return res.status(200).json({
+    success: true,
+    count: repos.length,
+  });
+});
 
-      orderBy: {
-        stars: "desc",
-      },
-    });
+// ============================
+// Get User Repositories
+// ============================
 
-    return res.status(200).json({
-      success: true,
-      repositories: repos,
-    });
-  } catch (error) {
-    console.log(error);
+const getUserRepositories = asyncHandler(async (req, res) => {
+  const repos = await prisma.repository.findMany({
+    where: {
+      userId: req.user.userId,
+    },
 
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    orderBy: {
+      stars: "desc",
+    },
+  });
+
+  return res.status(200).json({
+    success: true,
+    repositories: repos,
+  });
+});
+
+// ============================
+// Get Repository By ID
+// ============================
+
+const getRepositoryById = asyncHandler(async (req, res) => {
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: req.params.id,
+      userId: req.user.userId,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
 
-const getRepositoryById = async (req, res) => {
-  try {
-    const repository = await prisma.repository.findFirst({
-      where: {
-        id: req.params.id,
-        userId: req.user.userId,
-      },
-    });
+  return res.status(200).json({
+    success: true,
+    repository,
+  });
+});
 
-    if (!repository) {
-      return res.status(404).json({
-        success: false,
-        message: "Repository not found",
-      });
-    }
+// ============================
+// Get Repository Architecture
+// ============================
 
-    return res.status(200).json({
-      success: true,
-      repository,
-    });
-  } catch (error) {
-    console.log(error);
+const getRepositoryArchitecture = asyncHandler(async (req, res) => {
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: req.params.id,
+      userId: req.user.userId,
+    },
+    include: {
+      architecture: true,
+    },
+  });
 
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
 
-const getRepositoryArchitecture = async (req, res) => {
-  try {
-    const repository = await prisma.repository.findFirst({
-      where: {
-        id: req.params.id,
-        userId: req.user.userId,
-      },
-      include: {
-        architecture: true,
-      },
-    });
-
-    if (!repository) {
-      return res.status(404).json({
-        success: false,
-        message: "Repository not found",
-      });
-    }
-
-    if (!repository.architecture) {
-      return res.status(404).json({
-        success: false,
-        message: "Architecture analysis not found",
-      });
-    }
-
-    const intelligence =
-      await architectureIntelligenceService.generate(
-        repository.architecture,
-      );
-
-    return res.status(200).json({
-      success: true,
-      architecture: repository.architecture,
-      ...intelligence,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  if (!repository.architecture) {
+    throw new ApiError(404, "Architecture analysis not found");
   }
-};
+
+  const intelligence = await architectureIntelligenceService.generate(
+    repository.architecture
+  );
+
+  return res.status(200).json({
+    success: true,
+    architecture: repository.architecture,
+    ...intelligence,
+  });
+});
 
 module.exports = {
   syncRepositories,
   getUserRepositories,
   getRepositoryById,
-  getRepositoryArchitecture
+  getRepositoryArchitecture,
 };

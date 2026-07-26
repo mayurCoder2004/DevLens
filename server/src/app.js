@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const compression = require("compression");
 
 const authRoutes = require("./routes/auth.routes");
 const repositoryRoutes = require("./routes/repository.routes");
@@ -19,9 +21,39 @@ const engineeringHealthRoutes = require("./routes/engineeringHealth.routes");
 const aiReviewRoutes = require("./routes/aiReview.routes");
 
 const app = express();
+const REQUEST_SIZE_LIMIT = "10mb";
 
-app.use(cors());
-app.use(express.json());
+// Hide Express technology
+app.disable("x-powered-by");
+
+// Security headers
+app.use(helmet());
+
+// Compress responses
+app.use(compression());
+
+// Configure CORS
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
+
+// Parse JSON requests
+app.use(
+  express.json({
+    limit: REQUEST_SIZE_LIMIT,
+  })
+);
+
+// Parse form data
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: REQUEST_SIZE_LIMIT,
+  })
+);
 
 app.get("/", (req, res) => {
   res.json({

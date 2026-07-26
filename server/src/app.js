@@ -8,6 +8,7 @@ const {
   authLimiter,
   aiLimiter,
 } = require("./middleware/rateLimit.middleware");
+const errorHandler = require("./middleware/error.middleware");
 
 const authRoutes = require("./routes/auth.routes");
 const repositoryRoutes = require("./routes/repository.routes");
@@ -104,5 +105,8 @@ app.use("/api/analysis", aiLimiter, analysisRoutes);
 app.use("/api/pull-requests", aiLimiter, pullRequestRoutes);
 app.use("/api/engineering-health", aiLimiter, engineeringHealthRoutes);
 app.use("/api", aiLimiter, aiReviewRoutes);
+
+// Global Error Handler
+app.use(errorHandler);
 
 module.exports = app;

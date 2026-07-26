@@ -3,6 +3,12 @@ const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 
+const {
+  apiLimiter,
+  authLimiter,
+  aiLimiter,
+} = require("./middleware/rateLimit.middleware");
+
 const authRoutes = require("./routes/auth.routes");
 const repositoryRoutes = require("./routes/repository.routes");
 const analyticsRoutes = require("./routes/analytics.routes");
@@ -21,15 +27,20 @@ const engineeringHealthRoutes = require("./routes/engineeringHealth.routes");
 const aiReviewRoutes = require("./routes/aiReview.routes");
 
 const app = express();
+
 const REQUEST_SIZE_LIMIT = "10mb";
+
+// ============================
+// Security Middleware
+// ============================
 
 // Hide Express technology
 app.disable("x-powered-by");
 
-// Security headers
+// Secure HTTP headers
 app.use(helmet());
 
-// Compress responses
+// Compress all responses
 app.use(compression());
 
 // Configure CORS
@@ -47,13 +58,17 @@ app.use(
   })
 );
 
-// Parse form data
+// Parse URL Encoded requests
 app.use(
   express.urlencoded({
     extended: true,
     limit: REQUEST_SIZE_LIMIT,
   })
 );
+
+// ============================
+// Health Check
+// ============================
 
 app.get("/", (req, res) => {
   res.json({
@@ -62,36 +77,32 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/repositories", repositoryRoutes);
+// ============================
+// Routes
+// ============================
 
-app.use("/api/auth", authRoutes);
+// Authentication
+app.use("/api/auth", authLimiter, authRoutes);
 
-app.use("/api/analytics", analyticsRoutes);
+// Repository APIs
+app.use("/api/repositories", apiLimiter, repositoryRoutes);
+app.use("/api/analytics", apiLimiter, analyticsRoutes);
+app.use("/api/tech-stack", apiLimiter, techStackRoutes);
+app.use("/api/profile", apiLimiter, profileRoutes);
+app.use("/api/portfolio", apiLimiter, portfolioRoutes);
+app.use("/api/activity", apiLimiter, activityRoutes);
+app.use("/api/jobs", apiLimiter, jobStatusRoutes);
 
-app.use("/api/tech-stack", techStackRoutes);
-
-app.use("/api/profile", profileRoutes);
-
+// Health Endpoint (No Rate Limit)
 app.use("/api/health", healthRoutes);
 
-app.use("/api/portfolio", portfolioRoutes);
-
-app.use("/api/activity", activityRoutes);
-
-app.use("/api/architecture", architectureRoutes);
-
-app.use("/api/deployment", deploymentRoutes);
-
-app.use("/api/technical-debt", technicalDebtRoutes);
-
-app.use("/api/analysis", analysisRoutes);
-
-app.use("/api/jobs", jobStatusRoutes);
-
-app.use("/api/pull-requests", pullRequestRoutes);
-
-app.use("/api/engineering-health", engineeringHealthRoutes);
-
-app.use("/api", aiReviewRoutes);
+// AI / Heavy Processing Endpoints
+app.use("/api/architecture", aiLimiter, architectureRoutes);
+app.use("/api/deployment", aiLimiter, deploymentRoutes);
+app.use("/api/technical-debt", aiLimiter, technicalDebtRoutes);
+app.use("/api/analysis", aiLimiter, analysisRoutes);
+app.use("/api/pull-requests", aiLimiter, pullRequestRoutes);
+app.use("/api/engineering-health", aiLimiter, engineeringHealthRoutes);
+app.use("/api", aiLimiter, aiReviewRoutes);
 
 module.exports = app;

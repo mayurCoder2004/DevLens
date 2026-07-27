@@ -1,75 +1,101 @@
+const prisma = require("../config/prisma");
+
 const AIReviewService = require("../services/ai/aiReview.service");
+
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
 const aiReviewService = new AIReviewService();
 
-const generateRepositoryReview = async (req, res) => {
-  try {
-    const { repositoryId } = req.params;
+// ============================
+// Generate AI Review
+// ============================
 
-    const review = await aiReviewService.generateRepositoryReview(repositoryId);
+const generateRepositoryReview = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
 
-    return res.status(200).json({
-      success: true,
-      message: "AI repository review generated successfully.",
-      data: review,
-    });
-  } catch (error) {
-    console.error("AI Review Generation Error:", error);
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+  });
 
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to generate AI review.",
-    });
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
 
-const getRepositoryReview = async (req, res) => {
-  try {
-    const { repositoryId } = req.params;
+  const review = await aiReviewService.generateRepositoryReview(
+    repositoryId
+  );
 
-    const review = await aiReviewService.getRepositoryReview(repositoryId);
+  return res.status(200).json({
+    success: true,
+    message: "AI repository review generated successfully.",
+    data: review,
+  });
+});
 
-    if (!review) {
-      return res.status(404).json({
-        success: false,
-        message: "AI review not found.",
-      });
-    }
+// ============================
+// Get AI Review
+// ============================
 
-    return res.status(200).json({
-      success: true,
-      data: review,
-    });
-  } catch (error) {
-    console.error("Get AI Review Error:", error);
+const getRepositoryReview = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
 
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetch AI review.",
-    });
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
 
-const refreshRepositoryReview = async (req, res) => {
-  try {
-    const { repositoryId } = req.params;
+  const review = await aiReviewService.getRepositoryReview(
+    repositoryId
+  );
 
-    const review = await aiReviewService.refreshRepositoryReview(repositoryId);
-
-    return res.status(200).json({
-      success: true,
-      message: "AI repository review refreshed successfully.",
-      data: review,
-    });
-  } catch (error) {
-    console.error("Refresh AI Review Error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to refresh AI review.",
-    });
+  if (!review) {
+    throw new ApiError(404, "AI review not found");
   }
-};
+
+  return res.status(200).json({
+    success: true,
+    data: review,
+  });
+});
+
+// ============================
+// Refresh AI Review
+// ============================
+
+const refreshRepositoryReview = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const review = await aiReviewService.refreshRepositoryReview(
+    repositoryId
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "AI repository review refreshed successfully.",
+    data: review,
+  });
+});
 
 module.exports = {
   generateRepositoryReview,

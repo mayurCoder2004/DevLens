@@ -10,152 +10,114 @@ const {
 
 const { Octokit } = require("@octokit/rest");
 
-const analyzePullRequestController = async (req, res) => {
-  try {
-    const { repositoryId, prNumber } = req.params;
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
-    const prNumberInt = Number(prNumber);
+// ============================
+// Analyze Pull Request
+// ============================
 
-    if (Number.isNaN(prNumberInt)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid pull request number.",
-      });
-    }
+const analyzePullRequestController = asyncHandler(async (req, res) => {
+  const { repositoryId, prNumber } = req.validatedData.params;
 
-    const repository = await prisma.repository.findUnique({
-      where: {
-        id: repositoryId,
-      },
-      include: {
-        techStack: true,
-        user: true,
-      },
-    });
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      techStack: true,
+      user: true,
+    },
+  });
 
-    if (!repository) {
-      return res.status(404).json({
-        success: false,
-        message: "Repository not found.",
-      });
-    }
-
-    const technologies = repository.techStack?.technologies || [];
-
-    const analysis = await analyzePullRequest({
-      owner: repository.owner,
-      repo: repository.name,
-      prNumber: Number(prNumber),
-      githubToken: repository.user.githubToken,
-      technologies,
-    });
-
-    const savedAnalysis = await savePullRequestAnalysis({
-      repositoryId,
-      prNumber: prNumberInt,
-      title: analysis.pullRequest.title,
-      analysis,
-    });
-
-    return res.json({
-      success: true,
-      data: analysis,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to analyze pull request.",
-    });
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
 
-const getPullRequestAnalysis = async (req, res) => {
-  try {
-    const { repositoryId, prNumber } = req.params;
+  const technologies = repository.techStack?.technologies || [];
 
-    const prNumberInt = Number(prNumber);
+  const analysis = await analyzePullRequest({
+    owner: repository.owner,
+    repo: repository.name,
+    prNumber,
+    githubToken: repository.user.githubToken,
+    technologies,
+  });
 
-    if (Number.isNaN(prNumberInt)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid pull request number.",
-      });
-    }
+  await savePullRequestAnalysis({
+    repositoryId,
+    prNumber,
+    title: analysis.pullRequest.title,
+    analysis,
+  });
 
-    const repository = await prisma.repository.findUnique({
-      where: {
-        id: repositoryId,
-      },
-      include: {
-        user: true,
-      },
-    });
+  return res.status(200).json({
+    success: true,
+    data: analysis,
+  });
+});
 
-    if (!repository) {
-      return res.status(404).json({
-        success: false,
-        message: "Repository not found.",
-      });
-    }
+// ============================
+// Get Pull Request Analysis
+// ============================
 
-    const analysis = await prisma.pullRequestAnalysis.findUnique({
-      where: {
-        repositoryId_prNumber: {
-          repositoryId,
-          prNumber: prNumberInt,
-        },
-      },
-    });
+const getPullRequestAnalysis = asyncHandler(async (req, res) => {
+  const { repositoryId, prNumber } = req.validatedData.params;
 
-    if (!analysis) {
-      return res.status(404).json({
-        success: false,
-        message: "Analysis not found.",
-      });
-    }
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      user: true,
+    },
+  });
 
-    const octokit = new Octokit({
-      auth: repository.user.githubToken,
-    });
-
-    const { data: pullRequest } =
-      await octokit.pulls.get({
-        owner: repository.owner,
-        repo: repository.name,
-        pull_number: prNumberInt,
-      });
-
-    return res.json({
-      success: true,
-      data: {
-        ...analysis,
-
-        state: pullRequest.state,
-        author: pullRequest.user.login,
-        authorAvatar: pullRequest.user.avatar_url,
-
-        baseBranch: pullRequest.base.ref,
-        headBranch: pullRequest.head.ref,
-
-        merged: pullRequest.merged,
-
-        url: pullRequest.html_url,
-
-        createdAt: pullRequest.created_at,
-        updatedAt: pullRequest.updated_at,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
   }
-};
+
+  const analysis = await prisma.pullRequestAnalysis.findUnique({
+    where: {
+      repositoryId_prNumber: {
+        repositoryId,
+        prNumber,
+      },
+    },
+  });
+
+  if (!analysis) {
+    throw new ApiError(404, "Analysis not found");
+  }
+
+  const octokit = new Octokit({
+    auth: repository.user.githubToken,
+  });
+
+  const { data: pullRequest } = await octokit.pulls.get({
+    owner: repository.owner,
+    repo: repository.name,
+    pull_number: prNumber,
+  });
+
+  return res.status(200).json({
+    success: true,
+    data: {
+      ...analysis,
+      state: pullRequest.state,
+      author: pullRequest.user.login,
+      authorAvatar: pullRequest.user.avatar_url,
+      baseBranch: pullRequest.base.ref,
+      headBranch: pullRequest.head.ref,
+      merged: pullRequest.merged,
+      url: pullRequest.html_url,
+      createdAt: pullRequest.created_at,
+      updatedAt: pullRequest.updated_at,
+    },
+  });
+});
 
 module.exports = {
   analyzePullRequestController,

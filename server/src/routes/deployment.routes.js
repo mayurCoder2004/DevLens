@@ -2,10 +2,30 @@ const express = require("express");
 
 const router = express.Router();
 
-const deploymentController = require("../controllers/deployment.controller.js");
+const authMiddleware = require("../middleware/auth.middleware");
+const validate = require("../middleware/validate.middleware");
 
-router.post("/:id/analyze", deploymentController.analyzeDeployment);
+const {
+  repositoryIdSchema,
+} = require("../validations/repository.validation");
 
-router.get("/:id", deploymentController.getDeploymentReport);
+const {
+  analyzeDeployment,
+  getDeploymentReport,
+} = require("../controllers/deployment.controller");
+
+router.post(
+  "/:repositoryId/analyze",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  analyzeDeployment
+);
+
+router.get(
+  "/:repositoryId",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  getDeploymentReport
+);
 
 module.exports = router;

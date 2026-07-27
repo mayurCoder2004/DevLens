@@ -98,11 +98,11 @@ const getUserRepositories = asyncHandler(async (req, res) => {
 // ============================
 
 const getRepositoryById = asyncHandler(async (req, res) => {
-  const { id } = req.validatedData.params;
+  const { repositoryId } = req.validatedData.params;
 
   const repository = await prisma.repository.findFirst({
     where: {
-      id,
+      id: repositoryId,
       userId: req.user.userId,
     },
   });
@@ -122,11 +122,11 @@ const getRepositoryById = asyncHandler(async (req, res) => {
 // ============================
 
 const getRepositoryArchitecture = asyncHandler(async (req, res) => {
-  const { id } = req.validatedData.params;
+  const { repositoryId } = req.validatedData.params;
 
   const repository = await prisma.repository.findFirst({
     where: {
-      id,
+      id: repositoryId,
       userId: req.user.userId,
     },
     include: {

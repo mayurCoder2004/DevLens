@@ -1,89 +1,117 @@
 const prisma = require("../config/prisma");
 const analyticsService = require("../services/analytics.service");
 
-exports.test = async (req, res) => {
-  try {
-    const repo = await prisma.repository.findUnique({
-      where: {
-        id: req.params.repoId,
-      },
-      include: {
-        user: true,
-      },
-    });
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
-    if (!repo) {
-      return res.status(404).json({
-        message: "Repository not found",
-      });
-    }
+// ============================
+// Test Analytics
+// ============================
 
-    const analytics = await analyticsService.getRepositoryAnalytics(
-      repo,
-      repo.user.githubToken,
-    );
+const test = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
 
-    return res.json(analytics);
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
-exports.analyzeRepository = async (req, res) => {
-  try {
-    const repoId = req.params.repoId;
-
-    const repository = await prisma.repository.findUnique({
-      where: {
-        id: repoId,
-      },
-      include: {
-        user: true,
-      },
-    });
-
-    if (!repository) {
-      return res.status(404).json({
-        message: "Repository not found",
-      });
-    }
-
-    const analytics = await analyticsService.getRepositoryAnalytics(
-      repository,
-      repository.user.githubToken,
-    );
-
-    const saved = await prisma.repositoryAnalytics.upsert({
-      where: {
-        repositoryId: repository.id,
-      },
-      update: analytics,
-      create: {
-        repositoryId: repository.id,
-        ...analytics,
-      },
-    });
-
-    return res.json(saved);
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
-};
-
-exports.getAnalytics = async (req, res) => {
-  const analytics = await prisma.repositoryAnalytics.findUnique({
+  const repository = await prisma.repository.findFirst({
     where: {
-      repositoryId: req.params.repoId,
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      user: true,
     },
   });
 
-  return res.json(analytics);
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const analytics = await analyticsService.getRepositoryAnalytics(
+    repository,
+    repository.user.githubToken
+  );
+
+  return res.status(200).json(analytics);
+});
+
+// ============================
+// Analyze Repository
+// ============================
+
+const analyzeRepository = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const analytics = await analyticsService.getRepositoryAnalytics(
+    repository,
+    repository.user.githubToken
+  );
+
+  const saved = await prisma.repositoryAnalytics.upsert({
+    where: {
+      repositoryId,
+    },
+    update: analytics,
+    create: {
+      repositoryId,
+      ...analytics,
+    },
+  });
+
+  return res.status(200).json({
+    success: true,
+    analytics: saved,
+  });
+});
+
+// ============================
+// Get Analytics
+// ============================
+
+const getAnalytics = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const analytics = await prisma.repositoryAnalytics.findUnique({
+    where: {
+      repositoryId,
+    },
+  });
+
+  if (!analytics) {
+    throw new ApiError(404, "Repository analytics not found");
+  }
+
+  return res.status(200).json({
+    success: true,
+    analytics,
+  });
+});
+
+module.exports = {
+  test,
+  analyzeRepository,
+  getAnalytics,
 };

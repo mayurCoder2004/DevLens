@@ -1,24 +1,30 @@
 const analysisQueue = require("../queues/analysis.queue");
 
-exports.analyzeRepository = async (req, res) => {
-  try {
-    const { repoId } = req.params;
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
-    const job = await analysisQueue.add("analyze-repository", {
-      repositoryId: repoId,
-    });
+// ============================
+// Analyze Repository
+// ============================
 
-    return res.status(202).json({
-      success: true,
-      message: "Repository analysis queued successfully.",
-      jobId: job.id,
-    });
-  } catch (error) {
-    console.error(error);
+const analyzeRepository = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
 
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+  const job = await analysisQueue.add("analyze-repository", {
+    repositoryId,
+  });
+
+  if (!job) {
+    throw new ApiError(500, "Failed to queue repository analysis");
   }
+
+  return res.status(202).json({
+    success: true,
+    message: "Repository analysis queued successfully.",
+    jobId: job.id,
+  });
+});
+
+module.exports = {
+  analyzeRepository,
 };

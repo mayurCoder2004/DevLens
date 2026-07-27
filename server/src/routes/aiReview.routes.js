@@ -1,17 +1,39 @@
 const express = require("express");
 
+const router = express.Router();
+
+const authMiddleware = require("../middleware/auth.middleware");
+const validate = require("../middleware/validate.middleware");
+
+const {
+  repositoryIdSchema,
+} = require("../validations/repository.validation");
+
 const {
   generateRepositoryReview,
   getRepositoryReview,
   refreshRepositoryReview,
 } = require("../controllers/aiReview.controller");
 
-const router = express.Router();
+router.post(
+  "/repositories/:repositoryId/ai-review",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  generateRepositoryReview
+);
 
-router.post("/repositories/:repositoryId/ai-review", generateRepositoryReview);
+router.put(
+  "/repositories/:repositoryId/ai-review",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  refreshRepositoryReview
+);
 
-router.put("/repositories/:repositoryId/ai-review", refreshRepositoryReview);
-
-router.get("/repositories/:repositoryId/ai-review", getRepositoryReview);
+router.get(
+  "/repositories/:repositoryId/ai-review",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  getRepositoryReview
+);
 
 module.exports = router;

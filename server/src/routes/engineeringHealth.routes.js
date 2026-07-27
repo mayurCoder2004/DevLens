@@ -1,9 +1,23 @@
 const express = require("express");
 
-const engineeringHealthController = require("../controllers/engineeringHealth.controller");
-
 const router = express.Router();
 
-router.get("/:repositoryId", engineeringHealthController.getEngineeringHealth);
+const authMiddleware = require("../middleware/auth.middleware");
+const validate = require("../middleware/validate.middleware");
+
+const {
+  repositoryIdSchema,
+} = require("../validations/repository.validation");
+
+const {
+  getEngineeringHealth,
+} = require("../controllers/engineeringHealth.controller");
+
+router.get(
+  "/:repositoryId",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  getEngineeringHealth
+);
 
 module.exports = router;

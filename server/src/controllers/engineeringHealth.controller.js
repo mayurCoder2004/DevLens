@@ -1,35 +1,41 @@
+const prisma = require("../config/prisma");
 const engineeringHealthService = require("../services/engineeringHealth.service");
 
-const engineeringHealthController = {
-  async getEngineeringHealth(req, res) {
-    try {
-      const { repositoryId } = req.params;
+const asyncHandler = require("../utils/asyncHandler");
+const ApiError = require("../utils/ApiError");
 
-      const engineeringHealth =
-        await engineeringHealthService.getEngineeringHealth(repositoryId);
+// ============================
+// Get Engineering Health
+// ============================
 
-      return res.status(200).json({
-        success: true,
-        data: engineeringHealth,
-      });
-    } catch (error) {
-      console.error("Engineering Health Error:", error);
+const getEngineeringHealth = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
 
-      if (error.message === "Repository not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
-      }
+  // Verify repository exists and belongs to the authenticated user
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+  });
 
-      return res.status(500).json({
-        success: false,
-        message: "Failed to fetch engineering health.",
-        error:
-          process.env.NODE_ENV === "development" ? error.message : undefined,
-      });
-    }
-  },
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const engineeringHealth =
+    await engineeringHealthService.getEngineeringHealth(repositoryId);
+
+  if (!engineeringHealth) {
+    throw new ApiError(404, "Engineering health not found");
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: engineeringHealth,
+  });
+});
+
+module.exports = {
+  getEngineeringHealth,
 };
-
-module.exports = engineeringHealthController;

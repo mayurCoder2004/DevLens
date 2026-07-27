@@ -33,7 +33,7 @@ router.get("/", authMiddleware, getUserRepositories);
 // ============================
 
 router.get(
-  "/:id",
+  "/:repositoryId",
   authMiddleware,
   validate(repositoryIdSchema),
   getRepositoryById
@@ -44,7 +44,7 @@ router.get(
 // ============================
 
 router.get(
-  "/:id/architecture",
+  "/:repositoryId/architecture",
   authMiddleware,
   validate(repositoryIdSchema),
   getRepositoryArchitecture

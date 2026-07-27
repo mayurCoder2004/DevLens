@@ -15,6 +15,12 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   redis:
     image: redis:7-alpine
     container_name: devlens-redis
@@ -27,6 +33,12 @@ services:
 
     volumes:
       - redis-data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -43,8 +55,10 @@ services:
       - "5000:5000"
 
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
     volumes:
       - ./server:/app
@@ -64,8 +78,10 @@ services:
     command: npm run worker
 
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
     volumes:
       - ./server:/app
@@ -83,7 +99,8 @@ services:
       - "5173:5173"
 
     depends_on:
-      - backend
+      backend:
+        condition: service_started
 
     volumes:
       - ./client:/app

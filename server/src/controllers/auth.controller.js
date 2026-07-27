@@ -25,26 +25,23 @@ const login = async (req, res) => {
 
     const { uid, email, name, picture } = decodedToken;
 
-    let user = await prisma.user.update({
-      where: {
-        email,
-      },
-      data: {
-        githubToken: githubAccessToken,
-      },
-    });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          firebaseUid: uid,
-          email,
-          name,
-          avatar: picture,
-          githubToken: githubAccessToken,
-        },
-      });
-    }
+    const user = await prisma.user.upsert({
+  where: {
+    email,
+  },
+  update: {
+    githubToken: githubAccessToken,
+    name,
+    avatar: picture,
+  },
+  create: {
+    firebaseUid: uid,
+    email,
+    name,
+    avatar: picture,
+    githubToken: githubAccessToken,
+  },
+});
 
     const token = jwt.sign(
       {

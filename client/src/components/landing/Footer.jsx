@@ -54,19 +54,21 @@ export default function Footer() {
 
           <div className="max-w-md">
             <div className="flex items-center gap-4">
-              <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-500/20 sm:h-12 sm:w-12">
-                DL
-              </div>
+              <div className="flex items-center gap-3">
+  <img
+    src="/favicon.png"
+    alt="DevLens"
+    className="h-11 w-11"
+  />
 
-              <div>
-                <h3 className="text-xl font-bold text-white sm:text-2xl">
-                  DevLens
-                </h3>
+  <div>
+    <h3 className="text-xl font-bold text-white">DevLens</h3>
 
-                <p className="text-sm text-slate-400">
-                  AI Engineering Intelligence Platform
-                </p>
-              </div>
+    <p className="text-sm text-slate-400">
+      AI Engineering Intelligence Platform
+    </p>
+  </div>
+</div>
             </div>
 
             <p className="mt-5 text-sm leading-7 text-slate-400 sm:mt-6">

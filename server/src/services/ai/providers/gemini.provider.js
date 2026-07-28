@@ -1,8 +1,8 @@
 const { GoogleGenAI } = require("@google/genai");
 const AIProvider = require("./aiProvider");
-const env = require("../config/env");
-const logger = require("../config/logger");
-const ApiError = require("../utils/ApiError");
+const env = require("../../../config/env");
+const logger = require("../../../config/logger");
+const ApiError = require("../../../utils/ApiError");
 
 const MAX_PROMPT_LENGTH = 50000;
 const MAX_RETRIES = 3;

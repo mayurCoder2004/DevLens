@@ -40,12 +40,16 @@ export default function Navbar() {
           onClick={() => handleNavClick("hero")}
           className="flex cursor-pointer items-center gap-3"
         >
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/20">
-            DL
-          </div>
-          <span className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            DevLens
-          </span>
+          <div
+  onClick={() => handleNavClick("hero")}
+  className="flex cursor-pointer items-center"
+>
+  <img
+    src="/logo-dark.png"
+    alt="DevLens"
+    className="h-10 w-auto object-contain"
+  />
+</div>
         </div>
 
         {/* Desktop Navigation */}

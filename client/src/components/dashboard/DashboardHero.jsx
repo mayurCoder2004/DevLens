@@ -7,6 +7,8 @@ export default function DashboardHero({
   totalRepositories = 0,
   averageScore = 84,
   recentAnalyses = 12,
+  onSync,
+  syncLoading,
 }) {
   const greeting = () => {
     const hour = new Date().getHours();
@@ -53,11 +55,22 @@ export default function DashboardHero({
           </p>
 
           <div className="mt-5">
-            <Button variant="primary">
+            <Button
+              variant="primary"
+              onClick={onSync}
+              disabled={syncLoading}
+            >
               <div className="flex items-center gap-2">
-                <RefreshCw size={18} />
+                <RefreshCw
+                  size={18}
+                  className={syncLoading ? "animate-spin" : ""}
+                />
 
-                <span>Sync GitHub</span>
+                <span>
+                  {syncLoading
+                    ? "Syncing GitHub..."
+                    : "Sync GitHub"}
+                </span>
               </div>
             </Button>
           </div>

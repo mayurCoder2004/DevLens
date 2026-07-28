@@ -10,6 +10,7 @@ import RecentActivity from "../components/dashboard/RecentActivity";
 
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
+  const [syncLoading, setSyncLoading] = useState(false);
 
   useEffect(() => {
     fetchRepos();
@@ -34,12 +35,39 @@ const Dashboard = () => {
     }
   };
 
+  const handleSync = async () => {
+    try {
+      setSyncLoading(true);
+
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        "http://localhost:5000/api/repositories/sync",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      await fetchRepos();
+    } catch (error) {
+      console.error("Repository sync failed:", error);
+      alert("Failed to synchronize GitHub repositories.");
+    } finally {
+      setSyncLoading(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardHero
         totalRepositories={repos.length}
         averageScore={84}
         recentAnalyses={repos.length}
+        onSync={handleSync}
+        syncLoading={syncLoading}
       />
 
       <EngineeringOverview />

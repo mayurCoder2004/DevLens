@@ -6,6 +6,8 @@ const {
   generateRepositoryHealth,
 } = require("../services/repositoryHealth.service");
 
+const { logActivity } = require("../services/activityLogger.service");
+
 const analyzeRepositoryHealth = async (req, res) => {
   try {
     const { repositoryId } = req.params;
@@ -63,6 +65,20 @@ const analyzeRepositoryHealth = async (req, res) => {
       create: {
         repositoryId: repository.id,
         ...report,
+      },
+    });
+
+    await logActivity({
+      repositoryId: repository.id,
+      type: "ENGINEERING_HEALTH",
+      title: "Engineering Health Analysis Completed",
+      description: `Engineering health analysis completed for ${repository.owner}/${repository.name}.`,
+      metadata: {
+        healthScore: report.healthScore,
+        activityScore: report.activityScore,
+        documentationScore: report.documentationScore,
+        maintenanceScore: report.maintenanceScore,
+        openSourceScore: report.openSourceScore,
       },
     });
 

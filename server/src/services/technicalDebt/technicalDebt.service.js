@@ -2,6 +2,7 @@ const repositoryScanner = require("../architecture/repositoryScanner");
 const fileDownloader = require("../architecture/fileDownloader");
 const architectureAnalyzer = require("../architecture/architectureAnalyzer");
 const prisma = require("../../config/prisma");
+const { logActivity } = require("../activityLogger.service");
 
 const LARGE_FILE_THRESHOLD = 500;
 
@@ -257,6 +258,21 @@ async function analyzeAndStore(repositoryId) {
   );
 
   const saved = await saveTechnicalDebt(repositoryId, report);
+
+  await logActivity({
+    repositoryId,
+    type: "TECHNICAL_DEBT",
+    title: "Technical Debt Analysis Completed",
+    description: `Technical debt analysis completed for ${repository.owner}/${repository.name}.`,
+    metadata: {
+      technicalDebtScore: report.technicalDebtScore,
+      maintainabilityScore: report.maintainabilityScore,
+      largeFileCount: report.largeFileCount,
+      deadFileCount: report.deadFileCount,
+      circularDependencyCount: report.circularDependencyCount,
+      deepDependencyChainCount: report.deepDependencyChainCount,
+    },
+  });
 
   return saved;
 }

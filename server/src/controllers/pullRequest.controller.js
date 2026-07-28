@@ -8,6 +8,8 @@ const {
   savePullRequestAnalysis,
 } = require("../services/pullRequestPersistence.service");
 
+const { logActivity } = require("../services/activityLogger.service");
+
 const { Octokit } = require("@octokit/rest");
 
 const asyncHandler = require("../utils/asyncHandler");
@@ -50,6 +52,21 @@ const analyzePullRequestController = asyncHandler(async (req, res) => {
     prNumber,
     title: analysis.pullRequest.title,
     analysis,
+  });
+
+  await logActivity({
+    repositoryId,
+    type: "PULL_REQUEST",
+    title: `Pull Request #${prNumber} Analyzed`,
+    description: `Pull request analysis completed for ${repository.owner}/${repository.name}.`,
+    metadata: {
+      prNumber,
+      riskScore: analysis.riskScore,
+      summary: analysis.summary,
+      hasDependencyChanges: analysis.hasDependencyChanges,
+      hasConfigurationChanges: analysis.hasConfigurationChanges,
+      criticalFiles: analysis.criticalFiles?.length ?? 0,
+    },
   });
 
   return res.status(200).json({

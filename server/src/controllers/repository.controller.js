@@ -8,6 +8,8 @@ const {
   getRepositories: fetchGithubRepositories,
 } = require("../services/github.service");
 
+const { logActivity } = require("../services/activityLogger.service");
+
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 
@@ -65,6 +67,17 @@ const syncRepositories = asyncHandler(async (req, res) => {
       },
     });
   }
+
+  // Log activity after successful synchronization
+  await logActivity({
+    userId: user.id,
+    type: "REPOSITORY_SYNC",
+    title: "GitHub repositories synchronized",
+    description: `Successfully synchronized ${repos.length} repositories from GitHub.`,
+    metadata: {
+      repositoryCount: repos.length,
+    },
+  });
 
   return res.status(200).json({
     success: true,

@@ -15,6 +15,27 @@ const getDashboardOverview = async (req, res, next) => {
   }
 };
 
+const getRepositoriesNeedingAttention = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const repositories =
+      await dashboardService.getRepositoriesNeedingAttention(
+        req.user.id
+      );
+
+    return res.status(200).json({
+      success: true,
+      data: repositories,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getDashboardOverview,
+  getRepositoriesNeedingAttention,
 };

@@ -9,23 +9,34 @@ import WorkspaceActions from "../components/dashboard/WorkspaceActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
 
 import { getRecentActivities } from "../api/activity.api";
-import { getDashboardOverview } from "../api/dashboard.api";
+import {
+  getDashboardOverview,
+  getRepositoriesNeedingAttention,
+} from "../api/dashboard.api";
 
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
   const [syncLoading, setSyncLoading] = useState(false);
 
   const [activities, setActivities] = useState([]);
-  const [activityLoading, setActivityLoading] = useState(true);
+  const [activityLoading, setActivityLoading] =
+    useState(true);
 
   const [overview, setOverview] = useState(null);
   const [overviewLoading, setOverviewLoading] =
+    useState(true);
+
+  const [attentionRepositories, setAttentionRepositories] =
+    useState([]);
+
+  const [attentionLoading, setAttentionLoading] =
     useState(true);
 
   useEffect(() => {
     fetchRepos();
     fetchActivities();
     fetchDashboardOverview();
+    fetchAttentionRepositories();
   }, []);
 
   const fetchRepos = async () => {
@@ -55,7 +66,10 @@ const Dashboard = () => {
 
       setActivities(response.data);
     } catch (error) {
-      console.error("Failed to fetch activities:", error);
+      console.error(
+        "Failed to fetch activities:",
+        error
+      );
     } finally {
       setActivityLoading(false);
     }
@@ -65,7 +79,8 @@ const Dashboard = () => {
     try {
       setOverviewLoading(true);
 
-      const response = await getDashboardOverview();
+      const response =
+        await getDashboardOverview();
 
       setOverview(response.data);
     } catch (error) {
@@ -77,6 +92,25 @@ const Dashboard = () => {
       setOverviewLoading(false);
     }
   };
+
+  const fetchAttentionRepositories =
+    async () => {
+      try {
+        setAttentionLoading(true);
+
+        const response =
+          await getRepositoriesNeedingAttention();
+
+        setAttentionRepositories(response.data);
+      } catch (error) {
+        console.error(
+          "Failed to fetch attention repositories:",
+          error
+        );
+      } finally {
+        setAttentionLoading(false);
+      }
+    };
 
   const handleSync = async () => {
     try {
@@ -98,10 +132,17 @@ const Dashboard = () => {
         fetchRepos(),
         fetchActivities(),
         fetchDashboardOverview(),
+        fetchAttentionRepositories(),
       ]);
     } catch (error) {
-      console.error("Repository sync failed:", error);
-      alert("Failed to synchronize GitHub repositories.");
+      console.error(
+        "Repository sync failed:",
+        error
+      );
+
+      alert(
+        "Failed to synchronize GitHub repositories."
+      );
     } finally {
       setSyncLoading(false);
     }
@@ -126,7 +167,10 @@ const Dashboard = () => {
         loading={overviewLoading}
       />
 
-      <AttentionPanel />
+      <AttentionPanel
+        repositories={attentionRepositories}
+        loading={attentionLoading}
+      />
 
       <WorkspaceActions />
 

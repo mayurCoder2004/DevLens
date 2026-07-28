@@ -1,21 +1,47 @@
 import {
   AlertTriangle,
   ArrowRight,
+  ShieldAlert,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function AttentionCard({
   repository,
-  score,
-  issue,
-  severity = "High",
+  owner,
+  severity,
+  riskScore,
+  healthScore,
+  deploymentScore,
+  maintainabilityScore,
+  issues,
   link,
 }) {
-  const severityColor = {
-    High: "text-red-400 bg-red-500/10 border-red-500/20",
-    Medium: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
-    Low: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+  const severityStyles = {
+    LOW: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    MEDIUM: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    HIGH: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    CRITICAL: "bg-red-500/10 text-red-400 border-red-500/20",
   };
+
+  const ProgressBar = ({ label, value }) => (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-xs">
+        <span className="text-slate-400">{label}</span>
+        <span className="font-medium text-white">
+          {value ?? "--"}%
+        </span>
+      </div>
+
+      <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+        <div
+          className="h-full rounded-full bg-blue-500 transition-all duration-500"
+          style={{
+            width: `${value ?? 0}%`,
+          }}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <div
@@ -30,60 +56,106 @@ export default function AttentionCard({
         bg-slate-900
         p-5
         transition-all
-        duration-200
-        hover:-translate-y-0.5
+        duration-300
+        hover:-translate-y-1
         hover:border-blue-500/40
+        hover:shadow-xl
+        hover:shadow-blue-500/10
       "
     >
       {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white truncate">
+
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-white">
             {repository}
           </h3>
 
-          <p className="mt-2 text-xs text-slate-400">
-            Engineering Score
-          </p>
-
-          <p className="mt-1 text-3xl font-bold leading-none text-white">
-            {score}
+          <p className="mt-1 text-sm text-slate-400">
+            {owner}
           </p>
         </div>
 
         <span
-          className={`
-            flex-shrink-0
-            rounded-full
-            border
-            px-2.5
-            py-1
-            text-xs
-            font-semibold
-            whitespace-nowrap
-            ${severityColor[severity]}
-          `}
-          aria-label={`Severity: ${severity}`}
+          className={`rounded-full border px-3 py-1 text-xs font-semibold ${severityStyles[severity]}`}
         >
           {severity}
         </span>
       </div>
 
-      {/* Issue */}
-      <div className="mt-5 flex items-start gap-2.5 flex-1">
-        <AlertTriangle
-          size={16}
-          className="mt-0.5 flex-shrink-0 text-yellow-400"
-          aria-hidden="true"
+      {/* Risk */}
+
+      <div className="mt-5 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+        <ShieldAlert className="text-red-400" size={22} />
+
+        <div>
+          <p className="text-xs uppercase tracking-wide text-slate-400">
+            Engineering Risk
+          </p>
+
+          <p className="text-3xl font-bold text-white">
+            {riskScore}
+          </p>
+        </div>
+      </div>
+
+      {/* Metrics */}
+
+      <div className="mt-5 space-y-4">
+        <ProgressBar
+          label="Engineering Health"
+          value={healthScore}
         />
 
-        <p className="text-sm leading-relaxed text-slate-300 line-clamp-3">
-          {issue}
-        </p>
+        <ProgressBar
+          label="Deployment"
+          value={deploymentScore}
+        />
+
+        <ProgressBar
+          label="Maintainability"
+          value={maintainabilityScore}
+        />
+      </div>
+
+      {/* Issues */}
+
+      <div className="mt-6 flex-1">
+        <div className="mb-3 flex items-center gap-2">
+          <AlertTriangle
+            size={16}
+            className="text-yellow-400"
+          />
+
+          <span className="text-sm font-medium text-white">
+            Issues
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {issues.map((issue) => (
+            <span
+              key={issue}
+              className="
+                rounded-full
+                border
+                border-slate-700
+                bg-slate-800
+                px-3
+                py-1
+                text-xs
+                text-slate-300
+              "
+            >
+              {issue}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-5 pt-4 border-t border-slate-800/50">
+
+      <div className="mt-6 border-t border-slate-800 pt-5">
         <Link
           to={link}
           className="
@@ -94,24 +166,15 @@ export default function AttentionCard({
             font-medium
             text-blue-400
             transition-all
-            duration-200
+            hover:gap-3
             hover:text-blue-300
-            focus:outline-none
-            focus:ring-2
-            focus:ring-blue-500/40
-            focus:ring-offset-2
-            focus:ring-offset-slate-900
-            rounded
-            group-hover:gap-3
           "
-          aria-label={`Open workspace for ${repository}`}
         >
-          Open Workspace
+          Open Repository
 
           <ArrowRight
             size={16}
-            className="transition-transform duration-200 group-hover:translate-x-0.5"
-            aria-hidden="true"
+            className="transition-transform group-hover:translate-x-1"
           />
         </Link>
       </div>

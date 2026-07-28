@@ -11,4 +11,10 @@ router.get(
   dashboardController.getDashboardOverview
 );
 
+router.get(
+  "/attention",
+  authMiddleware,
+  dashboardController.getRepositoriesNeedingAttention
+);
+
 module.exports = router;

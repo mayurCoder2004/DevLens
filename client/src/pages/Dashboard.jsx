@@ -9,6 +9,7 @@ import WorkspaceActions from "../components/dashboard/WorkspaceActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
 
 import { getRecentActivities } from "../api/activity.api";
+import { getDashboardOverview } from "../api/dashboard.api";
 
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
@@ -17,9 +18,14 @@ const Dashboard = () => {
   const [activities, setActivities] = useState([]);
   const [activityLoading, setActivityLoading] = useState(true);
 
+  const [overview, setOverview] = useState(null);
+  const [overviewLoading, setOverviewLoading] =
+    useState(true);
+
   useEffect(() => {
     fetchRepos();
     fetchActivities();
+    fetchDashboardOverview();
   }, []);
 
   const fetchRepos = async () => {
@@ -55,6 +61,23 @@ const Dashboard = () => {
     }
   };
 
+  const fetchDashboardOverview = async () => {
+    try {
+      setOverviewLoading(true);
+
+      const response = await getDashboardOverview();
+
+      setOverview(response.data);
+    } catch (error) {
+      console.error(
+        "Failed to fetch dashboard overview:",
+        error
+      );
+    } finally {
+      setOverviewLoading(false);
+    }
+  };
+
   const handleSync = async () => {
     try {
       setSyncLoading(true);
@@ -74,6 +97,7 @@ const Dashboard = () => {
       await Promise.all([
         fetchRepos(),
         fetchActivities(),
+        fetchDashboardOverview(),
       ]);
     } catch (error) {
       console.error("Repository sync failed:", error);
@@ -87,13 +111,20 @@ const Dashboard = () => {
     <DashboardLayout>
       <DashboardHero
         totalRepositories={repos.length}
-        averageScore={84}
-        recentAnalyses={repos.length}
+        averageScore={
+          overview?.engineeringHealth?.score ?? 0
+        }
+        recentAnalyses={
+          overview?.analyzedRepositories ?? 0
+        }
         onSync={handleSync}
         syncLoading={syncLoading}
       />
 
-      <EngineeringOverview />
+      <EngineeringOverview
+        overview={overview}
+        loading={overviewLoading}
+      />
 
       <AttentionPanel />
 

@@ -26,6 +26,7 @@ const jobStatusRoutes = require("./routes/jobStatus.routes");
 const pullRequestRoutes = require("./routes/pullRequest.routes");
 const engineeringHealthRoutes = require("./routes/engineeringHealth.routes");
 const aiReviewRoutes = require("./routes/aiReview.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
@@ -105,6 +106,13 @@ app.use("/api/analysis", aiLimiter, analysisRoutes);
 app.use("/api/pull-requests", aiLimiter, pullRequestRoutes);
 app.use("/api/engineering-health", aiLimiter, engineeringHealthRoutes);
 app.use("/api", aiLimiter, aiReviewRoutes);
+
+// Dashboard routes
+app.use(
+  "/api/dashboard",
+  apiLimiter,
+  dashboardRoutes
+);
 
 // Global Error Handler
 app.use(errorHandler);

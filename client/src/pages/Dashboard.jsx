@@ -8,12 +8,18 @@ import EngineeringOverview from "../components/dashboard/EngineeringOverview";
 import WorkspaceActions from "../components/dashboard/WorkspaceActions";
 import RecentActivity from "../components/dashboard/RecentActivity";
 
+import { getRecentActivities } from "../api/activity.api";
+
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
   const [syncLoading, setSyncLoading] = useState(false);
 
+  const [activities, setActivities] = useState([]);
+  const [activityLoading, setActivityLoading] = useState(true);
+
   useEffect(() => {
     fetchRepos();
+    fetchActivities();
   }, []);
 
   const fetchRepos = async () => {
@@ -35,6 +41,20 @@ const Dashboard = () => {
     }
   };
 
+  const fetchActivities = async () => {
+    try {
+      setActivityLoading(true);
+
+      const response = await getRecentActivities();
+
+      setActivities(response.data);
+    } catch (error) {
+      console.error("Failed to fetch activities:", error);
+    } finally {
+      setActivityLoading(false);
+    }
+  };
+
   const handleSync = async () => {
     try {
       setSyncLoading(true);
@@ -51,7 +71,10 @@ const Dashboard = () => {
         }
       );
 
-      await fetchRepos();
+      await Promise.all([
+        fetchRepos(),
+        fetchActivities(),
+      ]);
     } catch (error) {
       console.error("Repository sync failed:", error);
       alert("Failed to synchronize GitHub repositories.");
@@ -76,7 +99,10 @@ const Dashboard = () => {
 
       <WorkspaceActions />
 
-      <RecentActivity />
+      <RecentActivity
+        activities={activities}
+        loading={activityLoading}
+      />
     </DashboardLayout>
   );
 };

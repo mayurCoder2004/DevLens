@@ -1,4 +1,11 @@
-import { ArrowRight, ShieldCheck, BrainCircuit, GitBranch } from "lucide-react";
+import { useState } from "react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  BrainCircuit,
+  GitBranch,
+  Loader2,
+} from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { loginWithGithub } from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
@@ -6,17 +13,25 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const handleGithubLogin = async () => {
+    if (loading) return;
+
     try {
+      setLoading(true);
+
       await loginWithGithub();
+
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6">
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6">
       <div className="grid w-full max-w-6xl overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl lg:grid-cols-2">
         {/* Left Side */}
         <div className="relative flex flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950 p-12">
@@ -106,11 +121,21 @@ export default function Login() {
 
             <button
               onClick={handleGithubLogin}
-              className="mt-10 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-4 text-base font-semibold text-slate-900 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-100 active:scale-100"
+              disabled={loading}
+              className="mt-10 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-4 text-base font-semibold text-slate-900 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-100 active:scale-100 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
             >
-              <FaGithub className="h-5 w-5" />
-              Continue with GitHub
-              <ArrowRight className="h-5 w-5" />
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Connecting to GitHub...
+                </>
+              ) : (
+                <>
+                  <FaGithub className="h-5 w-5" />
+                  Continue with GitHub
+                  <ArrowRight className="h-5 w-5" />
+                </>
+              )}
             </button>
 
             <div className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">

@@ -1,34 +1,55 @@
+import { Outlet, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import Topbar from "../components/layouts/Topbar";
 import RepositorySidebar from "../components/repository/RepositorySidebar";
 
-export default function RepositoryLayout({
-  repository,
-  activeSection,
-  onSectionChange,
-  children,
-}) {
+export default function RepositoryLayout() {
+  const { repositoryId } = useParams();
+
+  const [repository, setRepository] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRepository = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/repositories/${repositoryId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setRepository(data.repository || data);
+      } catch (err) {
+        console.error("Failed to load repository:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepository();
+  }, [repositoryId]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#0B0F19] text-slate-300">
+        Loading repository...
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#0B0F19]">
-      {/* Repository Sidebar */}
-
-      <RepositorySidebar
-        repository={repository}
-        activeSection={activeSection}
-        onSectionChange={onSectionChange}
-      />
-
-      {/* Main Content */}
+      <RepositorySidebar repository={repository} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* Topbar */}
-
         <Topbar />
-
-        {/* Workspace */}
 
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto w-full max-w-[1700px] p-8">
-            {children}
+            <Outlet context={{ repository }} />
           </div>
         </main>
       </div>

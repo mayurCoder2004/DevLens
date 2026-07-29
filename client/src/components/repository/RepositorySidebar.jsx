@@ -13,53 +13,51 @@ import {
   Star,
 } from "lucide-react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
-export default function RepositorySidebar({
-  repository,
-  activeSection,
-  onSectionChange,
-}) {
+export default function RepositorySidebar({ repository }) {
+  const { repositoryId } = useParams();
+
   const navigation = [
     {
-      id: "overview",
       label: "Overview",
       icon: LayoutDashboard,
+      path: "overview",
     },
     {
-      id: "analytics",
       label: "Analytics",
       icon: ChartColumn,
+      path: "analytics",
     },
     {
-      id: "architecture",
       label: "Architecture",
       icon: Boxes,
+      path: "architecture",
     },
     {
-      id: "technical-debt",
       label: "Technical Debt",
       icon: Wrench,
+      path: "technical-debt",
     },
     {
-      id: "deployment",
       label: "Deployment",
       icon: Rocket,
+      path: "deployment",
     },
     {
-      id: "engineering-health",
       label: "Engineering Health",
       icon: Activity,
+      path: "engineering-health",
     },
     {
-      id: "pull-requests",
       label: "Pull Requests",
       icon: GitPullRequest,
+      path: "pull-requests",
     },
     {
-      id: "ai-review",
       label: "AI Review",
       icon: Sparkles,
+      path: "ai-review",
     },
   ];
 
@@ -93,11 +91,7 @@ export default function RepositorySidebar({
               </div>
 
               <div className="flex items-center gap-1">
-                <Star
-                  size={14}
-                  className="text-yellow-400"
-                />
-
+                <Star size={14} className="text-yellow-400" />
                 {repository.stars}
               </div>
             </div>
@@ -109,9 +103,7 @@ export default function RepositorySidebar({
             )}
           </>
         ) : (
-          <div className="text-slate-400">
-            Loading...
-          </div>
+          <div className="text-slate-400">Loading...</div>
         )}
       </div>
 
@@ -119,19 +111,7 @@ export default function RepositorySidebar({
       <div className="border-b border-slate-800 p-4">
         <NavLink
           to="/repositories"
-          className="
-            flex
-            items-center
-            gap-2
-            rounded-lg
-            px-2
-            py-2
-            text-sm
-            text-slate-300
-            transition
-            hover:bg-slate-800
-            hover:text-white
-          "
+          className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
         >
           <ArrowLeft size={16} />
           Back to Repositories
@@ -145,24 +125,22 @@ export default function RepositorySidebar({
         </h3>
 
         <nav className="space-y-2">
-          {navigation.map(({ id, label, icon: Icon }) => {
-            const isActive = activeSection === id;
-
-            return (
-              <button
-                key={id}
-                onClick={() => onSectionChange(id)}
-                className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all ${
+          {navigation.map(({ label, icon: Icon, path }) => (
+            <NavLink
+              key={path}
+              to={`/repository/${repositoryId}/${path}`}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
                   isActive
                     ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
                     : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                }`}
-              >
-                <Icon size={18} />
-                <span>{label}</span>
-              </button>
-            );
-          })}
+                }`
+              }
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </NavLink>
+          ))}
         </nav>
       </div>
     </aside>

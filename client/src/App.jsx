@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
@@ -13,13 +13,18 @@ import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import Repositories from "./pages/Repositories";
 
+import RepositoryLayout from "./layouts/RepositoryLayout";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
     <Routes>
+      {/* ===================== */}
       {/* Public Routes */}
+      {/* ===================== */}
+
       <Route path="/" element={<LandingPage />} />
 
       <Route
@@ -34,7 +39,10 @@ function App() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
 
+      {/* ===================== */}
       {/* Protected Routes */}
+      {/* ===================== */}
+
       <Route
         path="/dashboard"
         element={
@@ -53,59 +61,50 @@ function App() {
         }
       />
 
-      <Route
-        path="/repository/:id"
-        element={
-          <ProtectedRoute>
-            <RepositoryWorkspace />
-          </ProtectedRoute>
-        }
-      />
+      {/* ===================== */}
+      {/* Repository Workspace */}
+      {/* ===================== */}
 
       <Route
-        path="/architecture/:repositoryId"
+        path="/repository/:repositoryId"
         element={
           <ProtectedRoute>
-            <ArchitecturePage />
+            <RepositoryLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Navigate to="overview" replace />} />
 
-      <Route
-        path="/technical-debt/:repositoryId"
-        element={
-          <ProtectedRoute>
-            <TechnicalDebt />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="overview"
+          element={<RepositoryWorkspace />}
+        />
 
-      <Route
-        path="/repositories/:id/deployment"
-        element={
-          <ProtectedRoute>
-            <Deployment />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="architecture"
+          element={<ArchitecturePage />}
+        />
 
-      <Route
-        path="/repositories/:id/engineering-health"
-        element={
-          <ProtectedRoute>
-            <EngineeringHealthPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="technical-debt"
+          element={<TechnicalDebt />}
+        />
 
-      <Route
-        path="/repositories/:id/ai-review"
-        element={
-          <ProtectedRoute>
-            <AIReview />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="deployment"
+          element={<Deployment />}
+        />
+
+        <Route
+          path="engineering-health"
+          element={<EngineeringHealthPage />}
+        />
+
+        <Route
+          path="ai-review"
+          element={<AIReview />}
+        />
+      </Route>
     </Routes>
   );
 }

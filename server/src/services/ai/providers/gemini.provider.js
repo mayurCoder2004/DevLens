@@ -72,65 +72,26 @@ class GeminiProvider extends AIProvider {
     }
 
     const cleanedResponse = response.text
-      .replace(/```json\s*/g, "")
+      .replace(/```json\s*/gi, "")
       .replace(/```\s*/g, "")
       .trim();
 
     try {
       const parsedResponse = JSON.parse(cleanedResponse);
 
-      this.validateRepositoryReview(parsedResponse);
+      // Generic provider:
+      // Do NOT validate any specific schema here.
+      // Each service should validate its own response.
 
       return parsedResponse;
     } catch (error) {
       logger.error("Invalid Gemini JSON Response");
       logger.error(cleanedResponse);
+      logger.error(error);
 
       throw new ApiError(
         502,
         "AI returned an invalid structured response."
-      );
-    }
-  }
-
-  validateRepositoryReview(review) {
-    const requiredFields = [
-      "executiveSummary",
-      "engineeringScore",
-      "strengths",
-      "criticalIssues",
-      "actionPlan",
-      "technologyInsights",
-      "architectureSuggestions",
-    ];
-
-    for (const field of requiredFields) {
-      if (!(field in review)) {
-        throw new Error(
-          `Gemini response is missing required field: ${field}`
-        );
-      }
-    }
-
-    if (!Array.isArray(review.strengths)) {
-      throw new Error("strengths must be an array.");
-    }
-
-    if (!Array.isArray(review.criticalIssues)) {
-      throw new Error("criticalIssues must be an array.");
-    }
-
-    if (!Array.isArray(review.actionPlan)) {
-      throw new Error("actionPlan must be an array.");
-    }
-
-    if (!Array.isArray(review.technologyInsights)) {
-      throw new Error("technologyInsights must be an array.");
-    }
-
-    if (!Array.isArray(review.architectureSuggestions)) {
-      throw new Error(
-        "architectureSuggestions must be an array."
       );
     }
   }

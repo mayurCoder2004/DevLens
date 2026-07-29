@@ -97,10 +97,28 @@ const getPullRequest = async (owner, repo, prNumber, accessToken) => {
   }
 };
 
+const getRepositoryPullRequests = async (
+  owner,
+  repo,
+  githubToken
+) => {
+  return makeGitHubRequest({
+    url: `https://api.github.com/repos/${owner}/${repo}/pulls`,
+    githubToken,
+    params: {
+      state: "all",
+      sort: "updated",
+      direction: "desc",
+      per_page: 100,
+    },
+  });
+};
+
 module.exports = {
   getRepositories,
   getRepositoryContents,
   getPullRequests,
   getPullRequestFiles,
   getPullRequest,
+  getRepositoryPullRequests,
 };

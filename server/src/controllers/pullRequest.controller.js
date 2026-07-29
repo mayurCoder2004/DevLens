@@ -14,6 +14,7 @@ const { Octokit } = require("@octokit/rest");
 
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
+const { listRepositoryPullRequests } = require("../services/pullRequestList.service");
 
 // ============================
 // Analyze Pull Request
@@ -136,7 +137,38 @@ const getPullRequestAnalysis = asyncHandler(async (req, res) => {
   });
 });
 
+const getRepositoryPullRequests = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const pullRequests =
+    await listRepositoryPullRequests({
+      owner: repository.owner,
+      repo: repository.name,
+      githubToken: repository.user.githubToken,
+    });
+
+  return res.status(200).json({
+    success: true,
+    data: pullRequests,
+  });
+});
+
 module.exports = {
   analyzePullRequestController,
   getPullRequestAnalysis,
+  getRepositoryPullRequests,
 };

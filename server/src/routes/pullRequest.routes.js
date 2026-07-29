@@ -7,11 +7,13 @@ const validate = require("../middleware/validate.middleware");
 
 const {
   pullRequestSchema,
+  repositoryIdSchema,
 } = require("../validations/repository.validation");
 
 const {
   analyzePullRequestController,
   getPullRequestAnalysis,
+  getRepositoryPullRequests,
 } = require("../controllers/pullRequest.controller");
 
 router.post(
@@ -26,6 +28,13 @@ router.get(
   authMiddleware,
   validate(pullRequestSchema),
   getPullRequestAnalysis
+);
+
+router.get(
+  "/:repositoryId",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  getRepositoryPullRequests
 );
 
 module.exports = router;

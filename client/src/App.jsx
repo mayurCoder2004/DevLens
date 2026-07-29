@@ -17,6 +17,7 @@ import RepositoryLayout from "./layouts/RepositoryLayout";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import PullRequestsPage from "./pages/PullRequestsPage";
 
 function App() {
   return (
@@ -66,45 +67,50 @@ function App() {
       {/* ===================== */}
 
       <Route
-        path="/repository/:repositoryId"
-        element={
-          <ProtectedRoute>
-            <RepositoryLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Navigate to="overview" replace />} />
+  path="/repository/:repositoryId"
+  element={
+    <ProtectedRoute>
+      <RepositoryLayout />
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<Navigate to="overview" replace />} />
 
-        <Route
-          path="overview"
-          element={<RepositoryWorkspace />}
-        />
+  <Route
+    path="overview"
+    element={<RepositoryWorkspace />}
+  />
 
-        <Route
-          path="architecture"
-          element={<ArchitecturePage />}
-        />
+  <Route
+    path="architecture"
+    element={<ArchitecturePage />}
+  />
 
-        <Route
-          path="technical-debt"
-          element={<TechnicalDebt />}
-        />
+  <Route
+    path="technical-debt"
+    element={<TechnicalDebt />}
+  />
 
-        <Route
-          path="deployment"
-          element={<Deployment />}
-        />
+  <Route
+    path="deployment"
+    element={<Deployment />}
+  />
 
-        <Route
-          path="engineering-health"
-          element={<EngineeringHealthPage />}
-        />
+  <Route
+    path="engineering-health"
+    element={<EngineeringHealthPage />}
+  />
 
-        <Route
-          path="ai-review"
-          element={<AIReview />}
-        />
-      </Route>
+  <Route
+    path="pull-requests"
+    element={<PullRequestsPage />}
+  />
+
+  <Route
+    path="ai-review"
+    element={<AIReview />}
+  />
+</Route>
     </Routes>
   );
 }

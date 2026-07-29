@@ -85,15 +85,16 @@ class GeminiProvider extends AIProvider {
 
       return parsedResponse;
     } catch (error) {
-      logger.error("Invalid Gemini JSON Response");
-      logger.error(cleanedResponse);
-      logger.error(error);
+  logger.error("Invalid Gemini JSON Response");
+  logger.error("Parse Error:", error.message);
+  logger.error("Raw Response:");
+  logger.error(cleanedResponse);
 
-      throw new ApiError(
-        502,
-        "AI returned an invalid structured response."
-      );
-    }
+  throw new ApiError(
+    502,
+    "AI returned an invalid structured response."
+  );
+}
   }
 }
 

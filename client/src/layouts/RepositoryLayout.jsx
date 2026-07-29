@@ -13,21 +13,25 @@ export default function RepositoryLayout() {
 
   useEffect(() => {
     const fetchRepository = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/repositories/${repositoryId}`,
-          {
-            withCredentials: true,
-          }
-        );
+  try {
+    const token = localStorage.getItem("token");
 
-        setRepository(data.repository || data);
-      } catch (err) {
-        console.error("Failed to load repository:", err);
-      } finally {
-        setLoading(false);
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/repositories/${repositoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
+    );
+
+    setRepository(data.repository);
+  } catch (err) {
+    console.error("Failed to load repository:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchRepository();
   }, [repositoryId]);

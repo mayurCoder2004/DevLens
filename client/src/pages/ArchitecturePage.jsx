@@ -31,6 +31,8 @@ export default function ArchitecturePage() {
         }
       );
 
+      console.log("Architecture Response:", response.data);
+
       setArchitecture(response.data.architecture);
       setAnalytics(response.data.analytics);
       setInsights(response.data.insights);

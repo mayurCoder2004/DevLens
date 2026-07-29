@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { getPullRequestAnalysis } from "../services/pullRequest";
-import RepositoryPullRequest from "../components/repository/workspace/RepositoryPullRequest";
+import { getRepositoryPullRequests } from "../services/pullRequest";
+import PullRequestList from "../components/repository/pullRequest/PullRequestList";
 
 export default function PullRequestsPage() {
-  const { repository } = useOutletContext();
   const { repositoryId } = useParams();
 
-  const [pullRequestAnalysis, setPullRequestAnalysis] = useState(null);
+  const [pullRequests, setPullRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchPullRequestAnalysis();
+    fetchPullRequests();
   }, [repositoryId]);
 
-  const fetchPullRequestAnalysis = async () => {
+  const fetchPullRequests = async () => {
     try {
-      const response = await getPullRequestAnalysis(repositoryId);
+      const response =
+        await getRepositoryPullRequests(repositoryId);
 
-      setPullRequestAnalysis(response.data.data);
+      setPullRequests(response.data.data);
     } catch (err) {
       console.error(err);
 
       setError(
         err.response?.data?.message ??
-          "Failed to load pull request analysis."
+          "Failed to load pull requests."
       );
     } finally {
       setLoading(false);
@@ -35,24 +35,24 @@ export default function PullRequestsPage() {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading pull request analysis...
+      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
+        Loading pull requests...
       </div>
     );
   }
 
-  if (!pullRequestAnalysis) {
+  if (error) {
     return (
-      <div className="rounded-2xl border border-red-900 bg-red-950/30 p-6 text-red-300">
-        {error || "Pull request analysis not found."}
+      <div className="rounded-xl border border-red-900 bg-red-950/30 p-6 text-red-300">
+        {error}
       </div>
     );
   }
 
   return (
-    <RepositoryPullRequest
-      repository={repository}
-      pullRequestAnalysis={pullRequestAnalysis}
+    <PullRequestList
+      repositoryId={repositoryId}
+      pullRequests={pullRequests}
     />
   );
 }

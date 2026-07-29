@@ -18,6 +18,7 @@ import RepositoryLayout from "./layouts/RepositoryLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import PullRequestsPage from "./pages/PullRequestsPage";
+import PullRequestAnalysisPage from "./pages/PullRequestAnalysisPage";
 
 function App() {
   return (
@@ -102,9 +103,14 @@ function App() {
   />
 
   <Route
-    path="pull-requests"
-    element={<PullRequestsPage />}
-  />
+  path="pull-requests"
+  element={<PullRequestsPage />}
+/>
+
+<Route
+  path="pull-requests/:prNumber"
+  element={<PullRequestAnalysisPage />}
+/>
 
   <Route
     path="ai-review"

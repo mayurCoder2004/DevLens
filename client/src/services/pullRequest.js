@@ -1,20 +1,31 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_URL;
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
+const getAuthHeaders = () => ({
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
 
-  return {
-    Authorization: `Bearer ${token}`,
-  };
+export const getRepositoryPullRequests = (repositoryId) => {
+  return axios.get(
+    `${API}/pull-requests/${repositoryId}`,
+    getAuthHeaders()
+  );
 };
 
-export const getPullRequestAnalysis = (repositoryId) => {
+export const getPullRequestAnalysis = (repositoryId, prNumber) => {
   return axios.get(
-    `${API_URL}/pull-request/${repositoryId}`,
-    {
-      headers: getAuthHeaders(),
-    }
+    `${API}/pull-requests/${repositoryId}/${prNumber}`,
+    getAuthHeaders()
+  );
+};
+
+export const analyzePullRequest = (repositoryId, prNumber) => {
+  return axios.post(
+    `${API}/pull-requests/analyze/${repositoryId}/${prNumber}`,
+    {},
+    getAuthHeaders()
   );
 };

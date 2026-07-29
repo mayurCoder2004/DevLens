@@ -1,8 +1,6 @@
 class AIProvider {
-  async generateStructuredResponse(prompt) {
-    throw new Error(
-      "generateStructuredResponse() must be implemented."
-    );
+  async generateStructuredResponse(prompt, schema) {
+    throw new Error("generateStructuredResponse() not implemented.");
   }
 }
 

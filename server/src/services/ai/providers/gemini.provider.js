@@ -30,24 +30,81 @@ class GeminiProvider extends AIProvider {
       );
     }
 
-    let response;
-
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
-        response = await this.client.models.generateContent({
+        const response = await this.client.models.generateContent({
           model: this.model,
           contents: prompt,
           config: {
             temperature: 0.2,
-            maxOutputTokens: 4096,
+            maxOutputTokens: 8192,
+            responseMimeType: "application/json",
           },
         });
 
-        break;
-      } catch (error) {
-        logger.warn(
-          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES}): ${error.message}`
+        const finishReason =
+          response?.candidates?.[0]?.finishReason;
+
+        logger.info(
+          `Gemini Finish Reason: ${finishReason ?? "UNKNOWN"}`
         );
+
+        if (!response?.text) {
+          throw new Error("Gemini returned an empty response.");
+        }
+
+        const cleanedResponse = response.text
+          .replace(/```json\s*/gi, "")
+          .replace(/```\s*/g, "")
+          .trim();
+        
+        logger.info(
+  `Response Length: ${cleanedResponse.length}`
+);
+
+logger.info(
+  `Last 500 Characters:\n${cleanedResponse.slice(-500)}`
+);
+
+        if (
+          !cleanedResponse.startsWith("{") ||
+          !cleanedResponse.endsWith("}")
+        ) {
+          throw new Error("Incomplete JSON response.");
+        }
+
+        try {
+          const parsedResponse = JSON.parse(cleanedResponse);
+
+          logger.info("JSON parsed successfully.");
+
+          return parsedResponse;
+        } catch (parseError) {
+          logger.warn(
+            `Invalid JSON received (attempt ${attempt}/${MAX_RETRIES})`
+          );
+
+          logger.warn(parseError.message);
+
+          logger.debug(cleanedResponse);
+
+          if (attempt === MAX_RETRIES) {
+            throw new ApiError(
+              502,
+              "AI returned an invalid structured response."
+            );
+          }
+        }
+      } catch (error) {
+        if (error instanceof ApiError) {
+          throw error;
+        }
+
+        logger.warn(
+          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES})`
+        );
+
+        logger.warn(error.message);
 
         if (attempt === MAX_RETRIES) {
           logger.error(error.stack || error.message);
@@ -63,38 +120,6 @@ class GeminiProvider extends AIProvider {
         );
       }
     }
-
-    if (!response?.text) {
-      throw new ApiError(
-        502,
-        "Gemini returned an empty response."
-      );
-    }
-
-    const cleanedResponse = response.text
-      .replace(/```json\s*/gi, "")
-      .replace(/```\s*/g, "")
-      .trim();
-
-    try {
-      const parsedResponse = JSON.parse(cleanedResponse);
-
-      // Generic provider:
-      // Do NOT validate any specific schema here.
-      // Each service should validate its own response.
-
-      return parsedResponse;
-    } catch (error) {
-  logger.error("Invalid Gemini JSON Response");
-  logger.error("Parse Error:", error.message);
-  logger.error("Raw Response:");
-  logger.error(cleanedResponse);
-
-  throw new ApiError(
-    502,
-    "AI returned an invalid structured response."
-  );
-}
   }
 }
 

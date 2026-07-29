@@ -63,6 +63,10 @@ class AIReviewService {
   const review =
     await this.provider.generateStructuredResponse(prompt);
 
+    logger.info("AI review generated successfully.");
+
+    logger.info(`Prompt length: ${prompt.length} characters`);
+
   const savedReview =
     await this.repositoryAIReviewRepository.saveReview(
       repositoryId,

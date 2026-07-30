@@ -9,26 +9,28 @@ class RepositoryAIReviewRepository {
       logger.info(`Model: ${modelUsed}`);
       logger.info(`Review Type: ${typeof review}`);
 
-      const savedReview = await prisma.repositoryAIReview.upsert({
-        where: {
-          repositoryId,
-        },
-        update: {
-          review,
-          modelUsed,
-          promptVersion: "v2",
-        },
-        create: {
-          repositoryId,
-          review,
-          modelUsed,
-          promptVersion: "v2",
-        },
-      });
+      const savedReview =
+        await prisma.repositoryAIReview.upsert({
+          where: {
+            repositoryId,
+          },
+          update: {
+            review,
+            modelUsed,
+            promptVersion: "v2",
+          },
+          create: {
+            repositoryId,
+            review,
+            modelUsed,
+            promptVersion: "v2",
+          },
+        });
 
       logger.info("AI review saved successfully.");
 
-      return savedReview;
+      // Return only the review JSON
+      return savedReview.review;
     } catch (error) {
       logger.error("Failed to save AI review:");
       logger.error(error);
@@ -38,11 +40,19 @@ class RepositoryAIReviewRepository {
   }
 
   async getReviewByRepositoryId(repositoryId) {
-    return prisma.repositoryAIReview.findUnique({
-      where: {
-        repositoryId,
-      },
-    });
+    const aiReview =
+      await prisma.repositoryAIReview.findUnique({
+        where: {
+          repositoryId,
+        },
+      });
+
+    if (!aiReview) {
+      return null;
+    }
+
+    // Return only the review JSON
+    return aiReview.review;
   }
 
   async deleteReview(repositoryId) {

@@ -9,9 +9,19 @@ const envSchema = z.object({
 
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
 
+  // Primary AI Provider (Gemini)
   GEMINI_API_KEY: z.string().min(1, "GEMINI_API_KEY is required"),
 
   GEMINI_MODEL: z.string().min(1).default("gemini-2.5-flash"),
+
+  // Fallback AI Provider (OpenRouter)
+  OPENROUTER_API_KEY: z.string().optional(),
+
+  OPENROUTER_BASE_URL: z.string().url().default("https://openrouter.ai/api/v1"),
+
+  OPENROUTER_MODEL_PRIMARY: z.string().default("qwen/qwen-2.5-coder-32b-instruct:free"),
+
+  OPENROUTER_MODEL_SECONDARY: z.string().default("meta-llama/llama-3.3-70b-instruct:free"),
 
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
 

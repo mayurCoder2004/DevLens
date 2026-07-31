@@ -1,9 +1,11 @@
-const GeminiProvider = require("../ai/providers/gemini.provider");
+const AIProviderFactory = require("../ai/AIProviderFactory");
 const architecturePromptBuilder = require("./architecturePromptBuilder");
+const logger = require("../../config/logger");
 
 class ArchitectureRecommendationsService {
   constructor() {
-    this.aiProvider = new GeminiProvider();
+    // Use AI Orchestrator with automatic fallback
+    this.aiProvider = AIProviderFactory.getOrchestrator();
   }
 
   async generate({
@@ -17,6 +19,8 @@ class ArchitectureRecommendationsService {
       insights,
     });
 
+    logger.info("Generating architecture recommendations");
+
     const recommendations =
       await this.aiProvider.generateStructuredResponse(prompt);
 
@@ -25,6 +29,8 @@ class ArchitectureRecommendationsService {
         "Invalid recommendations returned by AI."
       );
     }
+
+    logger.info(`Generated ${recommendations.length} architecture recommendations`);
 
     return recommendations;
   }

@@ -2,11 +2,12 @@ const RepositoryAnalysisRepository = require("../../repositories/repositoryAnaly
 const RepositoryAIReviewRepository = require("../../repositories/repositoryAIReview.repository");
 const { logActivity } = require("../activityLogger.service");
 
-const GeminiProvider = require("./providers/gemini.provider");
+const AIProviderFactory = require("./AIProviderFactory");
 
 const { buildRepositoryReviewPrompt } = require("./promptBuilder.service");
 
 const engineeringHealthService = require("../engineeringHealth.service");
+const logger = require("../../config/logger");
 
 class AIReviewService {
   constructor() {
@@ -14,7 +15,8 @@ class AIReviewService {
 
     this.repositoryAIReviewRepository = new RepositoryAIReviewRepository();
 
-    this.provider = new GeminiProvider();
+    // Use AI Orchestrator with automatic fallback
+    this.provider = AIProviderFactory.getOrchestrator();
   }
 
   buildAnalysisObject(repositoryAnalysis, engineeringHealth) {
@@ -60,27 +62,29 @@ class AIReviewService {
 
   const prompt = buildRepositoryReviewPrompt(analysis);
 
+  logger.info(`Generating AI review | Prompt length: ${prompt.length} characters`);
+
   const review =
     await this.provider.generateStructuredResponse(prompt);
 
-    logger.info("AI review generated successfully.");
+  logger.info("AI review generated successfully.");
 
-    logger.info(`Prompt length: ${prompt.length} characters`);
-
+  // Note: provider.model is not available in orchestrator
+  // The orchestrator automatically selects the best available provider
   const savedReview =
     await this.repositoryAIReviewRepository.saveReview(
       repositoryId,
       review,
-      this.provider.model,
+      "AI Orchestrator", // Generic label since orchestrator manages providers
     );
 
   await logActivity({
     repositoryId,
     type: "AI_REVIEW",
     title: "AI Review Generated",
-    description: `Repository analyzed using ${this.provider.model}.`,
+    description: `Repository analyzed using AI Orchestrator with automatic provider fallback.`,
     metadata: {
-      model: this.provider.model,
+      system: "AI Orchestrator",
     },
   });
 
@@ -109,6 +113,8 @@ class AIReviewService {
 
   const prompt = buildRepositoryReviewPrompt(analysis);
 
+  logger.info(`Refreshing AI review | Prompt length: ${prompt.length} characters`);
+
   const review =
     await this.provider.generateStructuredResponse(prompt);
 
@@ -116,16 +122,16 @@ class AIReviewService {
     await this.repositoryAIReviewRepository.saveReview(
       repositoryId,
       review,
-      this.provider.model,
+      "AI Orchestrator",
     );
 
   await logActivity({
     repositoryId,
     type: "AI_REVIEW",
     title: "AI Review Refreshed",
-    description: `Repository review regenerated using ${this.provider.model}.`,
+    description: `Repository review regenerated using AI Orchestrator with automatic provider fallback.`,
     metadata: {
-      model: this.provider.model,
+      system: "AI Orchestrator",
     },
   });
 

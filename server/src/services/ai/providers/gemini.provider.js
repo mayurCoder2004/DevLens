@@ -3,9 +3,10 @@ const AIProvider = require("./aiProvider");
 const env = require("../../../config/env");
 const logger = require("../../../config/logger");
 const ApiError = require("../../../utils/ApiError");
+const JSONValidator = require("../utils/jsonValidator");
 
 const MAX_PROMPT_LENGTH = 50000;
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 2;
 
 class GeminiProvider extends AIProvider {
   constructor() {
@@ -16,6 +17,7 @@ class GeminiProvider extends AIProvider {
     });
 
     this.model = env.GEMINI_MODEL;
+    this.providerName = "Gemini";
   }
 
   async generateStructuredResponse(prompt) {
@@ -32,6 +34,10 @@ class GeminiProvider extends AIProvider {
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
+        logger.info(
+          `Gemini Request | Model: ${this.model} | Attempt: ${attempt}/${MAX_RETRIES}`
+        );
+
         const response = await this.client.models.generateContent({
           model: this.model,
           contents: prompt,
@@ -46,52 +52,33 @@ class GeminiProvider extends AIProvider {
           response?.candidates?.[0]?.finishReason;
 
         logger.info(
-          `Gemini Finish Reason: ${finishReason ?? "UNKNOWN"}`
+          `Gemini Finish Reason: ${finishReason ?? "UNKNOWN"} | Model: ${this.model}`
         );
 
         if (!response?.text) {
           throw new Error("Gemini returned an empty response.");
         }
 
-        const cleanedResponse = response.text
-          .replace(/```json\s*/gi, "")
-          .replace(/```\s*/g, "")
-          .trim();
-        
-        logger.info(
-  `Response Length: ${cleanedResponse.length}`
-);
+        // Log response details
+        JSONValidator.logResponseDetails(response.text, "Gemini");
 
-logger.info(
-  `Last 500 Characters:\n${cleanedResponse.slice(-500)}`
-);
-
-        if (
-          !cleanedResponse.startsWith("{") ||
-          !cleanedResponse.endsWith("}")
-        ) {
-          throw new Error("Incomplete JSON response.");
-        }
-
+        // Parse and validate JSON
         try {
-          const parsedResponse = JSON.parse(cleanedResponse);
+          const parsedResponse = JSONValidator.parseAndValidate(response.text);
 
-          logger.info("JSON parsed successfully.");
+          logger.info(`Gemini JSON parsed successfully | Model: ${this.model}`);
 
           return parsedResponse;
         } catch (parseError) {
           logger.warn(
-            `Invalid JSON received (attempt ${attempt}/${MAX_RETRIES})`
+            `Gemini Invalid JSON (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
           );
-
-          logger.warn(parseError.message);
-
-          logger.debug(cleanedResponse);
+          logger.warn(`Parse Error: ${parseError.message}`);
 
           if (attempt === MAX_RETRIES) {
             throw new ApiError(
               502,
-              "AI returned an invalid structured response."
+              "Gemini returned an invalid structured response."
             );
           }
         }
@@ -101,20 +88,23 @@ logger.info(
         }
 
         logger.warn(
-          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES})`
+          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
         );
-
         logger.warn(error.message);
 
         if (attempt === MAX_RETRIES) {
+          logger.error(
+            `Gemini failed after ${MAX_RETRIES} attempts | Model: ${this.model}`
+          );
           logger.error(error.stack || error.message);
 
           throw new ApiError(
             502,
-            "AI service is temporarily unavailable. Please try again later."
+            "Gemini service is temporarily unavailable."
           );
         }
 
+        // Exponential backoff before retry
         await new Promise((resolve) =>
           setTimeout(resolve, attempt * 1000)
         );

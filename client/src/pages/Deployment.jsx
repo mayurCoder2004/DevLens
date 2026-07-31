@@ -6,6 +6,7 @@ import {
   analyzeDeployment,
 } from "../services/deployment";
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
+import DeploymentSkeleton from "../components/repository/deployment/DeploymentSkeleton";
 
 export default function Deployment() {
   const { repository } = useOutletContext();
@@ -65,11 +66,7 @@ export default function Deployment() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading deployment analysis...
-      </div>
-    );
+    return <DeploymentSkeleton />;
   }
 
   if (!deployment) {

@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 
 import RepositoryAIReview from "../components/repository/workspace/RepositoryAIReview";
+import AIReviewSkeleton from "../components/repository/aiReview/AIReviewSkeleton";
 
 import {
   getRepositoryAIReview,
@@ -71,11 +72,7 @@ export default function AIReview() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading AI Review...
-      </div>
-    );
+    return <AIReviewSkeleton />;
   }
 
   if (error) {

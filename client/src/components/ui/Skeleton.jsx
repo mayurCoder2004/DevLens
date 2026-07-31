@@ -12,7 +12,7 @@
 const Skeleton = ({ className = '' }) => {
   return (
     <div
-      className={`bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] rounded ${className}`}
+      className={`bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-[length:200%_100%] rounded ${className}`}
       style={{
         animation: 'skeleton-pulse 1.5s ease-in-out infinite',
       }}

@@ -7,6 +7,7 @@ import {
 } from "../services/pullRequest";
 
 import RepositoryPullRequest from "../components/repository/workspace/RepositoryPullRequest";
+import PullRequestSkeleton from "../components/repository/pullRequest/PullRequestSkeleton";
 
 export default function PullRequestAnalysisPage() {
   const { repository } = useOutletContext();
@@ -71,13 +72,7 @@ export default function PullRequestAnalysisPage() {
   };
 
   if (loading || generating) {
-    return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        {generating
-          ? "Analyzing pull request..."
-          : "Loading pull request..."}
-      </div>
-    );
+    return <PullRequestSkeleton />;
   }
 
   if (error) {

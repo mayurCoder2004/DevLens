@@ -3,6 +3,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 
 import { getEngineeringHealth } from "../services/engineeringHealth";
 import RepositoryEngineeringHealth from "../components/repository/workspace/RepositoryEngineeringHealth";
+import EngineeringHealthSkeleton from "../components/repository/engineeringHealth/EngineeringHealthSkeleton";
 
 export default function EngineeringHealthPage() {
   const { repository } = useOutletContext();
@@ -34,11 +35,7 @@ export default function EngineeringHealthPage() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading engineering health...
-      </div>
-    );
+    return <EngineeringHealthSkeleton />;
   }
 
   if (!engineeringHealth) {

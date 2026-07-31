@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { getRepositoryPullRequests } from "../services/pullRequest";
 import PullRequestList from "../components/repository/pullRequest/PullRequestList";
+import PullRequestListSkeleton from "../components/repository/pullRequest/PullRequestListSkeleton";
 
 export default function PullRequestsPage() {
   const { repositoryId } = useParams();
@@ -34,11 +35,7 @@ export default function PullRequestsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading pull requests...
-      </div>
-    );
+    return <PullRequestListSkeleton />;
   }
 
   if (error) {

@@ -3,6 +3,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
 
 import RepositoryArchitecture from "../components/repository/architecture/RepositoryArchitecture";
+import ArchitectureSkeleton from "../components/repository/architecture/ArchitectureSkeleton";
 
 export default function ArchitecturePage() {
   const { repository } = useOutletContext();
@@ -45,11 +46,7 @@ export default function ArchitecturePage() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading architecture...
-      </div>
-    );
+    return <ArchitectureSkeleton />;
   }
 
   return (

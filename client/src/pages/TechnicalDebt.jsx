@@ -3,6 +3,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 
 import { getTechnicalDebt } from "../services/technicalDebt";
 import RepositoryTechnicalDebt from "../components/repository/workspace/RepositoryTechnicalDebt";
+import TechnicalDebtSkeleton from "../components/repository/technicalDebt/TechnicalDebtSkeleton";
 
 export default function TechnicalDebt() {
   const { repository } = useOutletContext();
@@ -28,11 +29,7 @@ export default function TechnicalDebt() {
   };
 
   if (loading) {
-    return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-400">
-        Loading technical debt...
-      </div>
-    );
+    return <TechnicalDebtSkeleton />;
   }
 
   if (!technicalDebt) {

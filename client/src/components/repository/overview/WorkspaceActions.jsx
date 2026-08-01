@@ -5,7 +5,10 @@ import {
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useState } from "react";
+
 import WorkspaceActionCard from "../../dashboard/WorkspaceActionCard";
+
+import { analyzeRepository } from "../../../services/analysis";
 
 const actions = [
   {
@@ -54,14 +57,34 @@ export default function WorkspaceActions({
     useState(null);
 
   const handleAction = async (action) => {
-    if (action !== "refresh") {
-      return;
-    }
-
     try {
       setLoadingAction(action);
 
-      await refreshRepository();
+      switch (action) {
+        case "refresh":
+          await refreshRepository();
+          break;
+
+        case "analyze":
+          await analyzeRepository(repository.id);
+
+          await refreshRepository();
+
+          alert(
+            "Repository analysis completed successfully."
+          );
+          break;
+
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ??
+          "Failed to perform the requested action."
+      );
     } finally {
       setLoadingAction(null);
     }
@@ -87,12 +110,17 @@ export default function WorkspaceActions({
             description={action.description}
             icon={action.icon}
             iconColor={action.iconColor}
-            action={action.action}
             loading={
               loadingAction === action.action
             }
             onClick={() =>
               handleAction(action.action)
+            }
+            buttonText="Run Action"
+            loadingText={
+              action.action === "analyze"
+                ? "Analyzing..."
+                : "Refreshing..."
             }
           />
         ))}

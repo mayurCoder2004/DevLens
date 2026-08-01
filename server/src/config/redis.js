@@ -10,14 +10,17 @@ const connection = new IORedis({
   retryStrategy(times) {
     if (times > 10) {
       logger.error(
-        "Redis connection failed after 10 retries. Please ensure Redis is running."
+        "Redis connection failed after 10 retries. Running without Redis."
       );
 
       return null;
     }
 
     const delay = Math.min(times * 1000, 5000);
-    logger.warn(`Redis connection attempt ${times}. Retrying in ${delay}ms...`);
+
+    logger.warn(
+      `Redis connection attempt ${times}. Retrying in ${delay}ms...`
+    );
 
     return delay;
   },
@@ -39,4 +42,11 @@ connection.on("close", () => {
   logger.warn("Redis connection closed");
 });
 
-module.exports = connection;
+const isRedisAvailable = () => {
+  return connection.status === "ready";
+};
+
+module.exports = {
+  connection,
+  isRedisAvailable,
+};

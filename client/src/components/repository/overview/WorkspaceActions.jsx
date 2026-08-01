@@ -9,6 +9,7 @@ import { useState } from "react";
 import WorkspaceActionCard from "../../dashboard/WorkspaceActionCard";
 
 import { analyzeRepository } from "../../../services/analysis";
+import { refreshRepositoryAIReview } from "../../../services/aiReview";
 
 const actions = [
   {
@@ -63,15 +64,27 @@ export default function WorkspaceActions({
       switch (action) {
         case "refresh":
           await refreshRepository();
+          alert("Repository refreshed successfully.");
           break;
 
         case "analyze":
           await analyzeRepository(repository.id);
-
           await refreshRepository();
 
           alert(
             "Repository analysis completed successfully."
+          );
+          break;
+
+        case "ai-review":
+          await refreshRepositoryAIReview(
+            repository.id
+          );
+
+          await refreshRepository();
+
+          alert(
+            "AI Review generated successfully."
           );
           break;
 
@@ -118,9 +131,13 @@ export default function WorkspaceActions({
             }
             buttonText="Run Action"
             loadingText={
-              action.action === "analyze"
+              action.action === "refresh"
+                ? "Refreshing..."
+                : action.action === "analyze"
                 ? "Analyzing..."
-                : "Refreshing..."
+                : action.action === "ai-review"
+                ? "Generating..."
+                : "Processing..."
             }
           />
         ))}

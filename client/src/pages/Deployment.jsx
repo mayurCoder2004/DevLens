@@ -5,6 +5,7 @@ import {
   getDeploymentReport,
   analyzeDeployment,
 } from "../services/deployment";
+
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
 import DeploymentSkeleton from "../components/repository/deployment/DeploymentSkeleton";
 
@@ -21,17 +22,20 @@ export default function Deployment() {
     loadDeployment();
   }, [repositoryId]);
 
-  const fetchReport = async () => {
+  const fetchDeployment = async () => {
     const response = await getDeploymentReport(repositoryId);
+
     setDeployment(response.data.data);
   };
 
   const analyzeAndFetch = async () => {
-    setAnalyzing(true);
-
     try {
+      setAnalyzing(true);
+      setError("");
+
       await analyzeDeployment(repositoryId);
-      await fetchReport();
+
+      await fetchDeployment();
     } catch (err) {
       console.error(err);
 
@@ -45,13 +49,14 @@ export default function Deployment() {
   };
 
   const loadDeployment = async () => {
-    setLoading(true);
-
     try {
-      await fetchReport();
+      setLoading(true);
+      setError("");
+
+      await fetchDeployment();
     } catch (err) {
       if (err.response?.status === 404) {
-        await analyzeAndFetch();
+        setDeployment(null);
       } else {
         console.error(err);
 
@@ -71,8 +76,30 @@ export default function Deployment() {
 
   if (!deployment) {
     return (
-      <div className="rounded-2xl border border-red-900 bg-red-950/30 p-6 text-red-300">
-        {error || "Deployment report not available."}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
+        <h2 className="text-2xl font-semibold text-white">
+          No Deployment Analysis
+        </h2>
+
+        <p className="mt-3 text-slate-400">
+          This repository hasn't been analyzed yet.
+        </p>
+
+        <button
+          onClick={analyzeAndFetch}
+          disabled={analyzing}
+          className="mt-6 rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700 disabled:opacity-50"
+        >
+          {analyzing
+            ? "Analyzing..."
+            : "Analyze Deployment"}
+        </button>
+
+        {error && (
+          <p className="mt-4 text-sm text-red-400">
+            {error}
+          </p>
+        )}
       </div>
     );
   }

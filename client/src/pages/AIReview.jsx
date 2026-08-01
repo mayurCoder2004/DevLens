@@ -31,45 +31,45 @@ export default function AIReview() {
   }, [repositoryId]);
 
   const loadReview = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
+    setError("");
 
-      const response =
-        await getRepositoryAIReview(repositoryId);
+    const response =
+      await getRepositoryAIReview(repositoryId);
 
-      setReview(response.data.data);
-    } catch (err) {
-      if (err.response?.status === 404) {
-        setReview(null);
-      } else {
-        setError(
-          err.response?.data?.message ??
-            "Failed to load AI review."
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const refreshReview = async () => {
-    try {
-      setGenerating(true);
-
-      await refreshRepositoryAIReview(
-        repositoryId
-      );
-
-      await loadReview();
-    } catch (err) {
+    setReview(response.data.data);
+  } catch (err) {
+    if (err.response?.status === 404) {
+      setReview(null);
+    } else {
       setError(
         err.response?.data?.message ??
-          "Failed to refresh AI review."
+          "Failed to load AI review."
       );
-    } finally {
-      setGenerating(false);
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const refreshReview = async () => {
+  try {
+    setGenerating(true);
+    setError("");
+
+    await refreshRepositoryAIReview(repositoryId);
+
+    await loadReview();
+  } catch (err) {
+    setError(
+      err.response?.data?.message ??
+        "Failed to refresh AI review."
+    );
+  } finally {
+    setGenerating(false);
+  }
+};
 
   if (loading) {
     return <AIReviewSkeleton />;

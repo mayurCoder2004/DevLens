@@ -2,8 +2,6 @@ const IORedis = require("ioredis");
 const env = require("./env");
 const logger = require("./logger");
 
-let redisAvailable = false;
-
 const connection = new IORedis({
   host: env.REDIS_HOST,
   port: env.REDIS_PORT,
@@ -11,14 +9,17 @@ const connection = new IORedis({
 
   retryStrategy(times) {
     if (times > 10) {
-      logger.warn(
-        "Redis unavailable. Running without background jobs."
+      logger.error(
+        "Redis connection failed after 10 retries. Please ensure Redis is running."
       );
 
       return null;
     }
 
-    return Math.min(times * 1000, 5000);
+    const delay = Math.min(times * 1000, 5000);
+    logger.warn(`Redis connection attempt ${times}. Retrying in ${delay}ms...`);
+
+    return delay;
   },
 });
 
@@ -27,27 +28,15 @@ connection.on("connect", () => {
 });
 
 connection.on("ready", () => {
-  redisAvailable = true;
-
   logger.info("Redis is ready");
 });
 
 connection.on("error", (error) => {
-  redisAvailable = false;
-
-  logger.warn(
-    `Redis unavailable: ${error.message}`
-  );
+  logger.error(`Redis error: ${error.message}`);
 });
 
 connection.on("close", () => {
-  redisAvailable = false;
-
   logger.warn("Redis connection closed");
 });
 
-module.exports = {
-  connection,
-
-  isRedisAvailable: () => redisAvailable,
-};
+module.exports = connection;

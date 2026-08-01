@@ -9,24 +9,35 @@ export default function MetricCard({
 }) {
   const colors = {
     blue: {
-      badge: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+      badge:
+        "bg-blue-500/10 text-blue-400 border-blue-500/20",
       icon: "text-blue-400",
     },
     emerald: {
-      badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+      badge:
+        "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
       icon: "text-emerald-400",
     },
     yellow: {
-      badge: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+      badge:
+        "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
       icon: "text-yellow-400",
     },
     red: {
-      badge: "bg-red-500/10 text-red-400 border-red-500/20",
+      badge:
+        "bg-red-500/10 text-red-400 border-red-500/20",
       icon: "text-red-400",
     },
   };
 
-  const theme = colors[color];
+  const theme =
+    status === "Not Analyzed"
+      ? {
+          badge:
+            "bg-slate-700/50 text-slate-400 border-slate-600",
+          icon: "text-slate-400",
+        }
+      : colors[color];
 
   return (
     <div
@@ -49,7 +60,7 @@ export default function MetricCard({
           </p>
 
           <h3 className="mt-4 text-4xl font-bold text-white">
-            {score}
+            {status === "Not Analyzed" ? "--" : score}
           </h3>
 
           <span

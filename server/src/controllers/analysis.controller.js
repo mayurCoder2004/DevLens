@@ -1,5 +1,4 @@
 const analysisQueue = require("../queues/analysis.queue");
-
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
 
@@ -15,7 +14,10 @@ const analyzeRepository = asyncHandler(async (req, res) => {
   });
 
   if (!job) {
-    throw new ApiError(500, "Failed to queue repository analysis");
+    throw new ApiError(
+      500,
+      "Failed to queue repository analysis."
+    );
   }
 
   return res.status(202).json({

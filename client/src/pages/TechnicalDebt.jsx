@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 
-import { getTechnicalDebt } from "../services/technicalDebt";
+import { analyzeTechnicalDebt, getTechnicalDebt } from "../services/technicalDebt";
 import RepositoryTechnicalDebt from "../components/repository/workspace/RepositoryTechnicalDebt";
 import TechnicalDebtSkeleton from "../components/repository/technicalDebt/TechnicalDebtSkeleton";
 
@@ -16,29 +16,63 @@ export default function TechnicalDebt() {
     fetchTechnicalDebt();
   }, [repositoryId]);
 
-  const fetchTechnicalDebt = async () => {
-    try {
-      const response = await getTechnicalDebt(repositoryId);
+  const handleAnalyze = async () => {
+  try {
+    setLoading(true);
 
-      setTechnicalDebt(response.data);
-    } catch (error) {
-      console.error("Error fetching technical debt:", error);
-    } finally {
-      setLoading(false);
+    await analyzeTechnicalDebt(repositoryId);
+
+    await fetchTechnicalDebt();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const fetchTechnicalDebt = async () => {
+  try {
+    const data = await getTechnicalDebt(repositoryId);
+
+    setTechnicalDebt(data.data);
+  } catch (error) {
+    if (error.response?.status !== 404) {
+      console.error(error);
     }
-  };
+
+    setTechnicalDebt(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (loading) {
     return <TechnicalDebtSkeleton />;
   }
 
   if (!technicalDebt) {
-    return (
-      <div className="rounded-2xl border border-red-900 bg-red-950/30 p-6 text-red-300">
-        Technical debt analysis not found.
-      </div>
-    );
-  }
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
+      <h2 className="text-2xl font-semibold text-white">
+        No Technical Debt Analysis
+      </h2>
+
+      <p className="mt-3 text-slate-400">
+        This repository hasn't been analyzed yet.
+      </p>
+
+      <button
+        onClick={handleAnalyze}
+        disabled={loading}
+        className="mt-6 rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700 disabled:opacity-50"
+      >
+        {loading
+          ? "Analyzing..."
+          : "Analyze Technical Debt"}
+      </button>
+    </div>
+  );
+}
 
   return (
     <RepositoryTechnicalDebt

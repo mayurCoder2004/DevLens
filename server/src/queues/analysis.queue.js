@@ -1,5 +1,6 @@
 const { Queue } = require("bullmq");
 const connection = require("../config/redis");
+const logger = require("../config/logger");
 
 const analysisQueue = new Queue("repository-analysis", {
   connection,
@@ -17,5 +18,7 @@ const analysisQueue = new Queue("repository-analysis", {
     removeOnFail: 50,
   },
 });
+
+logger.info("Analysis Queue initialized.");
 
 module.exports = analysisQueue;

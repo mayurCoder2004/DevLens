@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function MetricCard({
   title,
@@ -6,7 +7,10 @@ export default function MetricCard({
   status,
   icon: Icon,
   color = "blue",
+  to,
 }) {
+  const navigate = useNavigate();
+
   const colors = {
     blue: {
       badge:
@@ -80,13 +84,7 @@ export default function MetricCard({
           </span>
         </div>
 
-        <div
-          className="
-            rounded-xl
-            bg-slate-800
-            p-3
-          "
-        >
+        <div className="rounded-xl bg-slate-800 p-3">
           <Icon
             size={24}
             className={theme.icon}
@@ -94,14 +92,25 @@ export default function MetricCard({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center text-sm text-slate-500">
+      <button
+        onClick={() => navigate(to)}
+        className="
+          mt-6
+          flex
+          items-center
+          text-sm
+          text-slate-500
+          transition
+          hover:text-blue-400
+        "
+      >
         View Details
 
         <ArrowUpRight
           size={16}
           className="ml-2"
         />
-      </div>
+      </button>
     </div>
   );
 }

@@ -17,6 +17,8 @@ export default function RepositoryMetricsGrid({
     return "Critical";
   };
 
+  const basePath = `/repository/${repository.id}`;
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <MetricCard
@@ -25,45 +27,59 @@ export default function RepositoryMetricsGrid({
         status={
           repository.architecture
             ? getStatus(
-                repository.architecture.complexityScore
+                repository.architecture
+                  .complexityScore
               )
             : "Not Analyzed"
         }
         icon={Boxes}
         color="blue"
+        to={`${basePath}/architecture`}
       />
 
       <MetricCard
         title="Technical Debt"
-        score={repository.technicalDebt?.technicalDebtScore ?? 0}
+        score={
+          repository.technicalDebt
+            ?.technicalDebtScore ?? 0
+        }
         status={
           repository.technicalDebt
             ? getStatus(
-                repository.technicalDebt.technicalDebtScore
+                repository.technicalDebt
+                  .technicalDebtScore
               )
             : "Not Analyzed"
         }
         icon={Wrench}
         color="yellow"
+        to={`${basePath}/technical-debt`}
       />
 
       <MetricCard
         title="Deployment"
-        score={repository.deployment?.deploymentScore ?? 0}
+        score={
+          repository.deployment
+            ?.deploymentScore ?? 0
+        }
         status={
           repository.deployment
             ? getStatus(
-                repository.deployment.deploymentScore
+                repository.deployment
+                  .deploymentScore
               )
             : "Not Analyzed"
         }
         icon={Rocket}
         color="emerald"
+        to={`${basePath}/deployment`}
       />
 
       <MetricCard
         title="Engineering Health"
-        score={repository.health?.healthScore ?? 0}
+        score={
+          repository.health?.healthScore ?? 0
+        }
         status={
           repository.health
             ? getStatus(
@@ -73,6 +89,7 @@ export default function RepositoryMetricsGrid({
         }
         icon={Activity}
         color="blue"
+        to={`${basePath}/engineering-health`}
       />
     </div>
   );

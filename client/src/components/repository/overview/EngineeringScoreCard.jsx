@@ -1,8 +1,13 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 
 export default function EngineeringScoreCard({
   score = 84,
   status = "Excellent Repository Health",
+  analyzing = false,
+  onAnalyze,
 }) {
   const getScoreColor = () => {
     if (score >= 90) {
@@ -26,6 +31,7 @@ export default function EngineeringScoreCard({
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
             <Sparkles size={16} />
+
             Engineering Intelligence
           </div>
 
@@ -34,8 +40,9 @@ export default function EngineeringScoreCard({
           </h2>
 
           <p className="mt-3 max-w-xl text-slate-400">
-            A consolidated health score generated from architecture,
-            deployment readiness, technical debt, engineering health,
+            A consolidated health score generated from
+            architecture, deployment readiness,
+            technical debt, engineering health,
             and AI-powered repository analysis.
           </p>
         </div>
@@ -52,6 +59,8 @@ export default function EngineeringScoreCard({
           </span>
 
           <button
+            onClick={onAnalyze}
+            disabled={analyzing}
             className="
               mt-8
               inline-flex
@@ -66,9 +75,13 @@ export default function EngineeringScoreCard({
               text-white
               transition
               hover:bg-blue-700
+              disabled:cursor-not-allowed
+              disabled:opacity-50
             "
           >
-            Analyze Repository
+            {analyzing
+              ? "Analyzing..."
+              : "Analyze Repository"}
 
             <ArrowRight size={16} />
           </button>

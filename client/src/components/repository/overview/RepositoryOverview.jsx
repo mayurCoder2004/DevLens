@@ -1,40 +1,67 @@
 import { useOutletContext } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import EngineeringScoreCard from "./EngineeringScoreCard";
 import QuickActions from "./WorkspaceActions";
 import RepositoryMetricsGrid from "./RepositoryMetricsGrid";
 import RepositoryOverviewSkeleton from "./RepositoryOverviewSkeleton";
+import { analyzeRepository } from "../../../services/analysis";
 
 export default function RepositoryOverview() {
-  const { repository, refreshRepository } = useOutletContext();
+  const {
+    repository,
+    refreshRepository,
+  } = useOutletContext();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [analyzing, setAnalyzing] =
+    useState(false);
 
-  useEffect(() => {
-    if (repository) {
-      setIsLoading(false);
-    }
-  }, [repository]);
-
-  if (isLoading) {
+  if (!repository) {
     return <RepositoryOverviewSkeleton />;
   }
+
+  const handleAnalyze = async () => {
+    try {
+      setAnalyzing(true);
+
+      await analyzeRepository(repository.id);
+
+      await refreshRepository();
+
+      alert(
+        "Repository analysis completed successfully."
+      );
+    } catch (error) {
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ??
+          "Failed to analyze repository."
+      );
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   return (
     <div className="space-y-8">
       <EngineeringScoreCard
-        title="Repository Health"
         score={repository.health?.healthScore ?? 0}
-        description="Overall engineering health based on repository analysis."
+        status="Overall Engineering Health"
+        analyzing={analyzing}
+        onAnalyze={handleAnalyze}
       />
 
-      <RepositoryMetricsGrid repository={repository} />
+      <RepositoryMetricsGrid
+        repository={repository}
+      />
 
       <QuickActions
-  repository={repository}
-  refreshRepository={refreshRepository}
-/>
+        repository={repository}
+        refreshRepository={
+          refreshRepository
+        }
+      />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import {
   analyzeTechnicalDebt,
@@ -43,19 +44,22 @@ export default function TechnicalDebt() {
   };
 
   const handleAnalyze = async () => {
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      await analyzeTechnicalDebt(repositoryId);
-
-      await loadTechnicalDebt();
-
-      await refreshRepository();
-    } catch (error) {
-      console.error("Error analyzing technical debt:", error);
-    } finally {
+    toast.promise(
+      (async () => {
+        await analyzeTechnicalDebt(repositoryId);
+        await loadTechnicalDebt();
+        await refreshRepository();
+      })(),
+      {
+        loading: 'Analyzing technical debt...',
+        success: 'Technical debt analysis completed successfully!',
+        error: (err) => err.response?.data?.message ?? 'Failed to analyze technical debt.',
+      }
+    ).finally(() => {
       setLoading(false);
-    }
+    });
   };
 
   if (loading) {

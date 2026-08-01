@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import {
   getDeploymentReport,
@@ -33,25 +34,22 @@ export default function Deployment() {
   };
 
   const analyzeAndFetch = async () => {
-    try {
-      setAnalyzing(true);
-      setError("");
+    setAnalyzing(true);
 
-      await analyzeDeployment(repositoryId);
-
-      await fetchDeployment();
-
-      await refreshRepository();
-    } catch (err) {
-      console.error(err);
-
-      setError(
-        err.response?.data?.message ??
-          "Deployment analysis failed."
-      );
-    } finally {
+    toast.promise(
+      (async () => {
+        await analyzeDeployment(repositoryId);
+        await fetchDeployment();
+        await refreshRepository();
+      })(),
+      {
+        loading: 'Analyzing deployment...',
+        success: 'Deployment analysis completed successfully!',
+        error: (err) => err.response?.data?.message ?? 'Failed to analyze deployment.',
+      }
+    ).finally(() => {
       setAnalyzing(false);
-    }
+    });
   };
 
   const loadDeployment = async () => {

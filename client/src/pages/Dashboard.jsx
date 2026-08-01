@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import AttentionPanel from "../components/dashboard/AttentionPanel";
 import DashboardHero from "../components/dashboard/DashboardHero";
@@ -113,9 +114,7 @@ const Dashboard = () => {
     };
 
   const handleSync = async () => {
-    try {
-      setSyncLoading(true);
-
+    const syncPromise = async () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
@@ -134,18 +133,20 @@ const Dashboard = () => {
         fetchDashboardOverview(),
         fetchAttentionRepositories(),
       ]);
-    } catch (error) {
-      console.error(
-        "Repository sync failed:",
-        error
-      );
+    };
 
-      alert(
-        "Failed to synchronize GitHub repositories."
-      );
-    } finally {
+    setSyncLoading(true);
+
+    toast.promise(
+      syncPromise(),
+      {
+        loading: 'Synchronizing GitHub repositories...',
+        success: 'Repositories synchronized successfully!',
+        error: 'Failed to synchronize GitHub repositories.',
+      }
+    ).finally(() => {
       setSyncLoading(false);
-    }
+    });
   };
 
   return (

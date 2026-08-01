@@ -3,6 +3,7 @@ import {
   useOutletContext,
   useParams,
 } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import RepositoryAIReview from "../components/repository/workspace/RepositoryAIReview";
 import AIReviewSkeleton from "../components/repository/aiReview/AIReviewSkeleton";
@@ -53,25 +54,22 @@ export default function AIReview() {
   };
 
   const refreshReview = async () => {
-    try {
-      setGenerating(true);
-      setError("");
+    setGenerating(true);
 
-      await refreshRepositoryAIReview(
-        repositoryId
-      );
-
-      await loadReview();
-
-      await refreshRepository();
-    } catch (err) {
-      setError(
-        err.response?.data?.message ??
-          "Failed to refresh AI review."
-      );
-    } finally {
+    toast.promise(
+      (async () => {
+        await refreshRepositoryAIReview(repositoryId);
+        await loadReview();
+        await refreshRepository();
+      })(),
+      {
+        loading: 'Generating AI review...',
+        success: 'AI Review generated successfully!',
+        error: (err) => err.response?.data?.message ?? 'Failed to generate AI review.',
+      }
+    ).finally(() => {
       setGenerating(false);
-    }
+    });
   };
 
   if (loading) {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import {
   analyzeArchitecture,
@@ -49,19 +50,22 @@ export default function ArchitecturePage() {
   };
 
   const handleAnalyze = async () => {
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      await analyzeArchitecture(repositoryId);
-
-      await loadArchitecture();
-
-      await refreshRepository();
-    } catch (error) {
-      console.error("Error analyzing architecture:", error);
-    } finally {
+    toast.promise(
+      (async () => {
+        await analyzeArchitecture(repositoryId);
+        await loadArchitecture();
+        await refreshRepository();
+      })(),
+      {
+        loading: 'Analyzing architecture...',
+        success: 'Architecture analysis completed successfully!',
+        error: (err) => err.response?.data?.message ?? 'Failed to analyze architecture.',
+      }
+    ).finally(() => {
       setLoading(false);
-    }
+    });
   };
 
   if (loading) {

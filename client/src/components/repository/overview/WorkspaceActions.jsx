@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import WorkspaceActionCard from "../../dashboard/WorkspaceActionCard";
 
@@ -63,25 +64,41 @@ export default function WorkspaceActions({
 
       switch (action) {
         case "refresh":
-          await refreshRepository();
-          alert("Repository refreshed successfully.");
+          await toast.promise(
+            refreshRepository(),
+            {
+              loading: 'Refreshing repository...',
+              success: 'Repository refreshed successfully!',
+              error: 'Failed to refresh repository.',
+            }
+          );
           break;
 
         case "analyze":
-          await analyzeRepository(repository.id);
-          await refreshRepository();
-          alert(
-            "Repository analysis completed successfully."
+          await toast.promise(
+            (async () => {
+              await analyzeRepository(repository.id);
+              await refreshRepository();
+            })(),
+            {
+              loading: 'Analyzing repository...',
+              success: 'Repository analysis completed successfully!',
+              error: 'Failed to analyze repository.',
+            }
           );
           break;
 
         case "ai-review":
-          await refreshRepositoryAIReview(
-            repository.id
-          );
-          await refreshRepository();
-          alert(
-            "AI Review generated successfully."
+          await toast.promise(
+            (async () => {
+              await refreshRepositoryAIReview(repository.id);
+              await refreshRepository();
+            })(),
+            {
+              loading: 'Generating AI review...',
+              success: 'AI Review generated successfully!',
+              error: 'Failed to generate AI review.',
+            }
           );
           break;
 
@@ -99,10 +116,12 @@ export default function WorkspaceActions({
     } catch (error) {
       console.error(error);
 
-      alert(
-        error.response?.data?.message ??
-          "Failed to perform the requested action."
-      );
+      const errorMessage = error.response?.data?.message ?? "Failed to perform the requested action.";
+      
+      // Only show toast if it's not already shown by toast.promise
+      if (action === "github") {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoadingAction(null);
     }

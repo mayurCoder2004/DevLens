@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import EngineeringScoreCard from "./EngineeringScoreCard";
 import QuickActions from "./WorkspaceActions";
@@ -21,26 +22,21 @@ export default function RepositoryOverview() {
   }
 
   const handleAnalyze = async () => {
-    try {
-      setAnalyzing(true);
+    setAnalyzing(true);
 
-      await analyzeRepository(repository.id);
-
-      await refreshRepository();
-
-      alert(
-        "Repository analysis completed successfully."
-      );
-    } catch (error) {
-      console.error(error);
-
-      alert(
-        error.response?.data?.message ??
-          "Failed to analyze repository."
-      );
-    } finally {
+    toast.promise(
+      (async () => {
+        await analyzeRepository(repository.id);
+        await refreshRepository();
+      })(),
+      {
+        loading: 'Analyzing repository...',
+        success: 'Repository analysis completed successfully!',
+        error: (err) => err.response?.data?.message ?? 'Failed to analyze repository.',
+      }
+    ).finally(() => {
       setAnalyzing(false);
-    }
+    });
   };
 
   return (

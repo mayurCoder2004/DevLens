@@ -70,7 +70,6 @@ export default function WorkspaceActions({
         case "analyze":
           await analyzeRepository(repository.id);
           await refreshRepository();
-
           alert(
             "Repository analysis completed successfully."
           );
@@ -80,11 +79,17 @@ export default function WorkspaceActions({
           await refreshRepositoryAIReview(
             repository.id
           );
-
           await refreshRepository();
-
           alert(
             "AI Review generated successfully."
+          );
+          break;
+
+        case "github":
+          window.open(
+            repository.repoUrl,
+            "_blank",
+            "noopener,noreferrer"
           );
           break;
 
@@ -137,6 +142,8 @@ export default function WorkspaceActions({
                 ? "Analyzing..."
                 : action.action === "ai-review"
                 ? "Generating..."
+                : action.action === "github"
+                ? "Opening..."
                 : "Processing..."
             }
           />

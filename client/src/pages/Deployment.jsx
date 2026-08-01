@@ -10,7 +10,11 @@ import RepositoryDeployment from "../components/repository/workspace/RepositoryD
 import DeploymentSkeleton from "../components/repository/deployment/DeploymentSkeleton";
 
 export default function Deployment() {
-  const { repository } = useOutletContext();
+  const {
+    repository,
+    refreshRepository,
+  } = useOutletContext();
+
   const { repositoryId } = useParams();
 
   const [deployment, setDeployment] = useState(null);
@@ -36,6 +40,8 @@ export default function Deployment() {
       await analyzeDeployment(repositoryId);
 
       await fetchDeployment();
+
+      await refreshRepository();
     } catch (err) {
       console.error(err);
 

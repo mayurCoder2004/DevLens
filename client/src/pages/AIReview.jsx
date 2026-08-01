@@ -13,17 +13,16 @@ import {
 } from "../services/aiReview";
 
 export default function AIReview() {
-  const { repository } = useOutletContext();
+  const {
+    repository,
+    refreshRepository,
+  } = useOutletContext();
 
   const { repositoryId } = useParams();
 
   const [review, setReview] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
-  const [generating, setGenerating] =
-    useState(false);
-
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -31,45 +30,49 @@ export default function AIReview() {
   }, [repositoryId]);
 
   const loadReview = async () => {
-  try {
-    setLoading(true);
-    setError("");
+    try {
+      setLoading(true);
+      setError("");
 
-    const response =
-      await getRepositoryAIReview(repositoryId);
+      const response =
+        await getRepositoryAIReview(repositoryId);
 
-    setReview(response.data.data);
-  } catch (err) {
-    if (err.response?.status === 404) {
-      setReview(null);
-    } else {
-      setError(
-        err.response?.data?.message ??
-          "Failed to load AI review."
-      );
+      setReview(response.data.data);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setReview(null);
+      } else {
+        setError(
+          err.response?.data?.message ??
+            "Failed to load AI review."
+        );
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const refreshReview = async () => {
-  try {
-    setGenerating(true);
-    setError("");
+    try {
+      setGenerating(true);
+      setError("");
 
-    await refreshRepositoryAIReview(repositoryId);
+      await refreshRepositoryAIReview(
+        repositoryId
+      );
 
-    await loadReview();
-  } catch (err) {
-    setError(
-      err.response?.data?.message ??
-        "Failed to refresh AI review."
-    );
-  } finally {
-    setGenerating(false);
-  }
-};
+      await loadReview();
+
+      await refreshRepository();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ??
+          "Failed to refresh AI review."
+      );
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   if (loading) {
     return <AIReviewSkeleton />;
@@ -91,8 +94,7 @@ export default function AIReview() {
         </h2>
 
         <p className="mt-2 text-slate-400">
-          Generate an AI-powered engineering
-          review for this repository.
+          Generate a comprehensive AI review that summarizes repository quality, identifies architectural concerns, highlights strengths, and recommends actionable improvements.
         </p>
 
         <button
@@ -102,7 +104,7 @@ export default function AIReview() {
         >
           {generating
             ? "Generating..."
-            : "Generate AI Review"}
+            : "Generate Repository Review"}
         </button>
       </div>
     );

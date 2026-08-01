@@ -11,28 +11,33 @@ export default function RepositoryLayout() {
   const [repository, setRepository] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchRepository = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/repositories/${repositoryId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setRepository(data.repository);
+    } catch (err) {
+      console.error("Failed to load repository:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshRepository = async () => {
+    await fetchRepository();
+  };
+
   useEffect(() => {
-    const fetchRepository = async () => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/repositories/${repositoryId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    setRepository(data.repository);
-  } catch (err) {
-    console.error("Failed to load repository:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+    setLoading(true);
     fetchRepository();
   }, [repositoryId]);
 
@@ -53,7 +58,12 @@ export default function RepositoryLayout() {
 
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto w-full max-w-[1700px] p-8">
-            <Outlet context={{ repository }} />
+            <Outlet
+              context={{
+                repository,
+                refreshRepository,
+              }}
+            />
           </div>
         </main>
       </div>

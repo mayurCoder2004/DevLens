@@ -114,11 +114,27 @@ const getRepositoryById = asyncHandler(async (req, res) => {
   const { repositoryId } = req.validatedData.params;
 
   const repository = await prisma.repository.findFirst({
-    where: {
-      id: repositoryId,
-      userId: req.user.userId,
+  where: {
+    id: repositoryId,
+    userId: req.user.userId,
+  },
+  include: {
+    analytics: true,
+    health: true,
+    architecture: true,
+    technicalDebt: true,
+    deployment: true,
+    techStack: true,
+    aiReview: {
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        modelUsed: true,
+      },
     },
-  });
+  },
+});
 
   if (!repository) {
     throw new ApiError(404, "Repository not found");

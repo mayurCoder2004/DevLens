@@ -56,7 +56,10 @@ export default function RepositoryLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar />
 
-        <main className="flex-1 overflow-y-auto">
+        <main
+          id="main-content"
+          className="flex-1 overflow-y-auto"
+        >
           <div className="mx-auto w-full max-w-[1700px] p-8">
             <Outlet
               context={{

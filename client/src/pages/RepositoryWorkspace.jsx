@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 
-import RepositoryHero from "../components/repository/RepositoryHero";
+import RepositoryHero from "../components/repository/shared/RepositoryHero";
 import RepositoryOverview from "../components/repository/overview/RepositoryOverview";
 
 export default function RepositoryWorkspace() {

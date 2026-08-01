@@ -15,8 +15,8 @@ import Repositories from "./pages/Repositories";
 
 import RepositoryLayout from "./layouts/RepositoryLayout";
 
-import ProtectedRoute from "./components/ProtectedRoute";
-import PublicRoute from "./components/PublicRoute";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import PublicRoute from "./components/common/PublicRoute";
 import PullRequestsPage from "./pages/PullRequestsPage";
 import PullRequestAnalysisPage from "./pages/PullRequestAnalysisPage";
 

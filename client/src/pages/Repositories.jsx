@@ -3,7 +3,7 @@ import axios from "axios";
 
 import DashboardLayout from "../layouts/DashboardLayout";
 import RepositoryGrid from "../components/dashboard/RepositoryGrid";
-import RepositoryToolbar from "../components/repositories/RepositoryToolbar";
+import RepositoryToolbar from "../components/dashboard/RepositoryToolbar";
 
 export default function Repositories() {
   const [repos, setRepos] = useState([]);

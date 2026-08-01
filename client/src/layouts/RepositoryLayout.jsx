@@ -2,8 +2,8 @@ import { Outlet, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import Topbar from "../components/layouts/Topbar";
-import RepositorySidebar from "../components/repository/RepositorySidebar";
+import Topbar from "./Topbar";
+import RepositorySidebar from "../components/repository/shared/RepositorySidebar";
 
 export default function RepositoryLayout() {
   const { repositoryId } = useParams();

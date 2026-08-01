@@ -4,8 +4,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { useState } from "react";
 import WorkspaceActionCard from "../../dashboard/WorkspaceActionCard";
-
 
 const actions = [
   {
@@ -48,7 +48,25 @@ const actions = [
 
 export default function WorkspaceActions({
   repository,
+  refreshRepository,
 }) {
+  const [loadingAction, setLoadingAction] =
+    useState(null);
+
+  const handleAction = async (action) => {
+    if (action !== "refresh") {
+      return;
+    }
+
+    try {
+      setLoadingAction(action);
+
+      await refreshRepository();
+    } finally {
+      setLoadingAction(null);
+    }
+  };
+
   return (
     <section className="mt-12">
       <div className="mb-8">
@@ -70,7 +88,12 @@ export default function WorkspaceActions({
             icon={action.icon}
             iconColor={action.iconColor}
             action={action.action}
-            repository={repository}
+            loading={
+              loadingAction === action.action
+            }
+            onClick={() =>
+              handleAction(action.action)
+            }
           />
         ))}
       </div>

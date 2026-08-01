@@ -5,6 +5,8 @@ export default function WorkspaceActionCard({
   description,
   icon: Icon,
   iconColor = "text-blue-400",
+  loading = false,
+  onClick,
 }) {
   return (
     <article
@@ -54,6 +56,8 @@ export default function WorkspaceActionCard({
       <div className="mt-auto pt-8">
         <button
           type="button"
+          onClick={onClick}
+          disabled={loading}
           className="
             inline-flex
             items-center
@@ -64,9 +68,13 @@ export default function WorkspaceActionCard({
             transition-all
             duration-200
             group-hover:gap-3
+            disabled:cursor-not-allowed
+            disabled:opacity-50
           "
         >
-          Run Action
+          {loading
+            ? "Refreshing..."
+            : "Run Action"}
 
           <ArrowRight size={16} />
         </button>

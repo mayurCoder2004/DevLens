@@ -7,7 +7,7 @@ import RepositoryMetricsGrid from "./RepositoryMetricsGrid";
 import RepositoryOverviewSkeleton from "./RepositoryOverviewSkeleton";
 
 export default function RepositoryOverview() {
-  const { repository } = useOutletContext();
+  const { repository, refreshRepository } = useOutletContext();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,7 +31,10 @@ export default function RepositoryOverview() {
 
       <RepositoryMetricsGrid repository={repository} />
 
-      <QuickActions repository={repository} />
+      <QuickActions
+  repository={repository}
+  refreshRepository={refreshRepository}
+/>
     </div>
   );
 }

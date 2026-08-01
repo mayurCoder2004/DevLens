@@ -1,12 +1,10 @@
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export default function WorkspaceActionCard({
   title,
   description,
   icon: Icon,
   iconColor = "text-blue-400",
-  to,
 }) {
   return (
     <article
@@ -26,8 +24,6 @@ export default function WorkspaceActionCard({
         hover:border-blue-500/30
       "
     >
-      {/* Icon */}
-
       <div
         className="
           flex
@@ -45,8 +41,6 @@ export default function WorkspaceActionCard({
         />
       </div>
 
-      {/* Content */}
-
       <div className="mt-5">
         <h3 className="text-lg font-semibold text-white">
           {title}
@@ -57,11 +51,9 @@ export default function WorkspaceActionCard({
         </p>
       </div>
 
-      {/* Footer */}
-
       <div className="mt-auto pt-8">
-        <Link
-          to={to}
+        <button
+          type="button"
           className="
             inline-flex
             items-center
@@ -74,10 +66,10 @@ export default function WorkspaceActionCard({
             group-hover:gap-3
           "
         >
-          Launch
+          Run Action
 
           <ArrowRight size={16} />
-        </Link>
+        </button>
       </div>
     </article>
   );

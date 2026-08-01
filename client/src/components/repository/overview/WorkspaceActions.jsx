@@ -1,79 +1,78 @@
 import {
-  Brain,
+  BrainCircuit,
   RefreshCw,
-  PlayCircle,
+  Sparkles,
 } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
+import WorkspaceActionCard from "../../dashboard/WorkspaceActionCard";
 
-export default function QuickActions() {
-  const actions = [
-    {
-      title: "Analyze Repository",
-      description:
-        "Run complete repository analysis.",
-      icon: PlayCircle,
-      color: "bg-blue-600 hover:bg-blue-700",
-    },
-    {
-      title: "Run AI Review",
-      description:
-        "Generate AI-powered engineering insights.",
-      icon: Brain,
-      color: "bg-violet-600 hover:bg-violet-700",
-    },
-    {
-      title: "Refresh Analysis",
-      description:
-        "Sync the latest repository information.",
-      icon: RefreshCw,
-      color: "bg-emerald-600 hover:bg-emerald-700",
-    },
-  ];
 
+const actions = [
+  {
+    id: 1,
+    title: "Analyze Repository",
+    description:
+      "Run the complete engineering analysis pipeline for this repository.",
+    icon: BrainCircuit,
+    iconColor: "text-violet-400",
+    action: "analyze",
+  },
+  {
+    id: 2,
+    title: "Refresh Repository",
+    description:
+      "Reload the latest repository information and analysis results.",
+    icon: RefreshCw,
+    iconColor: "text-emerald-400",
+    action: "refresh",
+  },
+  {
+    id: 3,
+    title: "Generate AI Review",
+    description:
+      "Generate an AI-powered engineering review for this repository.",
+    icon: Sparkles,
+    iconColor: "text-sky-400",
+    action: "ai-review",
+  },
+  {
+    id: 4,
+    title: "Open on GitHub",
+    description:
+      "Open this repository directly on GitHub.",
+    icon: FaGithub,
+    iconColor: "text-slate-200",
+    action: "github",
+  },
+];
+
+export default function WorkspaceActions({
+  repository,
+}) {
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-white">
+    <section className="mt-12">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white">
           Workspace Actions
         </h2>
 
         <p className="mt-2 text-slate-400">
-          Common actions for this repository.
+          Perform common engineering operations for this repository.
         </p>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        {actions.map((action) => {
-          const Icon = action.icon;
-
-          return (
-            <button
-              key={action.title}
-              className={`
-                flex
-                flex-col
-                items-start
-                rounded-xl
-                ${action.color}
-                p-6
-                text-left
-                text-white
-                transition-all
-                duration-200
-                hover:-translate-y-1
-              `}
-            >
-              <Icon size={28} />
-
-              <h3 className="mt-5 text-lg font-semibold">
-                {action.title}
-              </h3>
-
-              <p className="mt-2 text-sm text-white/80">
-                {action.description}
-              </p>
-            </button>
-          );
-        })}
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {actions.map((action) => (
+          <WorkspaceActionCard
+            key={action.id}
+            title={action.title}
+            description={action.description}
+            icon={action.icon}
+            iconColor={action.iconColor}
+            action={action.action}
+            repository={repository}
+          />
+        ))}
       </div>
     </section>
   );

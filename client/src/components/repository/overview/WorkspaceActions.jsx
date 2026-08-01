@@ -128,18 +128,18 @@ export default function WorkspaceActions({
   };
 
   return (
-    <section className="mt-12">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-white">
+    <section className="mt-8 sm:mt-10 lg:mt-12">
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-white">
           Workspace Actions
         </h2>
 
-        <p className="mt-2 text-slate-400">
+        <p className="mt-2 text-sm sm:text-base text-slate-400">
           Perform common engineering operations for this repository.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         {actions.map((action) => (
           <WorkspaceActionCard
             key={action.id}

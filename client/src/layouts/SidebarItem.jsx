@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
 
-export default function SidebarItem({ to, icon: Icon, label }) {
+export default function SidebarItem({ to, icon: Icon, label, onClick }) {
   return (
     <NavLink
       to={to}
+      onClick={onClick}
       className={({ isActive }) =>
         `
           group

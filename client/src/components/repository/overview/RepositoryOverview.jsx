@@ -40,7 +40,7 @@ export default function RepositoryOverview() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <EngineeringScoreCard
         score={repository.health?.healthScore ?? 0}
         status="Overall Engineering Health"

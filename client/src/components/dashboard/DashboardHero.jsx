@@ -20,18 +20,21 @@ export default function DashboardHero({
   };
 
   return (
-    <section className="mb-8">
+    <section className="mb-6 sm:mb-8">
       <div
         className="
           mx-auto
           max-w-7xl
           grid
-          gap-6
-          rounded-3xl
+          gap-4
+          sm:gap-6
+          rounded-2xl
+          sm:rounded-3xl
           border
           border-slate-800
           bg-slate-900
-          p-6
+          p-4
+          sm:p-6
           lg:grid-cols-[1.7fr_1fr]
           lg:items-center
           lg:p-8
@@ -40,21 +43,21 @@ export default function DashboardHero({
         {/* Left */}
 
         <div>
-          <p className="text-sm font-medium text-blue-400">
+          <p className="text-xs sm:text-sm font-medium text-blue-400">
             {greeting()}, Mayur 👋
           </p>
 
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-white">
+          <h1 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
             Engineering Intelligence Dashboard
           </h1>
 
-          <p className="mt-3 max-w-[650px] text-base leading-7 text-slate-400">
+          <p className="mt-2 sm:mt-3 max-w-[650px] text-sm sm:text-base leading-6 sm:leading-7 text-slate-400">
             Monitor your repositories, identify technical debt,
             review engineering health, and track AI-powered
             engineering insights from one workspace.
           </p>
 
-          <div className="mt-5">
+          <div className="mt-4 sm:mt-5">
             <Button
               variant="primary"
               onClick={onSync}

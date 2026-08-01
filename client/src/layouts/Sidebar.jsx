@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   FolderGit2,
+  X,
 } from "lucide-react";
 
 import SidebarItem from "./SidebarItem";
@@ -18,11 +19,11 @@ const overviewItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   return (
     <aside className="flex h-screen w-[270px] flex-shrink-0 flex-col border-r border-slate-800/80 bg-slate-950">
       {/* Logo */}
-      <div className="flex h-[68px] flex-shrink-0 items-center border-b border-slate-800/80 px-5">
+      <div className="flex h-[68px] flex-shrink-0 items-center justify-between border-b border-slate-800/80 px-5">
         <div className="flex items-center gap-3">
           <img
             src="/favicon.png"
@@ -40,6 +41,17 @@ export default function Sidebar() {
             </p>
           </div>
         </div>
+
+        {/* Close button for mobile */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="lg:hidden rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -53,6 +65,7 @@ export default function Sidebar() {
             <SidebarItem
               key={item.label}
               {...item}
+              onClick={onClose}
             />
           ))}
         </div>

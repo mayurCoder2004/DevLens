@@ -20,7 +20,7 @@ export default function RepositoryMetricsGrid({
   const basePath = `/repository/${repository.id}`;
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <MetricCard
         title="Architecture"
         score={repository.architecture?.complexityScore ?? 0}

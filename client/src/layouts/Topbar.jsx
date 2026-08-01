@@ -26,17 +26,18 @@ export default function Topbar() {
         border-b
         border-slate-800/80
         bg-[#0B0F19]/95
-        px-6
+        px-4
+        sm:px-6
         backdrop-blur-xl
       "
     >
-      {/* Left */}
-      <div className="flex flex-col justify-center">
+      {/* Left - Add padding for mobile menu button */}
+      <div className="flex flex-col justify-center lg:pl-0 pl-12">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
           Dashboard
         </p>
 
-        <h1 className="mt-1 text-base font-semibold text-white">
+        <h1 className="mt-1 text-sm sm:text-base font-semibold text-white truncate max-w-[200px] sm:max-w-none">
           Account Overview
         </h1>
       </div>
@@ -48,14 +49,16 @@ export default function Topbar() {
           className="
             flex
             items-center
-            gap-3
+            gap-2
+            sm:gap-3
             rounded-lg
             border
             border-slate-800
             bg-slate-900/40
             py-1.5
             pl-2
-            pr-3
+            pr-2
+            sm:pr-3
             transition-all
             duration-200
             hover:border-slate-700
@@ -66,8 +69,10 @@ export default function Topbar() {
           <div
             className="
               flex
-              h-8
-              w-8
+              h-7
+              w-7
+              sm:h-8
+              sm:w-8
               items-center
               justify-center
               rounded-full

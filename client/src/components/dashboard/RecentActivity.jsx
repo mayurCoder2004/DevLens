@@ -48,7 +48,9 @@ const formatTime = (date) => {
 
   const diff = Math.floor((now - created) / 1000);
 
-  if (diff < 60) return "Just now";
+  if (diff < 60) {
+    return "Just now";
+  }
 
   const minutes = Math.floor(diff / 60);
 
@@ -64,7 +66,9 @@ const formatTime = (date) => {
 
   const days = Math.floor(hours / 24);
 
-  if (days === 1) return "Yesterday";
+  if (days === 1) {
+    return "Yesterday";
+  }
 
   return `${days} days ago`;
 };
@@ -74,38 +78,81 @@ export default function RecentActivity({
   loading,
 }) {
   return (
-    <section className="mt-12">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-white">
-          Recent Activity
-        </h2>
+    <section className="mt-10">
+      {/* Header */}
 
-        <p className="mt-2 text-slate-400">
-          Track the latest engineering events across your repositories.
-        </p>
+      <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            Recent Activity
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Track the latest engineering events across your repositories.
+          </p>
+        </div>
+
+        <span
+          className="
+            inline-flex
+            w-fit
+            rounded-full
+            border
+            border-violet-500/20
+            bg-violet-500/10
+            px-3
+            py-1
+            text-xs
+            font-medium
+            text-violet-400
+          "
+        >
+          {activities.length} Recent Event
+          {activities.length !== 1 ? "s" : ""}
+        </span>
       </div>
 
+      {/* Loading */}
+
       {loading ? (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-8 text-center text-slate-400">
-          Loading activities...
+        <div className="grid gap-4">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="
+                h-24
+                animate-pulse
+                rounded-2xl
+                border
+                border-slate-800
+                bg-slate-900
+              "
+            />
+          ))}
         </div>
       ) : activities.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-8 text-center">
-          <Activity className="mx-auto mb-4 h-10 w-10 text-slate-500" />
+        /* Empty State */
 
-          <h3 className="text-lg font-semibold text-white">
+        <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-10 text-center">
+          <Activity className="mx-auto mb-4 h-12 w-12 text-slate-500" />
+
+          <h3 className="text-xl font-semibold text-white">
             No Activity Yet
           </h3>
 
-          <p className="mt-2 text-slate-400">
-            Start analyzing repositories to build your activity timeline.
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-400">
+            Repository activity will appear here after you
+            synchronize repositories and run engineering
+            analyses.
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        /* Timeline */
+
+        <div className="space-y-5">
           {activities.map((activity) => {
             const config =
-              activityIcons[activity.type] || {
+              activityIcons[activity.type] ?? {
                 icon: Activity,
                 iconColor: "text-slate-400",
               };
@@ -115,7 +162,8 @@ export default function RecentActivity({
                 key={activity.id}
                 title={activity.title}
                 repository={
-                  activity.repository?.name ?? "Unknown Repository"
+                  activity.repository?.name ??
+                  "Unknown Repository"
                 }
                 description={activity.description}
                 time={formatTime(activity.createdAt)}

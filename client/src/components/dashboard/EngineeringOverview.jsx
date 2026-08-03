@@ -13,22 +13,29 @@ export default function EngineeringOverview({
 }) {
   if (loading || !overview) {
     return (
-      <section className="mt-8">
-        <div className="mb-6">
+      <section className="mt-10">
+        <div className="mb-8">
           <h2 className="text-2xl font-bold text-white">
             Engineering Health
           </h2>
 
           <p className="mt-2 text-sm text-slate-400">
-            Loading dashboard overview...
+            Loading engineering insights...
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {[1, 2, 3, 4].map((item) => (
             <div
               key={item}
-              className="h-36 animate-pulse rounded-2xl bg-slate-900 border border-slate-800"
+              className="
+                h-40
+                animate-pulse
+                rounded-2xl
+                border
+                border-slate-800
+                bg-slate-900
+              "
             />
           ))}
         </div>
@@ -37,18 +44,44 @@ export default function EngineeringOverview({
   }
 
   return (
-    <section className="mt-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white">
-          Engineering Health
-        </h2>
+    <section className="mt-10">
+      {/* Section Header */}
 
-        <p className="mt-2 text-sm text-slate-400">
-          Monitor engineering quality across your repositories.
-        </p>
+      <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            Engineering Health
+          </h2>
+
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Monitor engineering quality, maintainability,
+            deployment readiness, and AI insights across
+            all repositories.
+          </p>
+        </div>
+
+        <div
+          className="
+            inline-flex
+            w-fit
+            rounded-full
+            border
+            border-blue-500/20
+            bg-blue-500/10
+            px-3
+            py-1
+            text-xs
+            font-medium
+            text-blue-400
+          "
+        >
+          Live Overview
+        </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {/* Metrics */}
+
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <OverviewMetricCard
           title="Engineering Health"
           value={overview.engineeringHealth.scoreText}

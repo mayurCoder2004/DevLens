@@ -17,24 +17,31 @@ export default function AttentionCard({
   link,
 }) {
   const severityStyles = {
-    LOW: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    MEDIUM: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    HIGH: "bg-orange-500/10 text-orange-400 border-orange-500/20",
-    CRITICAL: "bg-red-500/10 text-red-400 border-red-500/20",
+    LOW:
+      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    MEDIUM:
+      "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    HIGH:
+      "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    CRITICAL:
+      "bg-red-500/10 text-red-400 border-red-500/20",
   };
 
   const ProgressBar = ({ label, value }) => (
     <div>
-      <div className="mb-1 flex items-center justify-between text-xs">
-        <span className="text-slate-400">{label}</span>
-        <span className="font-medium text-white">
+      <div className="mb-2 flex items-center justify-between text-xs">
+        <span className="text-slate-400">
+          {label}
+        </span>
+
+        <span className="font-semibold text-white">
           {value ?? "--"}%
         </span>
       </div>
 
       <div className="h-2 overflow-hidden rounded-full bg-slate-800">
         <div
-          className="h-full rounded-full bg-blue-500 transition-all duration-500"
+          className="h-full rounded-full bg-blue-500 transition-all duration-700"
           style={{
             width: `${value ?? 0}%`,
           }}
@@ -58,20 +65,21 @@ export default function AttentionCard({
         transition-all
         duration-300
         hover:-translate-y-1
-        hover:border-blue-500/40
-        hover:shadow-xl
-        hover:shadow-blue-500/10
+        hover:border-blue-500/30
+        hover:bg-slate-900/80
+        hover:shadow-lg
+        hover:shadow-blue-500/5
       "
     >
       {/* Header */}
 
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-white">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h3 className="truncate text-lg font-semibold text-white">
             {repository}
           </h3>
 
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 truncate text-sm text-slate-400">
             {owner}
           </p>
         </div>
@@ -86,7 +94,10 @@ export default function AttentionCard({
       {/* Risk */}
 
       <div className="mt-5 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-        <ShieldAlert className="text-red-400" size={22} />
+        <ShieldAlert
+          className="text-red-400"
+          size={22}
+        />
 
         <div>
           <p className="text-xs uppercase tracking-wide text-slate-400">
@@ -133,7 +144,7 @@ export default function AttentionCard({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {issues.map((issue) => (
+          {issues.slice(0, 4).map((issue) => (
             <span
               key={issue}
               className="
@@ -150,6 +161,12 @@ export default function AttentionCard({
               {issue}
             </span>
           ))}
+
+          {issues.length > 4 && (
+            <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-xs text-slate-400">
+              +{issues.length - 4} more
+            </span>
+          )}
         </div>
       </div>
 
@@ -166,6 +183,7 @@ export default function AttentionCard({
             font-medium
             text-blue-400
             transition-all
+            duration-300
             hover:gap-3
             hover:text-blue-300
           "
@@ -174,7 +192,7 @@ export default function AttentionCard({
 
           <ArrowRight
             size={16}
-            className="transition-transform group-hover:translate-x-1"
+            className="transition-transform duration-300 group-hover:translate-x-1"
           />
         </Link>
       </div>

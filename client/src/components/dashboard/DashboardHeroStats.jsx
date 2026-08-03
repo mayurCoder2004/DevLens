@@ -12,11 +12,51 @@ export default function DashboardHeroStats({
   recentAnalyses = 0,
 }) {
   const getScoreSubtitle = (score) => {
-    if (score === "--" || score === null) return "Not analyzed yet";
-    if (score >= 80) return "Excellent Health";
-    if (score >= 60) return "Good Health";
-    if (score >= 40) return "Needs Attention";
+    if (score === "--" || score === null) {
+      return "Not analyzed yet";
+    }
+
+    if (score >= 90) {
+      return "Excellent Repository Health";
+    }
+
+    if (score >= 75) {
+      return "Healthy Engineering";
+    }
+
+    if (score >= 60) {
+      return "Good Overall Health";
+    }
+
+    if (score >= 40) {
+      return "Needs Attention";
+    }
+
     return "Critical Issues";
+  };
+
+  const getRepositorySubtitle = () => {
+    if (totalRepositories === 0) {
+      return "Connect GitHub to begin";
+    }
+
+    if (totalRepositories === 1) {
+      return "1 repository connected";
+    }
+
+    return `${totalRepositories} repositories connected`;
+  };
+
+  const getAnalysisSubtitle = () => {
+    if (recentAnalyses === 0) {
+      return "No analyses completed";
+    }
+
+    if (recentAnalyses === 1) {
+      return "1 repository analyzed";
+    }
+
+    return `${recentAnalyses} analyses completed`;
   };
 
   return (
@@ -25,7 +65,8 @@ export default function DashboardHeroStats({
         label="Repositories"
         value={totalRepositories}
         icon={FolderGit2}
-        subtitle={totalRepositories > 0 ? `+${Math.min(totalRepositories, 3)} synced this week` : "No repos yet"}
+        iconColor="text-blue-400"
+        subtitle={getRepositorySubtitle()}
       />
 
       <HeroStatCard
@@ -41,7 +82,7 @@ export default function DashboardHeroStats({
         value={recentAnalyses}
         icon={Sparkles}
         iconColor="text-violet-400"
-        subtitle={recentAnalyses > 0 ? "Last sync 2 hours ago" : "No analyses yet"}
+        subtitle={getAnalysisSubtitle()}
       />
     </div>
   );

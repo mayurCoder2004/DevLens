@@ -33,7 +33,7 @@ export default function RepositoryGrid({ repos = [] }) {
               text-slate-500
             "
           >
-            <FolderGit2 size={24} aria-hidden="true" />
+            <FolderGit2 size={24} />
           </div>
 
           <h3 className="mt-4 text-xl font-semibold text-white">
@@ -41,7 +41,8 @@ export default function RepositoryGrid({ repos = [] }) {
           </h3>
 
           <p className="mt-2 max-w-sm text-sm text-slate-400">
-            Connect or synchronize your GitHub account to start analyzing your repositories with DevLens.
+            Connect or synchronize your GitHub account to start analyzing your
+            repositories with DevLens.
           </p>
 
           <button
@@ -62,7 +63,7 @@ export default function RepositoryGrid({ repos = [] }) {
           </button>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {repos.map((repo) => (
             <RepositoryCard
               key={repo.id}
@@ -71,9 +72,13 @@ export default function RepositoryGrid({ repos = [] }) {
               description={repo.description}
               language={repo.language}
               stars={repo.stars}
-              engineeringScore={84}
-              lastUpdated={repo.updatedAtGithub || repo.createdAt}
-              visibility={repo.private ? "Private" : "Public"}
+              engineeringScore={repo.engineeringScore}
+              lastUpdated={
+                repo.updatedAtGithub || repo.createdAt
+              }
+              visibility={
+                repo.private ? "Private" : "Public"
+              }
               workspaceLink={`/repository/${repo.id}`}
             />
           ))}

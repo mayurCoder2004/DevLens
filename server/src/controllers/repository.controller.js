@@ -90,9 +90,17 @@ const syncRepositories = asyncHandler(async (req, res) => {
 // ============================
 
 const getUserRepositories = asyncHandler(async (req, res) => {
-  const repos = await prisma.repository.findMany({
+  const repositories = await prisma.repository.findMany({
     where: {
       userId: req.user.userId,
+    },
+
+    include: {
+      health: {
+        select: {
+          healthScore: true,
+        },
+      },
     },
 
     orderBy: {
@@ -100,9 +108,26 @@ const getUserRepositories = asyncHandler(async (req, res) => {
     },
   });
 
+  const formattedRepositories = repositories.map((repo) => ({
+    id: repo.id,
+    githubRepoId: repo.githubRepoId,
+    name: repo.name,
+    owner: repo.owner,
+    description: repo.description,
+    language: repo.language,
+    stars: repo.stars,
+    private: repo.private,
+    repoUrl: repo.repoUrl,
+    defaultBranch: repo.defaultBranch,
+    userId: repo.userId,
+    createdAt: repo.createdAt,
+    updatedAtGithub: repo.updatedAtGithub,
+    engineeringScore: repo.health?.healthScore ?? null,
+  }));
+
   return res.status(200).json({
     success: true,
-    repositories: repos,
+    repositories: formattedRepositories,
   });
 });
 

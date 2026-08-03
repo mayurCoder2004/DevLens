@@ -7,12 +7,17 @@ export default function StepCard({
   title,
   description,
 }) {
-  const { staggerItem, CARD_HOVER } = useMotionVariants();
+  const { staggerItem } = useMotionVariants();
 
   return (
     <motion.div
       variants={staggerItem}
-      whileHover={CARD_HOVER}
+      whileHover={{
+        y: -4,
+        boxShadow: "0 16px 32px -8px rgba(59, 130, 246, 0.12)",
+        borderColor: "rgba(59, 130, 246, 0.3)",
+        transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+      }}
       className="
         group
         relative
@@ -37,7 +42,7 @@ export default function StepCard({
       </div>
 
       {/* Icon */}
-      <div
+      <motion.div
         className="
           mx-auto
           flex
@@ -51,15 +56,10 @@ export default function StepCard({
           duration-200
           group-hover:bg-blue-500/20
         "
+        whileHover={{ scale: 1.08, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
       >
-        {/* Icon scales very slightly — no rotation */}
-        <motion.span
-          className="inline-flex"
-          whileHover={{ scale: 1.1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
-        >
-          <Icon size={34} className="text-blue-400" />
-        </motion.span>
-      </div>
+        <Icon size={34} className="text-blue-400" />
+      </motion.div>
 
       {/* Title */}
       <h3 className="mt-8 text-xl font-semibold text-white">

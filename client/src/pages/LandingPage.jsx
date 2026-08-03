@@ -6,6 +6,7 @@ import Navbar from "../components/landing/Navbar";
 import RepositoryPipeline from "../components/landing/RepositoryPipeline";
 import RepositoryWorkspace from "../components/landing/RepositoryWorkspace";
 import TrustSection from "../components/landing/TrustSection";
+import TrustBadgeRow from "../components/landing/TrustBadgeRow";
 
 export default function LandingPage() {
   return (
@@ -16,6 +17,9 @@ export default function LandingPage() {
       <div id="hero">
         <Hero />
       </div>
+
+      {/* Trust Badge Row */}
+      <TrustBadgeRow />
 
       {/* Trust / Features section */}
       <div id="features">

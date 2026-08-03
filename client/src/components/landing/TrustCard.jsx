@@ -6,12 +6,17 @@ export default function TrustCard({
   title,
   description,
 }) {
-  const { staggerItem, CARD_HOVER } = useMotionVariants();
+  const { staggerItem } = useMotionVariants();
 
   return (
     <motion.div
       variants={staggerItem}
-      whileHover={CARD_HOVER}
+      whileHover={{
+        y: -4,
+        boxShadow: "0 16px 32px -8px rgba(59, 130, 246, 0.12)",
+        borderColor: "rgba(59, 130, 246, 0.3)",
+        transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+      }}
       className="
         group
         rounded-2xl
@@ -26,7 +31,7 @@ export default function TrustCard({
       style={{ willChange: "transform, box-shadow" }}
     >
       {/* Icon — subtle scale on card hover */}
-      <div
+      <motion.div
         className="
           mb-6
           inline-flex
@@ -37,14 +42,10 @@ export default function TrustCard({
           duration-200
           group-hover:bg-blue-500/20
         "
+        whileHover={{ scale: 1.1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
       >
-        <motion.span
-          className="inline-flex"
-          whileHover={{ scale: 1.08, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
-        >
-          <Icon size={24} className="text-blue-400" />
-        </motion.span>
-      </div>
+        <Icon size={24} className="text-blue-400" />
+      </motion.div>
 
       {/* Title */}
       <h3 className="text-lg font-semibold text-white">

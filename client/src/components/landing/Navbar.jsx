@@ -65,7 +65,14 @@ export default function Navbar() {
             onClick={() => handleNavClick("how-it-works")}
             className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
           >
-            How It Works
+            Workflow
+          </li>
+
+          <li
+            onClick={() => handleNavClick("workspace")}
+            className="cursor-pointer text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
+          >
+            Workspace
           </li>
 
           <li>
@@ -121,7 +128,14 @@ export default function Navbar() {
               onClick={() => handleNavClick("how-it-works")}
               className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
             >
-              How It Works
+              Workflow
+            </button>
+
+            <button
+              onClick={() => handleNavClick("workspace")}
+              className="w-full rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+            >
+              Workspace
             </button>
 
             <a

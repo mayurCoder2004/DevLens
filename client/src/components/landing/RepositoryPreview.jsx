@@ -9,7 +9,8 @@ import {
   TrendingDown,
   CheckCircle2,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { useEffect } from "react";
 import { useMotionVariants } from "../../utils/motion";
 
 const metrics = [
@@ -65,8 +66,35 @@ export default function RepositoryPreview() {
   const { previewStagger, staggerItem, progressBar, CARD_HOVER } =
     useMotionVariants();
 
+  // Counter animation for engineering score
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(count, 87, {
+      duration: 2,
+      ease: "easeOut",
+    });
+
+    return controls.stop;
+  }, [count]);
+
   return (
-    <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl lg:max-w-2xl">
+    <motion.div
+      className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl lg:max-w-2xl"
+      animate={{
+        y: [0, -8, 0],
+      }}
+      transition={{
+        duration: 4,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "reverse",
+      }}
+      style={{
+        boxShadow: "0 0 60px -15px rgba(59, 130, 246, 0.3), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+      }}
+    >
 
       {/* Browser Header */}
       <div className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-4 py-3 sm:px-5">
@@ -102,7 +130,9 @@ export default function RepositoryPreview() {
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-slate-400">Engineering Score</span>
-            <span className="text-xl font-bold text-white sm:text-2xl">87</span>
+            <motion.span className="text-xl font-bold text-white sm:text-2xl">
+              {rounded}
+            </motion.span>
           </div>
 
           <div className="h-2 rounded-full bg-slate-800">
@@ -210,6 +240,6 @@ export default function RepositoryPreview() {
           </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

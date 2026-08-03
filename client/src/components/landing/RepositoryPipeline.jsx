@@ -77,10 +77,20 @@ export default function RepositoryPipeline() {
             variant="primary"
           />
 
-          <motion.div variants={staggerItem}>
+          <motion.div
+            variants={staggerItem}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+            }}
+          >
             <ArrowDown
               size={26}
-              className="my-4 text-slate-600 sm:my-5"
+              className="my-3 text-slate-600 sm:my-4"
             />
           </motion.div>
 
@@ -89,10 +99,21 @@ export default function RepositoryPipeline() {
             title="Repository Analytics"
           />
 
-          <motion.div variants={staggerItem}>
+          <motion.div
+            variants={staggerItem}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.3,
+            }}
+          >
             <ArrowDown
               size={26}
-              className="my-6 text-slate-600 sm:my-8"
+              className="my-4 text-slate-600 sm:my-5"
             />
           </motion.div>
 
@@ -117,10 +138,21 @@ export default function RepositoryPipeline() {
 
           </div>
 
-          <motion.div variants={staggerItem}>
+          <motion.div
+            variants={staggerItem}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.6,
+            }}
+          >
             <ArrowDown
               size={26}
-              className="my-6 text-slate-600 sm:my-8"
+              className="my-4 text-slate-600 sm:my-5"
             />
           </motion.div>
 
@@ -131,10 +163,21 @@ export default function RepositoryPipeline() {
             title="Engineering Health"
           />
 
-          <motion.div variants={staggerItem}>
+          <motion.div
+            variants={staggerItem}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 0.9,
+            }}
+          >
             <ArrowDown
               size={26}
-              className="my-4 text-slate-600 sm:my-5"
+              className="my-3 text-slate-600 sm:my-4"
             />
           </motion.div>
 
@@ -143,10 +186,21 @@ export default function RepositoryPipeline() {
             title="AI Repository Review"
           />
 
-          <motion.div variants={staggerItem}>
+          <motion.div
+            variants={staggerItem}
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 2.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              delay: 1.2,
+            }}
+          >
             <ArrowDown
               size={26}
-              className="my-4 text-slate-600 sm:my-5"
+              className="my-3 text-slate-600 sm:my-4"
             />
           </motion.div>
 

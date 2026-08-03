@@ -86,11 +86,28 @@ export default function LandingCTA() {
                   },
                   hover: {
                     scale: 1.03,
+                    y: -2,
                     boxShadow: "0 16px 40px -8px rgba(59, 130, 246, 0.45)",
                     transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
                   },
                 }}
+                className="relative overflow-hidden"
+                style={{ willChange: "transform" }}
               >
+                {/* Shine animation */}
+                <motion.div
+                  className="absolute inset-0 z-10 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                  animate={{
+                    x: ["-200%", "200%"],
+                  }}
+                  transition={{
+                    duration: 3,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                  }}
+                  style={{ pointerEvents: "none" }}
+                />
                 <Button variant="primary" onClick={() => navigate("/login")}>
                   <div className="flex items-center gap-3">
                     <FaGithub size={18} />

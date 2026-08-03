@@ -62,7 +62,25 @@ export default function RepositoryWorkspace() {
           whileInView="visible"
           viewport={defaultViewport}
         >
-          <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl shadow-blue-500/10 sm:rounded-3xl">
+          <motion.div
+            className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl shadow-blue-500/10 sm:rounded-3xl"
+            animate={{
+              y: [0, -6, 0],
+            }}
+            transition={{
+              duration: 4.5,
+              ease: "easeInOut",
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+            whileHover={{
+              boxShadow: "0 0 60px -12px rgba(59, 130, 246, 0.35), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+              transition: { duration: 0.3 },
+            }}
+            style={{
+              boxShadow: "0 0 40px -10px rgba(59, 130, 246, 0.2), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+            }}
+          >
 
             {/* Browser Header */}
             <div className="flex h-12 items-center justify-between border-b border-slate-800 bg-slate-950 px-4 sm:h-14 sm:px-6">
@@ -106,7 +124,7 @@ export default function RepositoryWorkspace() {
               </motion.div>
             </motion.div>
 
-          </div>
+          </motion.div>
         </motion.div>
       </Container>
     </section>

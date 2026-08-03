@@ -88,26 +88,26 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-1 text-sm text-slate-400 transition-colors hover:text-white"
+                  className="group flex items-center gap-1 text-sm text-slate-400 transition-all duration-200 hover:text-white"
                 >
                   {link.title}
 
                   <ArrowUpRight
                     size={15}
-                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    className="transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-400"
                   />
                 </a>
               ) : (
                 <Link
                   key={link.title}
                   to={link.href}
-                  className="group flex items-center gap-1 text-sm text-slate-400 transition-colors hover:text-white"
+                  className="group flex items-center gap-1 text-sm text-slate-400 transition-all duration-200 hover:text-white"
                 >
                   {link.title}
 
                   <ArrowUpRight
                     size={15}
-                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    className="transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-400"
                   />
                 </Link>
               )

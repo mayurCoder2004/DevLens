@@ -91,7 +91,18 @@ export default function HowItWorks() {
               >
                 <StepCard {...step} />
                 {index < steps.length - 1 && (
-                  <ArrowDown size={28} className="my-4 text-slate-700" />
+                  <motion.div
+                    animate={{
+                      opacity: [0.4, 0.7, 0.4],
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      ease: "easeInOut",
+                      repeat: Infinity,
+                    }}
+                  >
+                    <ArrowDown size={28} className="my-4 text-slate-700" />
+                  </motion.div>
                 )}
               </motion.div>
             ))}
@@ -113,12 +124,22 @@ export default function HowItWorks() {
                 <StepCard {...step} />
 
                 {index < steps.length - 1 && (
-                  <div className="absolute -right-7 top-1/2 hidden -translate-y-1/2 lg:block">
+                  <motion.div
+                    className="absolute -right-7 top-1/2 hidden -translate-y-1/2 lg:block"
+                    animate={{
+                      opacity: [0.4, 0.7, 0.4],
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      ease: "easeInOut",
+                      repeat: Infinity,
+                    }}
+                  >
                     <ArrowRight
                       size={30}
                       className="text-slate-700"
                     />
-                  </div>
+                  </motion.div>
                 )}
               </div>
             ))}

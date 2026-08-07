@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import SummaryMetricCard from "../common/SummaryMetricCard";
 
-
 export default function TechnicalDebtSummaryCards({ technicalDebt }) {
   if (!technicalDebt) return null;
 
@@ -16,15 +15,15 @@ export default function TechnicalDebtSummaryCards({ technicalDebt }) {
     {
       title: "Technical Debt Score",
       value: technicalDebt.technicalDebtScore,
-      subtitle: "Overall debt score",
+      subtitle: "Overall debt level",
       icon: Gauge,
       iconBg: "bg-red-500/10",
       iconColor: "text-red-400",
     },
     {
-      title: "Maintainability",
+      title: "Maintainability Score",
       value: technicalDebt.maintainabilityScore,
-      subtitle: "Code quality score",
+      subtitle: "Code quality",
       icon: ShieldCheck,
       iconBg: "bg-emerald-500/10",
       iconColor: "text-emerald-400",
@@ -32,7 +31,7 @@ export default function TechnicalDebtSummaryCards({ technicalDebt }) {
     {
       title: "Large Files",
       value: technicalDebt.largeFileCount,
-      subtitle: "Needs refactoring",
+      subtitle: "Need refactoring",
       icon: FileCode,
       iconBg: "bg-amber-500/10",
       iconColor: "text-amber-400",

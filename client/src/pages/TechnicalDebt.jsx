@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -9,23 +9,16 @@ import {
 
 import RepositoryTechnicalDebt from "../components/repository/workspace/RepositoryTechnicalDebt";
 import TechnicalDebtSkeleton from "../components/repository/technicalDebt/TechnicalDebtSkeleton";
+import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
 
 export default function TechnicalDebt() {
-  const {
-    repository,
-    refreshRepository,
-  } = useOutletContext();
-
+  const { repository, refreshRepository } = useOutletContext();
   const { repositoryId } = useParams();
 
   const [technicalDebt, setTechnicalDebt] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadTechnicalDebt();
-  }, [repositoryId]);
-
-  const loadTechnicalDebt = async () => {
+  const loadTechnicalDebt = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -37,63 +30,126 @@ export default function TechnicalDebt() {
         setTechnicalDebt(null);
       } else {
         console.error("Error fetching technical debt:", error);
+        toast.error("Failed to load technical debt.");
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, [repositoryId]);
+
+  useEffect(() => {
+    loadTechnicalDebt();
+  }, [loadTechnicalDebt]);
 
   const handleAnalyze = async () => {
-    setLoading(true);
-
     toast.promise(
       (async () => {
+        setLoading(true);
+
         await analyzeTechnicalDebt(repositoryId);
+
         await loadTechnicalDebt();
+
         await refreshRepository();
       })(),
       {
-        loading: 'Analyzing technical debt...',
-        success: 'Technical debt analysis completed successfully!',
-        error: (err) => err.response?.data?.message ?? 'Failed to analyze technical debt.',
+        loading: "Analyzing technical debt...",
+        success: "Technical debt analysis completed successfully!",
+        error: (err) =>
+          err.response?.data?.message ?? "Failed to analyze technical debt.",
       }
-    ).finally(() => {
-      setLoading(false);
-    });
+    );
   };
 
   if (loading) {
-    return <TechnicalDebtSkeleton />;
+    return (
+      <div className="mx-auto max-w-7xl">
+        <TechnicalDebtSkeleton />
+      </div>
+    );
   }
 
   if (!technicalDebt) {
     return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
-        <h2 className="text-2xl font-semibold text-white">
-          No Technical Debt Analysis
-        </h2>
+      <div className="mx-auto max-w-7xl space-y-8">
+        <RepositoryPageHeader
+          title="Technical Debt"
+          description="Analyze code quality, maintainability issues, and receive AI-powered recommendations to reduce technical debt."
+          actionLabel="Analyze Technical Debt"
+          action={handleAnalyze}
+          loading={loading}
+        />
 
-        <p className="mt-3 text-slate-400">
-          This repository hasn't been analyzed yet.
-        </p>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-16 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10 text-4xl">
+            ⚠️
+          </div>
 
-        <button
-          onClick={handleAnalyze}
-          disabled={loading}
-          className="mt-6 rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700 disabled:opacity-50"
-        >
-          {loading
-            ? "Analyzing..."
-            : "Analyze Technical Debt"}
-        </button>
+          <h2 className="text-2xl font-semibold text-white">
+            No Technical Debt Analysis
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+            This repository hasn't been analyzed yet. Run a technical debt
+            analysis to identify maintainability issues, code smells, large
+            files, dead code, and receive AI-powered refactoring recommendations.
+          </p>
+
+          <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Code Quality</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Measure maintainability and technical debt scores.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Problem Detection</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Identify large files, dead code, and circular dependencies.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ AI Insights</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Understand technical debt impact and priority areas.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Recommendations</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Receive actionable refactoring suggestions.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleAnalyze}
+            className="mt-10 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700"
+          >
+            Analyze Technical Debt
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <RepositoryTechnicalDebt
-      repository={repository}
-      technicalDebt={technicalDebt}
-    />
+    <div className="mx-auto max-w-7xl space-y-8">
+      <RepositoryPageHeader
+        title="Technical Debt"
+        description="Analyze code quality, maintainability issues, and receive AI-powered recommendations to reduce technical debt."
+        actionLabel="Re-analyze"
+        action={handleAnalyze}
+        loading={loading}
+      />
+
+      <RepositoryTechnicalDebt
+        repository={repository}
+        technicalDebt={technicalDebt}
+      />
+    </div>
   );
 }

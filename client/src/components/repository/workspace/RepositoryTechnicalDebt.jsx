@@ -16,18 +16,24 @@ export default function RepositoryTechnicalDebt({ technicalDebt }) {
 
   return (
     <div className="space-y-8">
-  <TechnicalDebtSummaryCards technicalDebt={technicalDebt} />
+      {/* Summary Cards */}
+      <TechnicalDebtSummaryCards technicalDebt={technicalDebt} />
 
-  <TechnicalDebtAnalytics technicalDebt={technicalDebt} />
+      {/* Analytics */}
+      <TechnicalDebtAnalytics technicalDebt={technicalDebt} />
 
-  <TechnicalDebtOverview technicalDebt={technicalDebt} />
+      {/* AI Overview */}
+      <TechnicalDebtOverview technicalDebt={technicalDebt} />
 
-<div className="grid gap-8 xl:grid-cols-2">
-  <TechnicalDebtInsights technicalDebt={technicalDebt} />
+      {/* Details Section */}
+      <div className="grid gap-8 xl:grid-cols-2">
+        <TechnicalDebtInsights technicalDebt={technicalDebt} />
 
-  <TechnicalDebtRecommendations technicalDebt={technicalDebt} />
-</div>
-    <TechnicalDebtFileBreakdown technicalDebt={technicalDebt} />
-</div>
+        <TechnicalDebtRecommendations technicalDebt={technicalDebt} />
+      </div>
+
+      {/* File Breakdown */}
+      <TechnicalDebtFileBreakdown technicalDebt={technicalDebt} />
+    </div>
   );
 }

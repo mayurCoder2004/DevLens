@@ -3,6 +3,7 @@ import {
   Clock3,
   Sparkles,
 } from "lucide-react";
+import MarkdownText from "./MarkdownText";
 
 export default function ActionPlanCard({
   phase,
@@ -37,7 +38,7 @@ export default function ActionPlanCard({
     priorityStyles[priority] || priorityStyles.Low;
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:border-slate-700">
+    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex items-start gap-4">
           <div className="rounded-lg bg-violet-500/10 p-3">
@@ -63,9 +64,7 @@ export default function ActionPlanCard({
               {title}
             </h3>
 
-            <p className="mt-3 leading-7 text-slate-400">
-              {description}
-            </p>
+            <MarkdownText className="mt-3">{description}</MarkdownText>
           </div>
         </div>
 
@@ -87,9 +86,7 @@ export default function ActionPlanCard({
               AI Recommendation
             </p>
 
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              {reason}
-            </p>
+            <MarkdownText className="mt-2">{reason}</MarkdownText>
           </div>
         </div>
       </div>

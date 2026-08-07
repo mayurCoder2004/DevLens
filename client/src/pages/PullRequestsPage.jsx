@@ -1,55 +1,95 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { getRepositoryPullRequests } from "../services/pullRequest";
 import PullRequestList from "../components/repository/pullRequest/PullRequestList";
 import PullRequestListSkeleton from "../components/repository/pullRequest/PullRequestListSkeleton";
+import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
 
 export default function PullRequestsPage() {
+  const { refreshRepository } = useOutletContext();
   const { repositoryId } = useParams();
 
   const [pullRequests, setPullRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    fetchPullRequests();
-  }, [repositoryId]);
-
-  const fetchPullRequests = async () => {
+  const loadPullRequests = useCallback(async ({
+    silent = false,
+    rethrow = false,
+  } = {}) => {
     try {
-      const response =
-        await getRepositoryPullRequests(repositoryId);
+      if (!silent) {
+        setLoading(true);
+      }
+
+      const response = await getRepositoryPullRequests(repositoryId);
 
       setPullRequests(response.data.data);
     } catch (err) {
       console.error(err);
+      if (!rethrow) {
+        toast.error(
+          err.response?.data?.message ?? "Failed to load pull requests."
+        );
+      }
 
-      setError(
-        err.response?.data?.message ??
-          "Failed to load pull requests."
-      );
+      if (rethrow) {
+        throw err;
+      }
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
+  }, [repositoryId]);
+
+  useEffect(() => {
+    Promise.resolve().then(() => loadPullRequests());
+  }, [loadPullRequests]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+
+    await toast.promise(
+      (async () => {
+        await loadPullRequests({ silent: true, rethrow: true });
+        await refreshRepository();
+      })(),
+      {
+        loading: "Refreshing pull requests...",
+        success: "Pull requests refreshed successfully!",
+        error: (err) =>
+          err.response?.data?.message ?? "Failed to refresh pull requests.",
+      }
+    )
+      .catch(() => {})
+      .finally(() => setRefreshing(false));
   };
 
   if (loading) {
-    return <PullRequestListSkeleton />;
-  }
-
-  if (error) {
     return (
-      <div className="rounded-xl border border-red-900 bg-red-950/30 p-6 text-red-300">
-        {error}
+      <div className="mx-auto max-w-7xl">
+        <PullRequestListSkeleton />
       </div>
     );
   }
 
   return (
-    <PullRequestList
-      repositoryId={repositoryId}
-      pullRequests={pullRequests}
-    />
+    <div className="mx-auto max-w-7xl space-y-8">
+      <RepositoryPageHeader
+        title="Pull Requests"
+        description="Review, analyze, and assess engineering risk across all pull requests in this repository."
+        actionLabel="Refresh Pull Requests"
+        action={handleRefresh}
+        loading={refreshing}
+      />
+
+      <PullRequestList
+        repositoryId={repositoryId}
+        pullRequests={pullRequests}
+      />
+    </div>
   );
 }

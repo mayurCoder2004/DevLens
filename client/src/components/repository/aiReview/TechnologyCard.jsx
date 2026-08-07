@@ -2,6 +2,7 @@ import {
   Sparkles,
   ArrowUpRight,
 } from "lucide-react";
+import MarkdownText from "./MarkdownText";
 
 export default function TechnologyCard({
   icon: Icon,
@@ -10,7 +11,7 @@ export default function TechnologyCard({
   insight,
 }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:border-slate-700 hover:bg-slate-800/70">
+    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className="rounded-lg bg-violet-500/10 p-3">
@@ -40,9 +41,7 @@ export default function TechnologyCard({
               AI Insight
             </p>
 
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              {insight}
-            </p>
+            <MarkdownText className="mt-2">{insight}</MarkdownText>
           </div>
         </div>
       </div>

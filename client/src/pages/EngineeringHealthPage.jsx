@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
+import { Activity, BadgeCheck, BarChart3, Lightbulb } from "lucide-react";
 import toast from "react-hot-toast";
 
 import { getEngineeringHealth } from "../services/engineeringHealth";
@@ -13,10 +14,16 @@ export default function EngineeringHealthPage() {
 
   const [engineeringHealth, setEngineeringHealth] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const loadEngineeringHealth = useCallback(async () => {
+  const loadEngineeringHealth = useCallback(async ({
+    silent = false,
+    rethrow = false,
+  } = {}) => {
     try {
-      setLoading(true);
+      if (!silent) {
+        setLoading(true);
+      }
 
       const response = await getEngineeringHealth(repositoryId);
 
@@ -24,34 +31,44 @@ export default function EngineeringHealthPage() {
     } catch (err) {
       if (err.response?.status === 404) {
         setEngineeringHealth(null);
-      } else {
+      } else if (!rethrow) {
         console.error(err);
         toast.error(
           err.response?.data?.message ?? "Failed to load engineering health."
         );
       }
+
+      if (rethrow) {
+        throw err;
+      }
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
   }, [repositoryId]);
 
   useEffect(() => {
-    loadEngineeringHealth();
+    Promise.resolve().then(() => loadEngineeringHealth());
   }, [loadEngineeringHealth]);
 
   const handleRefresh = async () => {
-    toast.promise(
+    setRefreshing(true);
+
+    await toast.promise(
       (async () => {
-        await loadEngineeringHealth();
+        await loadEngineeringHealth({ silent: true, rethrow: true });
         await refreshRepository();
       })(),
       {
-        loading: "Refreshing engineering health...",
-        success: "Engineering health refreshed successfully!",
+        loading: "Re-analyzing engineering health...",
+        success: "Engineering health re-analyzed successfully!",
         error: (err) =>
           err.response?.data?.message ?? "Failed to refresh engineering health.",
       }
-    );
+    )
+      .catch(() => {})
+      .finally(() => setRefreshing(false));
   };
 
   if (loading) {
@@ -68,14 +85,14 @@ export default function EngineeringHealthPage() {
         <RepositoryPageHeader
           title="Engineering Health"
           description="Consolidated view of repository health across architecture, technical debt, deployment, and pull request quality."
-          actionLabel="Refresh"
+          actionLabel="Re-analyze Engineering Health"
           action={handleRefresh}
-          loading={loading}
+          loading={refreshing}
         />
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-16 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-4xl">
-            🏥
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10">
+            <Activity className="h-8 w-8 text-blue-400" />
           </div>
 
           <h2 className="text-2xl font-semibold text-white">
@@ -89,40 +106,39 @@ export default function EngineeringHealthPage() {
           </p>
 
           <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">✓ Overall Score</h4>
-              <p className="mt-1 text-sm text-slate-400">
-                Aggregated engineering health across all dimensions.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">✓ Score Breakdown</h4>
-              <p className="mt-1 text-sm text-slate-400">
-                Per-dimension scores for each workspace analysis.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">✓ AI Insights</h4>
-              <p className="mt-1 text-sm text-slate-400">
-                Engineering strengths and priority improvement areas.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">✓ Recommendations</h4>
-              <p className="mt-1 text-sm text-slate-400">
-                Actionable suggestions to improve engineering quality.
-              </p>
-            </div>
+            <EmptyFeature
+              icon={Activity}
+              iconColor="text-blue-400"
+              title="Overall Score"
+              description="Aggregated engineering health across all dimensions."
+            />
+            <EmptyFeature
+              icon={BarChart3}
+              iconColor="text-violet-400"
+              title="Score Breakdown"
+              description="Per-dimension scores for each workspace analysis."
+            />
+            <EmptyFeature
+              icon={BadgeCheck}
+              iconColor="text-emerald-400"
+              title="AI Insights"
+              description="Engineering strengths and priority improvement areas."
+            />
+            <EmptyFeature
+              icon={Lightbulb}
+              iconColor="text-amber-400"
+              title="Recommendations"
+              description="Actionable suggestions to improve engineering quality."
+            />
           </div>
 
           <button
+            type="button"
             onClick={handleRefresh}
-            className="mt-10 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700"
+            disabled={refreshing}
+            className="mt-10 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Refresh Engineering Health
+            {refreshing ? "Re-analyzing..." : "Re-analyze Engineering Health"}
           </button>
         </div>
       </div>
@@ -134,15 +150,27 @@ export default function EngineeringHealthPage() {
       <RepositoryPageHeader
         title="Engineering Health"
         description="Consolidated view of repository health across architecture, technical debt, deployment, and pull request quality."
-        actionLabel="Refresh"
+        actionLabel="Re-analyze Engineering Health"
         action={handleRefresh}
-        loading={loading}
+        loading={refreshing}
       />
 
       <RepositoryEngineeringHealth
         repository={repository}
         engineeringHealth={engineeringHealth}
       />
+    </div>
+  );
+}
+
+function EmptyFeature({ icon: Icon, iconColor, title, description }) {
+  return (
+    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+      <div className="mb-2 flex items-center gap-2 text-white">
+        <Icon className={`h-4 w-4 ${iconColor}`} />
+        <h4 className="font-medium">{title}</h4>
+      </div>
+      <p className="text-sm text-slate-400">{description}</p>
     </div>
   );
 }

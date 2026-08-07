@@ -3,6 +3,7 @@ import {
   Sparkles,
   CheckCircle2,
 } from "lucide-react";
+import MarkdownText from "./MarkdownText";
 
 export default function ArchitectureCard({
   title,
@@ -29,7 +30,7 @@ export default function ArchitectureCard({
     priorityStyles[priority] || priorityStyles.Low;
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:border-slate-700 hover:bg-slate-800/70">
+    <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className="rounded-lg bg-violet-500/10 p-3">
@@ -59,9 +60,7 @@ export default function ArchitectureCard({
               AI Recommendation
             </p>
 
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              {recommendation}
-            </p>
+            <MarkdownText className="mt-2">{recommendation}</MarkdownText>
           </div>
         </div>
       </div>
@@ -72,7 +71,7 @@ export default function ArchitectureCard({
         </h4>
 
         <div className="mt-4 space-y-3">
-          {benefits.map((benefit) => (
+          {(benefits || []).map((benefit) => (
             <div
               key={benefit}
               className="flex items-start gap-3"

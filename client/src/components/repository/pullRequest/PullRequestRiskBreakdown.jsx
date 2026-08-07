@@ -7,121 +7,112 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-export default function PullRequestRiskBreakdown({
-  pullRequestAnalysis,
-}) {
+const getStatus = (score) => {
+  if (score === 0)
+    return {
+      label: "No Risk",
+      badge: "bg-slate-700/60 text-slate-400 border border-slate-600/30",
+      bar: "bg-slate-500",
+    };
+  if (score <= 25)
+    return {
+      label: "Low",
+      badge: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30",
+      bar: "bg-emerald-500",
+    };
+  if (score <= 50)
+    return {
+      label: "Medium",
+      badge: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
+      bar: "bg-amber-500",
+    };
+  if (score <= 75)
+    return {
+      label: "High",
+      badge: "bg-orange-500/15 text-orange-400 border border-orange-500/30",
+      bar: "bg-orange-500",
+    };
+  return {
+    label: "Critical",
+    badge: "bg-red-500/15 text-red-400 border border-red-500/30",
+    bar: "bg-red-500",
+  };
+};
+
+export default function PullRequestRiskBreakdown({ pullRequestAnalysis }) {
   if (!pullRequestAnalysis) return null;
 
-  const breakdown = pullRequestAnalysis.riskBreakdown;
+  const breakdown = pullRequestAnalysis.riskBreakdown || {};
 
   const breakdownItems = [
     {
       title: "Overall Risk",
-      description:
-        "Combined engineering risk calculated for this pull request.",
+      description: "Combined engineering risk for this pull request.",
       value: pullRequestAnalysis.riskScore,
       icon: AlertTriangle,
+      iconBg: "bg-red-500/10",
       iconColor: "text-red-400",
     },
     {
       title: "Critical Files",
-      description:
-        "Risk introduced by changes to sensitive files.",
-      value: breakdown.critical,
+      description: "Risk from changes to sensitive or critical files.",
+      value: breakdown.critical || 0,
       icon: ShieldAlert,
+      iconBg: "bg-orange-500/10",
       iconColor: "text-orange-400",
     },
     {
       title: "Infrastructure",
-      description:
-        "Risk introduced by infrastructure changes.",
-      value: breakdown.infrastructure,
+      description: "Risk from infrastructure and configuration changes.",
+      value: breakdown.infrastructure || 0,
       icon: ServerCog,
+      iconBg: "bg-cyan-500/10",
       iconColor: "text-cyan-400",
     },
     {
       title: "Dependencies",
-      description:
-        "Risk caused by dependency updates.",
-      value: breakdown.dependency,
+      description: "Risk introduced by dependency updates.",
+      value: breakdown.dependency || 0,
       icon: Package,
+      iconBg: "bg-violet-500/10",
       iconColor: "text-violet-400",
     },
     {
       title: "Documentation",
-      description:
-        "Risk associated with documentation changes.",
-      value: breakdown.documentation,
+      description: "Risk associated with documentation changes.",
+      value: breakdown.documentation || 0,
       icon: FileText,
+      iconBg: "bg-emerald-500/10",
       iconColor: "text-emerald-400",
     },
     {
       title: "File Count",
-      description:
-        "Risk based on the total number of modified files.",
-      value: breakdown.fileCount,
+      description: "Risk based on total number of modified files.",
+      value: breakdown.fileCount || 0,
       icon: Files,
+      iconBg: "bg-blue-500/10",
       iconColor: "text-blue-400",
     },
   ];
 
-  const getStatus = (score) => {
-    if (score === 0) {
-      return {
-        label: "No Risk",
-        color: "bg-slate-700 text-slate-300",
-      };
-    }
-
-    if (score <= 25) {
-      return {
-        label: "Low",
-        color: "bg-emerald-500/15 text-emerald-400",
-      };
-    }
-
-    if (score <= 50) {
-      return {
-        label: "Medium",
-        color: "bg-amber-500/15 text-amber-400",
-      };
-    }
-
-    if (score <= 75) {
-      return {
-        label: "High",
-        color: "bg-orange-500/15 text-orange-400",
-      };
-    }
-
-    return {
-      label: "Critical",
-      color: "bg-red-500/15 text-red-400",
-    };
-  };
-
-  const getProgressColor = (score) => {
-    if (score === 0) return "bg-slate-500";
-    if (score <= 25) return "bg-emerald-500";
-    if (score <= 50) return "bg-amber-500";
-    if (score <= 75) return "bg-orange-500";
-    return "bg-red-500";
-  };
-
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-white">
-          Pull Request Risk Breakdown
-        </h2>
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
+      <div className="flex items-center gap-3">
+        <div className="rounded-xl bg-red-500/10 p-2">
+          <AlertTriangle className="h-6 w-6 text-red-400" />
+        </div>
 
-        <p className="mt-2 text-sm text-slate-400">
-          Understand how the overall pull request risk score is
-          calculated across different engineering dimensions.
-        </p>
+        <div>
+          <h2 className="text-xl font-semibold text-white">Risk Analysis</h2>
+          <p className="mt-1 text-sm text-slate-400">
+            Risk contribution per engineering dimension.
+          </p>
+        </div>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="my-6 border-t border-slate-800" />
+
+      <div className="space-y-5">
         {breakdownItems.map((item) => {
           const Icon = item.icon;
           const status = getStatus(item.value);
@@ -129,49 +120,37 @@ export default function PullRequestRiskBreakdown({
           return (
             <div
               key={item.title}
-              className="rounded-xl border border-slate-800 bg-slate-950/60 p-6 transition-all hover:border-slate-700"
+              className="rounded-xl border border-slate-800 bg-slate-900 p-5"
             >
-              <div className="flex items-center justify-between">
-                <div
-                  className={`rounded-lg bg-slate-800 p-3 ${item.iconColor}`}
-                >
-                  <Icon className="h-5 w-5" />
+              <div className="flex items-center gap-3">
+                <div className={`rounded-lg ${item.iconBg} p-2 shrink-0`}>
+                  <Icon className={`h-4 w-4 ${item.iconColor}`} />
                 </div>
 
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-medium ${status.color}`}
-                >
-                  {status.label}
-                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium text-white">{item.title}</span>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${status.badge}`}
+                    >
+                      {status.label}
+                    </span>
+                  </div>
+
+                  <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+                </div>
               </div>
 
-              <h3 className="mt-5 text-lg font-semibold text-white">
-                {item.title}
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                {item.description}
-              </p>
-
-              <div className="mt-6">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm text-slate-400">
-                    Risk
-                  </span>
-
-                  <span className="font-semibold text-white">
-                    {item.value}%
-                  </span>
+              <div className="mt-4">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <span className="text-xs text-slate-500">Score</span>
+                  <span className="text-sm font-bold text-white">{item.value}%</span>
                 </div>
 
                 <div className="h-2 overflow-hidden rounded-full bg-slate-800">
                   <div
-                    className={`h-full rounded-full transition-all duration-700 ${getProgressColor(
-                      item.value
-                    )}`}
-                    style={{
-                      width: `${item.value}%`,
-                    }}
+                    className={`h-full rounded-full transition-all duration-700 ${status.bar}`}
+                    style={{ width: `${item.value}%` }}
                   />
                 </div>
               </div>

@@ -3,7 +3,14 @@ import Skeleton from "../../ui/Skeleton";
 const EngineeringHealthSkeleton = () => {
   return (
     <div className="space-y-8">
-      {/* Summary Cards - 6 cards in 3-column grid */}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <Skeleton className="h-9 w-72 max-w-full" />
+          <Skeleton className="h-5 w-96 max-w-full" />
+        </div>
+        <Skeleton className="h-12 w-64 rounded-xl" />
+      </div>
+
       <section>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (

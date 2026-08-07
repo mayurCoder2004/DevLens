@@ -10,37 +10,37 @@ export default function EngineeringScoreBreakdown({ engineeringHealth }) {
       title: "Overall Engineering",
       value: engineeringScore,
       status: status,
-      color: "bg-blue-500",
+      color: "blue",
     },
     {
       title: "Repository Health",
       value: scores.repositoryHealth,
       status: "Repository Health",
-      color: "bg-emerald-500",
+      color: "emerald",
     },
     {
       title: "Architecture",
       value: scores.architecture,
       status: "Architecture",
-      color: "bg-violet-500",
+      color: "violet",
     },
     {
       title: "Technical Debt",
       value: scores.technicalDebt,
       status: "Technical Debt",
-      color: "bg-amber-500",
+      color: "amber",
     },
     {
       title: "Deployment",
       value: scores.deployment,
       status: "Deployment Readiness",
-      color: "bg-cyan-500",
+      color: "cyan",
     },
     {
       title: "Pull Request Risk",
       value: scores.pullRequest,
       status: "Risk Analysis",
-      color: "bg-rose-500",
+      color: "rose",
     },
   ];
 
@@ -56,7 +56,7 @@ export default function EngineeringScoreBreakdown({ engineeringHealth }) {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
+      <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6 sm:p-8">
         <div className="space-y-6">
           {metrics.map((metric) => (
             <ProgressMetric

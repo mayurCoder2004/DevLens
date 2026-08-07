@@ -1,59 +1,37 @@
 import ActionPlan from "../aiReview/ActionPlan";
 import AIExecutiveSummary from "../aiReview/AIExecutiveSummary";
-import ArchitectureSuggestions from "../aiReview/ArchitectureSuggestions";
+import AIReviewHero from "../aiReview/AIReviewHero";
+import AIReviewRecommendations from "../aiReview/AIReviewRecommendations";
 import CriticalIssues from "../aiReview/CriticalIssues";
 import EngineeringScore from "../aiReview/EngineeringScore";
+import ReviewMetadata from "../aiReview/ReviewMetadata";
 import Strengths from "../aiReview/Strengths";
-import TechnologyInsights from "../aiReview/TechnologyInsights";
 
-export default function RepositoryAIReview({
-  review,
-  generating,
-  onRefresh,
-}) {
+export default function RepositoryAIReview({ repository, review }) {
   if (!review) return null;
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-end">
-        <button
-          onClick={onRefresh}
-          disabled={generating}
-          className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-violet-700 disabled:opacity-50"
-        >
-          {generating
-            ? "Refreshing..."
-            : "Refresh AI Review"}
-        </button>
+      <AIReviewHero review={review} />
+
+      <AIExecutiveSummary data={review.executiveSummary} />
+
+      <EngineeringScore data={review.engineeringScore} />
+
+      <div className="grid gap-8 xl:grid-cols-2">
+        <Strengths data={review.strengths} />
+
+        <CriticalIssues data={review.criticalIssues} />
       </div>
 
-      <AIExecutiveSummary
-        data={review.executiveSummary}
+      <ActionPlan data={review.actionPlan} />
+
+      <AIReviewRecommendations
+        architectureSuggestions={review.architectureSuggestions}
+        technologyInsights={review.technologyInsights}
       />
 
-      <EngineeringScore
-        data={review.engineeringScore}
-      />
-
-      <CriticalIssues
-        data={review.criticalIssues}
-      />
-
-      <Strengths
-        data={review.strengths}
-      />
-
-      <ActionPlan
-        data={review.actionPlan}
-      />
-
-      <TechnologyInsights
-        data={review.technologyInsights}
-      />
-
-      <ArchitectureSuggestions
-        data={review.architectureSuggestions}
-      />
+      <ReviewMetadata repository={repository} review={review} />
     </div>
   );
 }

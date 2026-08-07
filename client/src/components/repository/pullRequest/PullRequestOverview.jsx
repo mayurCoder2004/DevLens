@@ -1,210 +1,193 @@
 import {
-  GitPullRequest,
-  User,
-  GitBranch,
-  Calendar,
-  Clock3,
-  ExternalLink,
+  AlertTriangle,
   CheckCircle2,
-  Circle,
+  FileWarning,
+  GitCompareArrows,
+  Info,
+  Package,
+  ServerCog,
+  Shield,
+  Sparkles,
 } from "lucide-react";
 
-export default function PullRequestOverview({
-  pullRequestAnalysis,
-}) {
+const RISK_CONFIG = {
+  Critical: {
+    color: "text-red-400",
+    bg: "bg-red-500/10",
+    border: "border-red-500/30",
+    icon: AlertTriangle,
+    label: "Critical review required",
+  },
+  High: {
+    color: "text-orange-400",
+    bg: "bg-orange-500/10",
+    border: "border-orange-500/30",
+    icon: AlertTriangle,
+    label: "Review carefully",
+  },
+  Medium: {
+    color: "text-amber-400",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/30",
+    icon: Info,
+    label: "Moderate review needed",
+  },
+  Low: {
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+    border: "border-emerald-500/30",
+    icon: Shield,
+    label: "Low risk",
+  },
+};
 
-    console.log(pullRequestAnalysis);
+export default function PullRequestOverview({ pullRequestAnalysis }) {
   if (!pullRequestAnalysis) return null;
 
   const {
-  prNumber,
-  title,
-  state,
-  author,
-  authorAvatar,
-  baseBranch,
-  headBranch,
-  merged,
-  url,
-  createdAt,
-  updatedAt,
-} = pullRequestAnalysis;
+    riskScore,
+    riskLevel,
+    totalFiles,
+    totalChanges,
+    additions,
+    deletions,
+    criticalFiles = [],
+    hasConfigurationChanges,
+    hasDependencyChanges,
+    recommendations = [],
+  } = pullRequestAnalysis;
 
-  const formatDate = (date) =>
-    new Date(date).toLocaleString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
+  const riskConfig = RISK_CONFIG[riskLevel] ?? RISK_CONFIG.Low;
+  const RiskIcon = riskConfig.icon;
+
+  const signals = [
+    {
+      label: "Critical Files",
+      value: criticalFiles.length,
+      icon: FileWarning,
+      tone:
+        criticalFiles.length > 0
+          ? "bg-orange-500/10 text-orange-400"
+          : "bg-emerald-500/10 text-emerald-400",
+    },
+    {
+      label: "Dependencies",
+      value: hasDependencyChanges ? "Changed" : "Clean",
+      icon: Package,
+      tone: hasDependencyChanges
+        ? "bg-violet-500/10 text-violet-400"
+        : "bg-slate-500/10 text-slate-400",
+    },
+    {
+      label: "Configuration",
+      value: hasConfigurationChanges ? "Changed" : "Clean",
+      icon: ServerCog,
+      tone: hasConfigurationChanges
+        ? "bg-blue-500/10 text-blue-400"
+        : "bg-slate-500/10 text-slate-400",
+    },
+  ];
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-white">
-          Pull Request Overview
-        </h2>
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
+      <div className="mb-8 flex items-center gap-3">
+        <div className="rounded-xl bg-yellow-500/10 p-3">
+          <Sparkles className="h-6 w-6 text-yellow-400" />
+        </div>
 
-        <p className="mt-2 text-sm text-slate-400">
-          High-level information about the selected pull request,
-          including author, branches, lifecycle, and GitHub
-          reference.
-        </p>
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            AI Pull Request Overview
+          </h2>
+
+          <p className="mt-1 text-slate-400">
+            High-level analysis of pull request risk and review priority.
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[2fr,1fr]">
-        {/* Left */}
-        <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-6">
-          <div className="flex items-start gap-4">
-            <div className="rounded-xl bg-blue-500/10 p-3">
-              <GitPullRequest className="h-6 w-6 text-blue-400" />
+      <div className="grid gap-6 lg:grid-cols-4">
+        <div
+          className={`min-h-[180px] rounded-xl border ${riskConfig.border} ${riskConfig.bg} p-6`}
+        >
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">Risk Score</h3>
+            <div className="rounded-xl bg-slate-900/60 p-3">
+              <RiskIcon className={`h-5 w-5 ${riskConfig.color}`} />
             </div>
+          </div>
 
-            <div className="flex-1">
-              <p className="text-sm text-slate-400">
-                Pull Request #{prNumber}
-              </p>
-
-              <h3 className="mt-1 text-xl font-semibold text-white">
-                {title}
-              </h3>
-
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <InfoRow
-                  icon={GitBranch}
-                  label="Base Branch"
-                  value={baseBranch}
-                />
-
-                <InfoRow
-                  icon={GitBranch}
-                  label="Head Branch"
-                  value={headBranch}
-                />
-
-                <InfoRow
-                  icon={Calendar}
-                  label="Created"
-                  value={formatDate(createdAt)}
-                />
-
-                <InfoRow
-                  icon={Clock3}
-                  label="Last Updated"
-                  value={formatDate(updatedAt)}
-                />
-              </div>
-
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-500"
-              >
-                View on GitHub
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </div>
+          <div className="mt-8">
+            <p className={`text-5xl font-bold ${riskConfig.color}`}>
+              {riskScore}%
+            </p>
+            <p className="mt-3 text-sm text-slate-500">{riskConfig.label}</p>
           </div>
         </div>
 
-        {/* Right */}
-        <div className="space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-6">
-            <h3 className="mb-5 text-lg font-semibold text-white">
-              Author
+        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-6">
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">Change Size</h3>
+            <GitCompareArrows className="h-5 w-5 text-slate-400" />
+          </div>
+
+          <div className="mt-6 space-y-3">
+            <MetricRow label="Files" value={totalFiles} />
+            <MetricRow label="Lines" value={totalChanges} />
+            <MetricRow label="Added" value={`+${additions}`} />
+            <MetricRow label="Deleted" value={`-${deletions}`} />
+          </div>
+        </div>
+
+        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-6 lg:col-span-2">
+          <div className="mb-5 flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+            <h3 className="text-lg font-semibold text-white">
+              Review Signals
             </h3>
+          </div>
 
-            <div className="flex items-center gap-4">
-              <img
-                src={authorAvatar}
-                alt={author}
-                className="h-14 w-14 rounded-full border border-slate-700"
-              />
+          <div className="grid gap-3 sm:grid-cols-3">
+            {signals.map((signal) => {
+              const Icon = signal.icon;
 
-              <div>
-                <p className="text-lg font-medium text-white">
-                  {author}
-                </p>
-
-                <div className="mt-1 flex items-center gap-2 text-sm text-slate-400">
-                  <User className="h-4 w-4" />
-                  GitHub Contributor
+              return (
+                <div
+                  key={signal.label}
+                  className="rounded-lg border border-slate-800 bg-slate-950/60 p-4"
+                >
+                  <div
+                    className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${signal.tone}`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <p className="text-xs text-slate-500">{signal.label}</p>
+                  <p className="mt-1 font-semibold text-white">
+                    {signal.value}
+                  </p>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-6">
-            <h3 className="mb-5 text-lg font-semibold text-white">
-              Status
-            </h3>
-
-            <div className="space-y-4">
-              <StatusRow
-                label="State"
-                value={state}
-                active={state === "open"}
-              />
-
-              <StatusRow
-                label="Merged"
-                value={merged ? "Yes" : "No"}
-                active={merged}
-              />
-            </div>
-          </div>
+          <p className="mt-4 text-sm leading-6 text-slate-400">
+            {recommendations.length > 0
+              ? `${recommendations.length} AI recommendation${
+                  recommendations.length === 1 ? "" : "s"
+                } generated for reviewer follow-up.`
+              : "No AI recommendations were generated for this pull request."}
+          </p>
         </div>
       </div>
     </section>
   );
 }
 
-function InfoRow({
-  icon: Icon,
-  label,
-  value,
-}) {
+function MetricRow({ label, value }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="rounded-lg bg-slate-800 p-2">
-        <Icon className="h-4 w-4 text-slate-300" />
-      </div>
-
-      <div>
-        <p className="text-sm text-slate-400">{label}</p>
-
-        <p className="mt-1 font-medium text-white">
-          {value}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function StatusRow({
-  label,
-  value,
-  active,
-}) {
-  return (
-    <div className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900 p-4">
-      <span className="text-sm text-slate-400">
-        {label}
-      </span>
-
-      <div className="flex items-center gap-2">
-        {active ? (
-          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-        ) : (
-          <Circle className="h-4 w-4 text-slate-500" />
-        )}
-
-        <span className="font-medium capitalize text-white">
-          {value}
-        </span>
-      </div>
+    <div className="flex items-center justify-between">
+      <span className="text-xs text-slate-500">{label}</span>
+      <span className="text-sm font-bold text-white">{value}</span>
     </div>
   );
 }

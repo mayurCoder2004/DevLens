@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -9,112 +9,147 @@ import {
 
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
 import DeploymentSkeleton from "../components/repository/deployment/DeploymentSkeleton";
+import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
 
 export default function Deployment() {
-  const {
-    repository,
-    refreshRepository,
-  } = useOutletContext();
-
+  const { repository, refreshRepository } = useOutletContext();
   const { repositoryId } = useParams();
 
   const [deployment, setDeployment] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    loadDeployment();
-  }, [repositoryId]);
-
-  const fetchDeployment = async () => {
-    const response = await getDeploymentReport(repositoryId);
-
-    setDeployment(response.data.data);
-  };
-
-  const analyzeAndFetch = async () => {
-    setAnalyzing(true);
-
-    toast.promise(
-      (async () => {
-        await analyzeDeployment(repositoryId);
-        await fetchDeployment();
-        await refreshRepository();
-      })(),
-      {
-        loading: 'Analyzing deployment...',
-        success: 'Deployment analysis completed successfully!',
-        error: (err) => err.response?.data?.message ?? 'Failed to analyze deployment.',
-      }
-    ).finally(() => {
-      setAnalyzing(false);
-    });
-  };
-
-  const loadDeployment = async () => {
+  const loadDeployment = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
 
-      await fetchDeployment();
+      const response = await getDeploymentReport(repositoryId);
+
+      setDeployment(response.data.data);
     } catch (err) {
       if (err.response?.status === 404) {
         setDeployment(null);
       } else {
         console.error(err);
-
-        setError(
-          err.response?.data?.message ??
-            "Failed to load deployment report."
-        );
+        toast.error("Failed to load deployment analysis.");
       }
     } finally {
       setLoading(false);
     }
+  }, [repositoryId]);
+
+  useEffect(() => {
+    loadDeployment();
+  }, [loadDeployment]);
+
+  const handleAnalyze = async () => {
+    toast.promise(
+      (async () => {
+        setLoading(true);
+
+        await analyzeDeployment(repositoryId);
+
+        await loadDeployment();
+
+        await refreshRepository();
+      })(),
+      {
+        loading: "Analyzing deployment...",
+        success: "Deployment analysis completed successfully!",
+        error: (err) =>
+          err.response?.data?.message ?? "Failed to analyze deployment.",
+      }
+    );
   };
 
   if (loading) {
-    return <DeploymentSkeleton />;
+    return (
+      <div className="mx-auto max-w-7xl">
+        <DeploymentSkeleton />
+      </div>
+    );
   }
 
   if (!deployment) {
     return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-center">
-        <h2 className="text-2xl font-semibold text-white">
-          No Deployment Analysis
-        </h2>
+      <div className="mx-auto max-w-7xl space-y-8">
+        <RepositoryPageHeader
+          title="Deployment"
+          description="Analyze deployment readiness, infrastructure configuration, CI/CD pipelines, and receive AI-powered recommendations."
+          actionLabel="Analyze Deployment"
+          action={handleAnalyze}
+          loading={loading}
+        />
 
-        <p className="mt-3 text-slate-400">
-          This repository hasn't been analyzed yet.
-        </p>
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-16 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-4xl">
+            🚀
+          </div>
 
-        <button
-          onClick={analyzeAndFetch}
-          disabled={analyzing}
-          className="mt-6 rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700 disabled:opacity-50"
-        >
-          {analyzing
-            ? "Analyzing..."
-            : "Analyze Deployment"}
-        </button>
+          <h2 className="text-2xl font-semibold text-white">
+            No Deployment Analysis
+          </h2>
 
-        {error && (
-          <p className="mt-4 text-sm text-red-400">
-            {error}
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+            This repository hasn't been analyzed yet. Run a deployment analysis
+            to evaluate infrastructure configuration, CI/CD pipelines, build
+            readiness, and receive AI-powered deployment recommendations.
           </p>
-        )}
+
+          <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Infrastructure</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Docker, Kubernetes, and platform configuration.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ CI/CD Pipelines</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Continuous integration and deployment workflows.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Build Readiness</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                Dependencies, scripts, and build configuration.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+              <h4 className="font-medium text-white">✓ Recommendations</h4>
+              <p className="mt-1 text-sm text-slate-400">
+                AI-powered deployment improvement suggestions.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleAnalyze}
+            className="mt-10 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700"
+          >
+            Analyze Deployment
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <RepositoryDeployment
-      repository={repository}
-      deployment={deployment}
-      analyzing={analyzing}
-      error={error}
-      onReanalyze={analyzeAndFetch}
-    />
+    <div className="mx-auto max-w-7xl space-y-8">
+      <RepositoryPageHeader
+        title="Deployment"
+        description="Analyze deployment readiness, infrastructure configuration, CI/CD pipelines, and receive AI-powered recommendations."
+        actionLabel="Re-analyze"
+        action={handleAnalyze}
+        loading={loading}
+      />
+
+      <RepositoryDeployment
+        repository={repository}
+        deployment={deployment}
+      />
+    </div>
   );
 }

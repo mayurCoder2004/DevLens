@@ -16,17 +16,40 @@ export default function RepositoryDeployment({ deployment }) {
 
   return (
     <div className="space-y-8">
-  <DeploymentSummaryCards deployment={deployment} />
+      {/* Summary Cards */}
+      <DeploymentSummaryCards deployment={deployment} />
 
-  <DeploymentAnalytics deployment={deployment} />
+      {/* Analytics */}
+      <DeploymentAnalytics deployment={deployment} />
 
-  <DeploymentOverview deployment={deployment} />
+      {/* AI Overview */}
+      <DeploymentOverview deployment={deployment} />
 
-  <DeploymentInsights deployment={deployment} />
+      {/* Details Section - 2x2 Grid */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <DeploymentInsights
+          title="Strengths"
+          items={deployment.strengths || []}
+          type="success"
+        />
 
-  <DeploymentRecommendations deployment={deployment} />
+        <DeploymentInsights
+          title="Critical Issues"
+          items={deployment.criticalIssues || []}
+          type="error"
+        />
 
-  <DeploymentConfigurationBreakdown deployment={deployment} />
-</div>
+        <DeploymentInsights
+          title="Warnings"
+          items={deployment.warnings || []}
+          type="warning"
+        />
+
+        <DeploymentRecommendations deployment={deployment} />
+      </div>
+
+      {/* Configuration Breakdown */}
+      <DeploymentConfigurationBreakdown deployment={deployment} />
+    </div>
   );
 }

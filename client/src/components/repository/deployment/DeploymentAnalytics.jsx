@@ -13,7 +13,7 @@ export default function DeploymentAnalytics({ deployment }) {
           : deployment.deploymentScore >= 60
           ? "Good"
           : "Needs Improvement",
-      color: "blue",
+      color: "bg-blue-500",
     },
     {
       title: "Infrastructure",
@@ -24,7 +24,7 @@ export default function DeploymentAnalytics({ deployment }) {
           : deployment.infrastructure.score > 0
           ? "Partial"
           : "Missing",
-      color: "red",
+      color: "bg-red-500",
     },
     {
       title: "Configuration",
@@ -35,7 +35,7 @@ export default function DeploymentAnalytics({ deployment }) {
           : deployment.configuration.score >= 50
           ? "Partial"
           : "Missing",
-      color: "amber",
+      color: "bg-amber-500",
     },
     {
       title: "Build Readiness",
@@ -46,7 +46,7 @@ export default function DeploymentAnalytics({ deployment }) {
           : deployment.buildReadiness.score >= 50
           ? "Partial"
           : "Missing",
-      color: "emerald",
+      color: "bg-emerald-500",
     },
     {
       title: "CI/CD",
@@ -57,7 +57,7 @@ export default function DeploymentAnalytics({ deployment }) {
           : deployment.ciCd.score > 0
           ? "Partial"
           : "Missing",
-      color: "violet",
+      color: "bg-violet-500",
     },
   ];
 
@@ -112,63 +112,64 @@ export default function DeploymentAnalytics({ deployment }) {
   const getBadgeClasses = (status) => {
     switch (status) {
       case "Ready":
-        return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        return "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30";
       case "Partial":
-        return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+        return "bg-amber-500/15 text-amber-400 border border-amber-500/30";
       default:
-        return "bg-red-500/10 text-red-400 border border-red-500/20";
+        return "bg-red-500/15 text-red-400 border border-red-500/30";
     }
   };
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-white">
+    <section>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-white">
           Deployment Analytics
         </h2>
 
-        <p className="mt-2 text-sm text-slate-400">
-          Deployment readiness across core infrastructure and
-          DevOps categories.
+        <p className="mt-2 text-slate-400">
+          Deployment readiness across infrastructure and DevOps categories.
         </p>
       </div>
 
-      <div className="mt-8 space-y-6">
-        {metrics.map((metric) => (
-          <ProgressMetric
-            key={metric.title}
-            title={metric.title}
-            value={metric.value}
-            status={metric.status}
-            color={metric.color}
-          />
-        ))}
-      </div>
-
-      <div className="mt-10 border-t border-slate-800 pt-8">
-        <h3 className="text-lg font-semibold text-white">
-          Deployment Health
-        </h3>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {health.map((item) => (
-            <div
-              key={item.title}
-              className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/60 p-4"
-            >
-              <span className="text-sm text-slate-300">
-                {item.title}
-              </span>
-
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-medium ${getBadgeClasses(
-                  item.status
-                )}`}
-              >
-                {item.status}
-              </span>
-            </div>
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
+        <div className="space-y-6">
+          {metrics.map((metric) => (
+            <ProgressMetric
+              key={metric.title}
+              title={metric.title}
+              value={metric.value}
+              status={metric.status}
+              color={metric.color}
+            />
           ))}
+        </div>
+
+        <div className="mt-10 border-t border-slate-800 pt-8">
+          <h3 className="text-lg font-semibold text-white">
+            Deployment Health
+          </h3>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {health.map((item) => (
+              <div
+                key={item.title}
+                className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/60 p-4"
+              >
+                <span className="text-sm font-medium text-slate-300">
+                  {item.title}
+                </span>
+
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${getBadgeClasses(
+                    item.status
+                  )}`}
+                >
+                  {item.status}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

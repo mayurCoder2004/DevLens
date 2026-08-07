@@ -1,66 +1,54 @@
 import { Lightbulb } from "lucide-react";
 
-export default function EngineeringRecommendations({
-  engineeringHealth,
-}) {
+export default function EngineeringRecommendations({ engineeringHealth }) {
   if (!engineeringHealth) return null;
 
-  const recommendations =
-    engineeringHealth.priorityRecommendations ?? [];
+  const recommendations = engineeringHealth.priorityRecommendations ?? [];
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-semibold text-white">
-          Engineering Recommendations
-        </h2>
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6 backdrop-blur-sm">
+      <div className="flex items-center gap-3">
+        <div className="rounded-xl bg-yellow-500/10 p-2">
+          <Lightbulb className="h-6 w-6 text-yellow-400" />
+        </div>
 
-        <p className="mt-2 text-sm text-slate-400">
-          Prioritized actions that can improve your repository's
-          engineering health and overall software quality.
-        </p>
+        <div>
+          <h2 className="text-xl font-semibold text-white">
+            Engineering Recommendations
+          </h2>
+
+          <p className="mt-1 text-sm text-slate-400">
+            Prioritized actions to improve engineering quality.
+          </p>
+        </div>
       </div>
 
-      {/* Empty State */}
-      {recommendations.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-emerald-900/50 bg-slate-950/60 p-8 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10">
-            <Lightbulb className="h-7 w-7 text-emerald-400" />
-          </div>
+      <div className="my-6 border-t border-slate-800" />
 
-          <h3 className="mt-5 text-lg font-semibold text-white">
-            No Recommendations Available
+      {recommendations.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/40 py-14 text-center">
+          <Lightbulb className="mx-auto h-12 w-12 text-slate-500" />
+
+          <h3 className="mt-5 text-xl font-semibold text-white">
+            No Recommendations
           </h3>
 
           <p className="mt-2 text-sm text-slate-400">
-            Your repository already demonstrates strong engineering
-            practices. Keep monitoring future analyses for new
-            improvements.
+            Your repository demonstrates strong engineering practices.
           </p>
         </div>
       ) : (
-        <div className="mt-8 space-y-4">
+        <div className="space-y-3">
           {recommendations.map((recommendation, index) => (
             <div
               key={index}
-              className="rounded-xl border border-slate-800 bg-slate-950/60 p-6 transition-colors hover:border-amber-500/40"
+              className="group flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-900 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:shadow-lg"
             >
-              <div className="flex items-start gap-4">
-                <div className="rounded-lg bg-amber-500/10 p-3">
-                  <Lightbulb className="h-5 w-5 text-amber-400" />
-                </div>
-
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white">
-                    Recommendation {index + 1}
-                  </h3>
-
-                  <p className="mt-2 leading-7 text-slate-300">
-                    {recommendation}
-                  </p>
-                </div>
+              <div className="rounded-lg bg-amber-500/10 p-2 shrink-0">
+                <Lightbulb className="h-4 w-4 text-amber-400" />
               </div>
+
+              <p className="text-sm leading-7 text-slate-300">{recommendation}</p>
             </div>
           ))}
         </div>

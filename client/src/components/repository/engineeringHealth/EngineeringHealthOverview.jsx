@@ -1,14 +1,6 @@
-import {
-  Activity,
-  BadgeCheck,
-  Clock3,
-  Lightbulb,
-  ShieldCheck,
-} from "lucide-react";
+import { Sparkles, Activity, BadgeCheck, Lightbulb, Clock3 } from "lucide-react";
 
-export default function EngineeringHealthOverview({
-  engineeringHealth,
-}) {
+export default function EngineeringHealthOverview({ engineeringHealth }) {
   if (!engineeringHealth) return null;
 
   const {
@@ -26,79 +18,108 @@ export default function EngineeringHealthOverview({
       })
     : "Not Available";
 
-  const overviewItems = [
-    {
-      title: "Overall Status",
-      value: status,
-      icon: ShieldCheck,
-      color: "text-blue-400",
-    },
-    {
-      title: "Engineering Score",
-      value: `${engineeringScore}%`,
-      icon: Activity,
-      color: "text-emerald-400",
-    },
-    {
-      title: "Strengths",
-      value: strengths.length,
-      icon: BadgeCheck,
-      color: "text-violet-400",
-    },
-    {
-      title: "Recommendations",
-      value: priorityRecommendations.length,
-      icon: Lightbulb,
-      color: "text-amber-400",
-    },
-    {
-      title: "Last Analysis",
-      value: formattedDate,
-      icon: Clock3,
-      color: "text-cyan-400",
-    },
-  ];
+  const scoreLabel =
+    engineeringScore >= 90
+      ? "Excellent"
+      : engineeringScore >= 75
+      ? "Good"
+      : engineeringScore >= 60
+      ? "Fair"
+      : "Needs Improvement";
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-white">
-          Engineering Health Overview
-        </h2>
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
+      <div className="mb-8 flex items-center gap-3">
+        <div className="rounded-xl bg-yellow-500/10 p-3">
+          <Sparkles className="h-6 w-6 text-yellow-400" />
+        </div>
 
-        <p className="mt-2 text-sm text-slate-400">
-          Executive overview of the repository's current
-          engineering health.
-        </p>
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            AI Engineering Health Overview
+          </h2>
+
+          <p className="mt-1 text-slate-400">
+            High-level summary of your repository's engineering health status.
+          </p>
+        </div>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {overviewItems.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <div
-              key={item.title}
-              className="rounded-xl border border-slate-800 bg-slate-950/60 p-6"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`rounded-lg bg-slate-800 p-2 ${item.color}`}
-                >
-                  <Icon className="h-5 w-5" />
-                </div>
-
-                <h3 className="text-sm font-medium text-slate-400">
-                  {item.title}
-                </h3>
-              </div>
-
-              <p className="mt-5 text-2xl font-bold text-white break-words">
-                {item.value}
-              </p>
+      <div className="grid gap-6 lg:grid-cols-4">
+        {/* Score Card */}
+        <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-6 min-h-[180px]">
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">
+              Engineering Score
+            </h3>
+            <div className="rounded-xl bg-slate-900/60 p-3">
+              <Activity className="h-5 w-5 text-blue-400" />
             </div>
-          );
-        })}
+          </div>
+
+          <div className="mt-8">
+            <p className="text-5xl font-bold text-blue-400">
+              {engineeringScore}%
+            </p>
+            <p className="mt-3 text-sm text-slate-500">{scoreLabel}</p>
+          </div>
+        </div>
+
+        {/* Status Card */}
+        <div className="rounded-xl border border-slate-700 bg-slate-900 p-6 min-h-[180px]">
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">Status</h3>
+            <Sparkles className="h-5 w-5 text-slate-400" />
+          </div>
+
+          <div className="mt-8">
+            <p className="text-xl font-bold text-white">{status}</p>
+            <p className="mt-3 text-sm text-slate-500">Overall assessment</p>
+          </div>
+        </div>
+
+        {/* Strengths Count Card */}
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-6 min-h-[180px]">
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">Strengths</h3>
+            <div className="rounded-xl bg-slate-900/60 p-3">
+              <BadgeCheck className="h-5 w-5 text-emerald-400" />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-5xl font-bold text-emerald-400">
+              {strengths.length}
+            </p>
+            <p className="mt-3 text-sm text-slate-500">Detected strengths</p>
+          </div>
+        </div>
+
+        {/* Recommendations Count Card */}
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-6 min-h-[180px]">
+          <div className="flex items-start justify-between">
+            <h3 className="text-sm font-medium text-slate-400">
+              Recommendations
+            </h3>
+            <div className="rounded-xl bg-slate-900/60 p-3">
+              <Lightbulb className="h-5 w-5 text-amber-400" />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-5xl font-bold text-amber-400">
+              {priorityRecommendations.length}
+            </p>
+            <p className="mt-3 text-sm text-slate-500">Priority actions</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Last Analyzed */}
+      <div className="mt-6 flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 px-5 py-3">
+        <Clock3 className="h-4 w-4 text-slate-500" />
+        <span className="text-sm text-slate-500">Last analyzed:</span>
+        <span className="text-sm font-medium text-slate-300">{formattedDate}</span>
       </div>
     </section>
   );

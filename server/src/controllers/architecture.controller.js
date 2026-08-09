@@ -13,7 +13,7 @@ const analyzeRepositoryArchitecture = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to analyze repository architecture:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -34,7 +34,7 @@ const getRepositoryArchitecture = async (req, res) => {
       data: architecture,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get repository architecture:", error.message);
 
     return res.status(500).json({
       success: false,

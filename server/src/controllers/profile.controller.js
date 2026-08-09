@@ -84,7 +84,7 @@ exports.getStats = async (req, res) => {
       developerScore,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get profile stats:", error.message);
 
     return res.status(500).json({
       message: error.message,

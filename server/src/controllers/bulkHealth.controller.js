@@ -9,7 +9,7 @@ const analyzeAllHealth = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to analyze all repository health:", error.message);
 
     return res.status(500).json({
       success: false,

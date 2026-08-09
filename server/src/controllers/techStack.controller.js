@@ -38,7 +38,7 @@ exports.analyzeTechStack = async (req, res) => {
 
     return res.json(saved);
   } catch (error) {
-    console.error(error);
+    console.error("Failed to analyze tech stack:", error.message);
 
     return res.status(500).json({
       message: error.message,
@@ -56,7 +56,7 @@ exports.getTechStack = async (req, res) => {
 
     return res.json(data);
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get tech stack:", error.message);
 
     return res.status(500).json({
       message: error.message,

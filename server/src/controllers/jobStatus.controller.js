@@ -11,7 +11,7 @@ exports.getJobStatus = async (req, res) => {
       data: status,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get job status:", error.message);
 
     return res.status(404).json({
       success: false,

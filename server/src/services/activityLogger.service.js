@@ -54,7 +54,7 @@ const logActivity = async ({
       },
     });
   } catch (error) {
-    console.error("Failed to log activity:", error);
+    console.error("Failed to log activity:", error.message);
 
     // Never break the main feature because activity logging failed.
     return null;

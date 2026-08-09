@@ -87,7 +87,7 @@ const analyzeRepositoryHealth = async (req, res) => {
       data: health,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to analyze repository health:", error.message);
 
     return res.status(500).json({
       success: false,
@@ -116,7 +116,7 @@ const getRepositoryHealth = async (req, res) => {
       data: health,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get repository health:", error.message);
 
     return res.status(500).json({
       success: false,

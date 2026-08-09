@@ -11,7 +11,7 @@ const getInsights = async (req, res) => {
       data: insights,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get portfolio insights:", error.message);
 
     return res.status(500).json({
       success: false,

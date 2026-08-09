@@ -11,7 +11,7 @@ const getRecommendations = async (req, res) => {
       data: recommendations,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get portfolio recommendations:", error.message);
 
     return res.status(500).json({
       success: false,

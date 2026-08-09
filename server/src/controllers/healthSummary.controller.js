@@ -9,7 +9,7 @@ const getSummary = async (req, res) => {
       data: summary,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get health summary:", error.message);
 
     return res.status(500).json({
       success: false,

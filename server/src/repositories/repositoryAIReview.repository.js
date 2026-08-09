@@ -32,8 +32,7 @@ class RepositoryAIReviewRepository {
       // Return only the review JSON
       return savedReview.review;
     } catch (error) {
-      logger.error("Failed to save AI review:");
-      logger.error(error);
+      logger.error(`Failed to save AI review: ${error.message}`);
 
       throw error;
     }

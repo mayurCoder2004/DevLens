@@ -23,7 +23,7 @@ const getRepositoryFilesMetadata = async (owner, repo, githubToken) => {
       totalRootFiles: files.length,
     };
   } catch (error) {
-    console.error(error);
+    console.error("Failed to get repository file metadata:", error.message);
 
     return {
       hasReadme: false,

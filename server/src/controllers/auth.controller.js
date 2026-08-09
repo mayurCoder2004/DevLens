@@ -57,7 +57,7 @@ const login = async (req, res) => {
       user,
     });
   } catch (error) {
-    logger.error(`Login failed: ${error.stack}`);
+    logger.error(`Login failed: ${error.message}`);
 
     return res.status(500).json({
       success: false,

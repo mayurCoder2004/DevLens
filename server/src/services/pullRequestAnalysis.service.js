@@ -74,7 +74,7 @@ const analyzePullRequest = async ({
       files,
     };
   } catch (error) {
-    console.error("Pull Request Analysis Error:", error);
+    console.error("Pull Request Analysis Error:", error.message);
 
     throw new Error("Failed to analyze pull request.");
   }

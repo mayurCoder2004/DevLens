@@ -57,7 +57,7 @@ const Dashboard = () => {
 
       setRepos(response.data.repositories);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch repositories:", error.message);
     }
   };
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(
         "Failed to fetch activities:",
-        error
+        error.message
       );
     } finally {
       setActivityLoading(false);
@@ -89,7 +89,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(
         "Failed to fetch dashboard overview:",
-        error
+        error.message
       );
     } finally {
       setOverviewLoading(false);
@@ -108,7 +108,7 @@ const Dashboard = () => {
       } catch (error) {
         console.error(
           "Failed to fetch attention repositories:",
-          error
+          error.message
         );
       } finally {
         setAttentionLoading(false);

@@ -29,7 +29,7 @@ export default function TechnicalDebt() {
       if (error.response?.status === 404) {
         setTechnicalDebt(null);
       } else {
-        console.error("Error fetching technical debt:", error);
+        console.error("Error fetching technical debt:", error.message);
         toast.error("Failed to load technical debt.");
       }
     } finally {

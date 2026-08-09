@@ -32,7 +32,7 @@ export default function EngineeringHealthPage() {
       if (err.response?.status === 404) {
         setEngineeringHealth(null);
       } else if (!rethrow) {
-        console.error(err);
+        console.error("Failed to load engineering health:", err.message);
         toast.error(
           err.response?.data?.message ?? "Failed to load engineering health."
         );

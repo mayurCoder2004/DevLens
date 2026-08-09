@@ -30,7 +30,7 @@ export default function Repositories() {
 
       setRepos(response.data.repositories);
     } catch (error) {
-      console.error(error);
+      console.error("Failed to fetch repositories:", error.message);
     } finally {
       setLoading(false);
     }

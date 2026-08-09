@@ -114,7 +114,7 @@ export default function WorkspaceActions({
           break;
       }
     } catch (error) {
-      console.error(error);
+      console.error("Workspace action failed:", error.message);
 
       const errorMessage = error.response?.data?.message ?? "Failed to perform the requested action.";
       

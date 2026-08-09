@@ -35,7 +35,7 @@ export default function ArchitecturePage() {
       if (error.response?.status === 404) {
         setArchitecture(null);
       } else {
-        console.error(error);
+        console.error("Failed to load architecture:", error.message);
         toast.error("Failed to load architecture.");
       }
     } finally {

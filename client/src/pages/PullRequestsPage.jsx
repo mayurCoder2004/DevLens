@@ -28,7 +28,7 @@ export default function PullRequestsPage() {
 
       setPullRequests(response.data.data);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load pull requests:", err.message);
       if (!rethrow) {
         toast.error(
           err.response?.data?.message ?? "Failed to load pull requests."

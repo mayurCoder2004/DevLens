@@ -29,7 +29,7 @@ export default function Deployment() {
       if (err.response?.status === 404) {
         setDeployment(null);
       } else {
-        console.error(err);
+        console.error("Failed to load deployment analysis:", err.message);
         toast.error("Failed to load deployment analysis.");
       }
     } finally {

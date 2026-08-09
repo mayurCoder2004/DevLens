@@ -25,7 +25,7 @@ export default function Login() {
 
       navigate("/dashboard");
     } catch (error) {
-      console.error(error);
+      console.error("GitHub login failed:", error.message);
       setLoading(false);
     }
   };

@@ -28,7 +28,7 @@ export default function RepositoryLayout() {
 
       setRepository(data.repository);
     } catch (err) {
-      console.error("Failed to load repository:", err);
+      console.error("Failed to load repository:", err.message);
     } finally {
       setLoading(false);
     }

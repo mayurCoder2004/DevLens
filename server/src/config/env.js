@@ -25,9 +25,7 @@ const envSchema = z.object({
 
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
 
-  REDIS_HOST: z.string().min(1, "REDIS_HOST is required"),
-
-  REDIS_PORT: z.coerce.number().int().positive(),
+  REDIS_URL: z.string().url("REDIS_URL must be a valid URL"),
 });
 
 const parsed = envSchema.safeParse(process.env);

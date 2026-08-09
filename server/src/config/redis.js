@@ -2,9 +2,7 @@ const IORedis = require("ioredis");
 const env = require("./env");
 const logger = require("./logger");
 
-const connection = new IORedis({
-  host: env.REDIS_HOST,
-  port: env.REDIS_PORT,
+const connection = new IORedis(env.REDIS_URL, {
   maxRetriesPerRequest: null,
 
   retryStrategy(times) {

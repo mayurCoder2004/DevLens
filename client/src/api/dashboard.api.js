@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/dashboard";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const getAuthHeaders = () => ({
   headers: {
@@ -10,7 +10,7 @@ const getAuthHeaders = () => ({
 
 export const getDashboardOverview = async () => {
   const response = await axios.get(
-    `${API_URL}/overview`,
+    `${API_URL}/dashboard/overview`,
     getAuthHeaders()
   );
 
@@ -20,7 +20,7 @@ export const getDashboardOverview = async () => {
 export const getRepositoriesNeedingAttention =
   async () => {
     const response = await axios.get(
-      `${API_URL}/attention`,
+      `${API_URL}/dashboard/attention`,
       getAuthHeaders()
     );
 

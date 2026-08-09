@@ -15,6 +15,8 @@ import {
   getRepositoriesNeedingAttention,
 } from "../api/dashboard.api";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Dashboard = () => {
   const [repos, setRepos] = useState([]);
   const [syncLoading, setSyncLoading] = useState(false);
@@ -45,7 +47,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:5000/api/repositories",
+        `${API_URL}/repositories`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,7 +120,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/repositories/sync",
+        `${API_URL}/repositories/sync`,
         {},
         {
           headers: {

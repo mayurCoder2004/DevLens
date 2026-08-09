@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/activity";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const getRecentActivities = async (
   page = 1,
@@ -8,7 +8,7 @@ export const getRecentActivities = async (
 ) => {
   const token = localStorage.getItem("token");
 
-  const response = await axios.get(API_URL, {
+  const response = await axios.get(`${API_URL}/activity`, {
     params: {
       page,
       limit,

@@ -38,10 +38,7 @@ export default function ActivityItem({
           bg-slate-800
         "
       >
-        <Icon
-          size={20}
-          className={iconColor}
-        />
+        <Icon size={20} className={iconColor} />
       </div>
 
       {/* Content */}
@@ -49,9 +46,7 @@ export default function ActivityItem({
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-base font-semibold text-white">
-              {title}
-            </h3>
+            <h3 className="text-base font-semibold text-white">{title}</h3>
 
             <p className="mt-1 text-sm font-medium text-blue-400">
               {repository}
@@ -66,9 +61,7 @@ export default function ActivityItem({
         </div>
 
         {description && (
-          <p className="mt-3 text-sm leading-6 text-slate-400">
-            {description}
-          </p>
+          <p className="mt-3 text-sm leading-6 text-slate-400">{description}</p>
         )}
       </div>
     </article>

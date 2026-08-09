@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -7,17 +7,17 @@ import {
   useNodesState,
   useEdgesState,
   Panel,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
 
-import ArchitectureNode from './ArchitectureNode';
-import { getLayoutedElements } from './graphLayout';
+import ArchitectureNode from "./ArchitectureNode";
+import { getLayoutedElements } from "./graphLayout";
 import {
   createNodesFromArchitecture,
   createEdgesFromArchitecture,
   analyzeGraphComplexity,
-} from './graphUtils';
-import { getNodeColorScheme } from './nodeColors';
+} from "./graphUtils";
+import { getNodeColorScheme } from "./nodeColors";
 
 // Register custom node types
 const nodeTypes = {
@@ -26,17 +26,17 @@ const nodeTypes = {
 
 // Professional edge styling for production
 const defaultEdgeOptions = {
-  type: 'smoothstep',
+  type: "smoothstep",
   animated: true,
   style: {
-    stroke: 'rgb(59, 130, 246)',
+    stroke: "rgb(59, 130, 246)",
     strokeWidth: 2,
   },
 };
 
 /**
  * DependencyGraph - Production-grade architecture visualization
- * 
+ *
  * Features:
  * - ELK hierarchical layout (prevents extremely wide graphs)
  * - Custom styled nodes with file type detection
@@ -53,12 +53,12 @@ export default function DependencyGraph({ architecture }) {
   // Convert backend data to React Flow format
   const rawNodes = useMemo(
     () => createNodesFromArchitecture(architecture),
-    [architecture]
+    [architecture],
   );
 
   const rawEdges = useMemo(
     () => createEdgesFromArchitecture(architecture),
-    [architecture]
+    [architecture],
   );
 
   // Initialize React Flow state
@@ -82,7 +82,7 @@ export default function DependencyGraph({ architecture }) {
         setIsLayouting(false);
       })
       .catch((error) => {
-        console.error('Layout failed:', error);
+        console.error("Layout failed:", error);
         setNodes(rawNodes);
         setEdges(rawEdges);
         setIsLayouting(false);
@@ -112,15 +112,15 @@ export default function DependencyGraph({ architecture }) {
             animated: isConnected,
             style: {
               ...edge.style,
-              stroke: isConnected ? 'rgb(96, 165, 250)' : 'rgb(59, 130, 246)',
+              stroke: isConnected ? "rgb(96, 165, 250)" : "rgb(59, 130, 246)",
               strokeWidth: isConnected ? 3 : 2,
               opacity: isConnected ? 1 : 0.4,
             },
           };
-        })
+        }),
       );
     },
-    [setEdges]
+    [setEdges],
   );
 
   /**
@@ -133,11 +133,11 @@ export default function DependencyGraph({ architecture }) {
         animated: true,
         style: {
           ...edge.style,
-          stroke: 'rgb(59, 130, 246)',
+          stroke: "rgb(59, 130, 246)",
           strokeWidth: 2,
           opacity: 1,
         },
-      }))
+      })),
     );
   }, [setEdges]);
 
@@ -145,7 +145,7 @@ export default function DependencyGraph({ architecture }) {
    * Handle node click - prepared for future side panel integration
    */
   const onNodeClick = useCallback((_, node) => {
-    console.log('Node clicked:', node.data.label);
+    console.log("Node clicked:", node.data.label);
     // TODO: Open side panel with node details
     // - Full file path
     // - Import list
@@ -249,7 +249,10 @@ export default function DependencyGraph({ architecture }) {
 
       {/* Graph statistics overlay */}
       {graphStats && (
-        <Panel position="top-left" className="max-w-[calc(100vw-2rem)] space-y-2">
+        <Panel
+          position="top-left"
+          className="max-w-[calc(100vw-2rem)] space-y-2"
+        >
           <div className="rounded-lg border border-slate-700 bg-slate-800/90 p-3 shadow-xl backdrop-blur-sm">
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between gap-4">

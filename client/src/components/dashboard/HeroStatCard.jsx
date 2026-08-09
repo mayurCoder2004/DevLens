@@ -19,25 +19,14 @@ export default function HeroStatCard({
       "
     >
       <div className="flex items-center justify-between">
-        <p className="text-sm text-slate-400">
-          {label}
-        </p>
+        <p className="text-sm text-slate-400">{label}</p>
 
-        <Icon
-          size={20}
-          className={iconColor}
-        />
+        <Icon size={20} className={iconColor} />
       </div>
 
-      <h3 className="mt-3 text-3xl font-bold text-white">
-        {value}
-      </h3>
+      <h3 className="mt-3 text-3xl font-bold text-white">{value}</h3>
 
-      {subtitle && (
-        <p className="mt-1.5 text-xs text-slate-500">
-          {subtitle}
-        </p>
-      )}
+      {subtitle && <p className="mt-1.5 text-xs text-slate-500">{subtitle}</p>}
     </div>
   );
 }

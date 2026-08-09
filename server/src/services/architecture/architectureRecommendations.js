@@ -8,11 +8,7 @@ class ArchitectureRecommendationsService {
     this.aiProvider = AIProviderFactory.getOrchestrator();
   }
 
-  async generate({
-    architecture,
-    analytics,
-    insights,
-  }) {
+  async generate({ architecture, analytics, insights }) {
     const prompt = architecturePromptBuilder.build({
       architecture,
       analytics,
@@ -25,16 +21,15 @@ class ArchitectureRecommendationsService {
       await this.aiProvider.generateStructuredResponse(prompt);
 
     if (!Array.isArray(recommendations)) {
-      throw new Error(
-        "Invalid recommendations returned by AI."
-      );
+      throw new Error("Invalid recommendations returned by AI.");
     }
 
-    logger.info(`Generated ${recommendations.length} architecture recommendations`);
+    logger.info(
+      `Generated ${recommendations.length} architecture recommendations`,
+    );
 
     return recommendations;
   }
 }
 
-module.exports =
-  new ArchitectureRecommendationsService();
+module.exports = new ArchitectureRecommendationsService();

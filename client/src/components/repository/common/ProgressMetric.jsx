@@ -6,9 +6,7 @@ export default function ProgressMetric({
 }) {
   const isAvailable = value !== null && value !== undefined;
 
-  const percentage = isAvailable
-    ? Math.max(0, Math.min(value, 100))
-    : 0;
+  const percentage = isAvailable ? Math.max(0, Math.min(value, 100)) : 0;
 
   const colorClasses = {
     blue: "bg-blue-500",
@@ -21,16 +19,13 @@ export default function ProgressMetric({
     slate: "bg-slate-500",
   };
 
-  const progressColor =
-    colorClasses[color] || color || colorClasses.blue;
+  const progressColor = colorClasses[color] || color || colorClasses.blue;
 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <h4 className="text-sm font-medium text-white">
-            {title}
-          </h4>
+          <h4 className="text-sm font-medium text-white">{title}</h4>
 
           <p className="mt-1 text-xs text-slate-400">
             {isAvailable ? status : "Not Analyzed"}

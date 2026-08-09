@@ -5,9 +5,7 @@ export default function RepositoryGridHeader() {
     <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">
-          Repositories
-        </h2>
+        <h2 className="text-2xl font-bold text-white">Repositories</h2>
 
         <p className="mt-2 text-sm text-slate-400">
           Browse and manage analyzed repositories.

@@ -8,13 +8,13 @@ const dashboardController = require("../controllers/dashboard.controller");
 router.get(
   "/overview",
   authMiddleware,
-  dashboardController.getDashboardOverview
+  dashboardController.getDashboardOverview,
 );
 
 router.get(
   "/attention",
   authMiddleware,
-  dashboardController.getRepositoriesNeedingAttention
+  dashboardController.getRepositoriesNeedingAttention,
 );
 
 module.exports = router;

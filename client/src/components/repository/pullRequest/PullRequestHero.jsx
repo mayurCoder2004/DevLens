@@ -59,7 +59,7 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
             </span>
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${getRiskBadge(
-                riskLevel
+                riskLevel,
               )}`}
             >
               <Shield className="h-3.5 w-3.5" />
@@ -77,8 +77,16 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
           <div className="mt-5 grid gap-3 text-sm text-slate-400 sm:grid-cols-2 xl:grid-cols-4">
             <InfoItem icon={GitBranch} label="Base" value={baseBranch} />
             <InfoItem icon={GitBranch} label="Head" value={headBranch} />
-            <InfoItem icon={Calendar} label="Updated" value={formatDate(updatedAt)} />
-            <InfoItem icon={Shield} label="Risk Score" value={`${riskScore}%`} />
+            <InfoItem
+              icon={Calendar}
+              label="Updated"
+              value={formatDate(updatedAt)}
+            />
+            <InfoItem
+              icon={Shield}
+              label="Risk Score"
+              value={`${riskScore}%`}
+            />
           </div>
         </div>
 
@@ -98,7 +106,9 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
 
             <div className="min-w-0">
               <p className="text-xs text-slate-500">Author</p>
-              <p className="break-words font-medium text-white">{author || "Unknown"}</p>
+              <p className="break-words font-medium text-white">
+                {author || "Unknown"}
+              </p>
             </div>
           </div>
 
@@ -126,7 +136,9 @@ function InfoItem({ icon: Icon, label, value }) {
         <Icon className="h-3.5 w-3.5" />
         {label}
       </div>
-      <p className="break-words font-medium text-slate-200">{value || "Unknown"}</p>
+      <p className="break-words font-medium text-slate-200">
+        {value || "Unknown"}
+      </p>
     </div>
   );
 }

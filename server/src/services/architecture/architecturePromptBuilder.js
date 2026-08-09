@@ -10,12 +10,8 @@ class ArchitecturePromptBuilder {
    * @returns {string}
    */
   build({ architecture, analytics, insights }) {
-    const {
-      nodeCount,
-      edgeCount,
-      complexityScore,
-      hasCircularDependency,
-    } = architecture;
+    const { nodeCount, edgeCount, complexityScore, hasCircularDependency } =
+      architecture;
 
     return `
 You are a Senior Software Architect performing an architecture review for a production software repository.
@@ -40,10 +36,7 @@ Architecture Analytics:
 
 Existing Engineering Insights:
 ${insights
-  .map(
-    (insight) =>
-      `- ${insight.title}: ${insight.description}`,
-  )
+  .map((insight) => `- ${insight.title}: ${insight.description}`)
   .join("\n")}
 
 Instructions:

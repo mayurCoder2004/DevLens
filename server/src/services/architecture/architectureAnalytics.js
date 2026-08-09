@@ -16,15 +16,9 @@ class ArchitectureAnalytics {
     });
 
     edges.forEach((edge) => {
-      outgoing.set(
-        edge.source,
-        (outgoing.get(edge.source) || 0) + 1
-      );
+      outgoing.set(edge.source, (outgoing.get(edge.source) || 0) + 1);
 
-      incoming.set(
-        edge.target,
-        (incoming.get(edge.target) || 0) + 1
-      );
+      incoming.set(edge.target, (incoming.get(edge.target) || 0) + 1);
     });
 
     // -------------------------
@@ -69,7 +63,7 @@ class ArchitectureAnalytics {
     // -------------------------
 
     const rootModules = [...incoming.values()].filter(
-      (count) => count === 0
+      (count) => count === 0,
     ).length;
 
     // -------------------------
@@ -78,7 +72,7 @@ class ArchitectureAnalytics {
     // -------------------------
 
     const leafModules = [...outgoing.values()].filter(
-      (count) => count === 0
+      (count) => count === 0,
     ).length;
 
     // -------------------------
@@ -86,20 +80,14 @@ class ArchitectureAnalytics {
     // -------------------------
 
     const averageDependencies =
-      nodes.length === 0
-        ? 0
-        : (
-            edges.length / nodes.length
-          ).toFixed(1);
+      nodes.length === 0 ? 0 : (edges.length / nodes.length).toFixed(1);
 
     // -------------------------
     // Architecture Grade
     // -------------------------
 
     const dependencyRatio =
-      nodes.length === 0
-        ? 0
-        : edges.length / nodes.length;
+      nodes.length === 0 ? 0 : edges.length / nodes.length;
 
     let architectureGrade = "A";
 

@@ -31,7 +31,9 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
 
             <div>
               <h3 className="font-semibold text-white">Large Files</h3>
-              <p className="text-sm text-slate-500">{largeFiles.length} files</p>
+              <p className="text-sm text-slate-500">
+                {largeFiles.length} files
+              </p>
             </div>
           </div>
 
@@ -149,7 +151,9 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
                     </div>
 
                     <div className="mt-4 flex items-center justify-between border-t border-slate-800 pt-3">
-                      <span className="text-xs text-slate-500">Chain Depth</span>
+                      <span className="text-xs text-slate-500">
+                        Chain Depth
+                      </span>
                       <span className="text-sm font-semibold text-white">
                         {chain.depth}
                       </span>

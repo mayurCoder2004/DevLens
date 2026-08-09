@@ -20,10 +20,7 @@ export default function DashboardHero({
     return "Good Evening 🌙";
   };
 
-  const userName =
-    user?.firstName ||
-    user?.name?.split(" ")[0] ||
-    "Developer";
+  const userName = user?.firstName || user?.name?.split(" ")[0] || "Developer";
 
   return (
     <section className="mb-6 sm:mb-8">
@@ -77,11 +74,7 @@ export default function DashboardHero({
               <div className="flex min-w-0 flex-wrap items-center justify-center gap-2">
                 <RefreshCw
                   size={18}
-                  className={
-                    syncLoading
-                      ? "animate-spin"
-                      : ""
-                  }
+                  className={syncLoading ? "animate-spin" : ""}
                 />
 
                 <span>

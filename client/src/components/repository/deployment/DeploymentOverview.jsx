@@ -24,8 +24,7 @@ export default function DeploymentOverview({ deployment }) {
     },
   };
 
-  const config =
-    statusConfig[deployment.status] || statusConfig["Not Ready"];
+  const config = statusConfig[deployment.status] || statusConfig["Not Ready"];
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
@@ -80,8 +79,8 @@ export default function DeploymentOverview({ deployment }) {
               {deployment.deploymentScore >= 80
                 ? "Excellent readiness"
                 : deployment.deploymentScore >= 60
-                ? "Good readiness"
-                : "Needs improvement"}
+                  ? "Good readiness"
+                  : "Needs improvement"}
             </p>
           </div>
         </div>

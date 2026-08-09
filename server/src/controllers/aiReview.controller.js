@@ -25,9 +25,7 @@ const generateRepositoryReview = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Repository not found");
   }
 
-  const review = await aiReviewService.generateRepositoryReview(
-    repositoryId
-  );
+  const review = await aiReviewService.generateRepositoryReview(repositoryId);
 
   return res.status(200).json({
     success: true,
@@ -54,9 +52,7 @@ const getRepositoryReview = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Repository not found");
   }
 
-  const review = await aiReviewService.getRepositoryReview(
-    repositoryId
-  );
+  const review = await aiReviewService.getRepositoryReview(repositoryId);
 
   if (!review) {
     throw new ApiError(404, "AI review not found");
@@ -86,9 +82,7 @@ const refreshRepositoryReview = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Repository not found");
   }
 
-  const review = await aiReviewService.refreshRepositoryReview(
-    repositoryId
-  );
+  const review = await aiReviewService.refreshRepositoryReview(repositoryId);
 
   return res.status(200).json({
     success: true,

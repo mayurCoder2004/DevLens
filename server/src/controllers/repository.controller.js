@@ -1,8 +1,6 @@
 const prisma = require("../config/prisma");
 
-const architectureIntelligenceService = require(
-  "../services/architecture/architectureIntelligence.service"
-);
+const architectureIntelligenceService = require("../services/architecture/architectureIntelligence.service");
 
 const {
   getRepositories: fetchGithubRepositories,
@@ -45,9 +43,7 @@ const syncRepositories = asyncHandler(async (req, res) => {
         private: repo.private,
         repoUrl: repo.html_url,
         defaultBranch: repo.default_branch,
-        updatedAtGithub: repo.updated_at
-          ? new Date(repo.updated_at)
-          : null,
+        updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
       },
 
       create: {
@@ -61,9 +57,7 @@ const syncRepositories = asyncHandler(async (req, res) => {
         repoUrl: repo.html_url,
         defaultBranch: repo.default_branch,
         userId: user.id,
-        updatedAtGithub: repo.updated_at
-          ? new Date(repo.updated_at)
-          : null,
+        updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
       },
     });
   }
@@ -139,27 +133,27 @@ const getRepositoryById = asyncHandler(async (req, res) => {
   const { repositoryId } = req.validatedData.params;
 
   const repository = await prisma.repository.findFirst({
-  where: {
-    id: repositoryId,
-    userId: req.user.userId,
-  },
-  include: {
-    analytics: true,
-    health: true,
-    architecture: true,
-    technicalDebt: true,
-    deployment: true,
-    techStack: true,
-    aiReview: {
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        modelUsed: true,
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    include: {
+      analytics: true,
+      health: true,
+      architecture: true,
+      technicalDebt: true,
+      deployment: true,
+      techStack: true,
+      aiReview: {
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          modelUsed: true,
+        },
       },
     },
-  },
-});
+  });
 
   if (!repository) {
     throw new ApiError(404, "Repository not found");
@@ -197,7 +191,7 @@ const getRepositoryArchitecture = asyncHandler(async (req, res) => {
   }
 
   const intelligence = await architectureIntelligenceService.generate(
-    repository.architecture
+    repository.architecture,
   );
 
   return res.status(200).json({

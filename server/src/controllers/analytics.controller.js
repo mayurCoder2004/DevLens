@@ -27,7 +27,7 @@ const test = asyncHandler(async (req, res) => {
 
   const analytics = await analyticsService.getRepositoryAnalytics(
     repository,
-    repository.user.githubToken
+    repository.user.githubToken,
   );
 
   return res.status(200).json(analytics);
@@ -56,7 +56,7 @@ const analyzeRepository = asyncHandler(async (req, res) => {
 
   const analytics = await analyticsService.getRepositoryAnalytics(
     repository,
-    repository.user.githubToken
+    repository.user.githubToken,
   );
 
   const saved = await prisma.repositoryAnalytics.upsert({

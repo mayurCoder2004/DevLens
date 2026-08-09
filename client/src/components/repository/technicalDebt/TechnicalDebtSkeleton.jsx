@@ -1,6 +1,6 @@
 /**
  * TechnicalDebtSkeleton Component
- * 
+ *
  * Skeleton loading state for the Technical Debt page.
  * Matches the layout of:
  * - TechnicalDebtSummaryCards (6 metric cards in 3-column grid)
@@ -10,7 +10,7 @@
  * - TechnicalDebtFileBreakdown (3-column file breakdown)
  */
 
-import Skeleton from '../../ui/Skeleton';
+import Skeleton from "../../ui/Skeleton";
 
 const TechnicalDebtSkeleton = () => {
   return (

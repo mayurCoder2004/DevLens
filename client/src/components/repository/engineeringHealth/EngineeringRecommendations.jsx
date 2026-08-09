@@ -48,7 +48,9 @@ export default function EngineeringRecommendations({ engineeringHealth }) {
                 <Lightbulb className="h-4 w-4 text-amber-400" />
               </div>
 
-              <p className="text-sm leading-7 text-slate-300">{recommendation}</p>
+              <p className="text-sm leading-7 text-slate-300">
+                {recommendation}
+              </p>
             </div>
           ))}
         </div>

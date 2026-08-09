@@ -27,7 +27,7 @@ const analyzeDeployment = asyncHandler(async (req, res) => {
 
   const report = await deploymentService.analyzeRepositoryDeployment(
     repository,
-    repository.user.githubToken
+    repository.user.githubToken,
   );
 
   return res.status(200).json({

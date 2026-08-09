@@ -29,51 +29,69 @@ export default function PrivacyPage() {
         </h1>
 
         <p className="mt-4 text-slate-400">
-          Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          Last updated:{" "}
+          {new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </p>
 
         <div className="mt-12 space-y-10 text-slate-300 leading-8">
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">1. Information We Collect</h2>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              1. Information We Collect
+            </h2>
             <p>
-              DevLens collects only the information required to provide the service,
-              including your GitHub username and repository metadata accessed through
-              GitHub OAuth. We do not store your source code on our servers.
+              DevLens collects only the information required to provide the
+              service, including your GitHub username and repository metadata
+              accessed through GitHub OAuth. We do not store your source code on
+              our servers.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">2. How We Use Your Information</h2>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              2. How We Use Your Information
+            </h2>
             <p>
-              Information is used exclusively to analyze repositories you explicitly
-              connect and to generate engineering intelligence reports. We do not sell,
-              rent, or share your information with third parties.
+              Information is used exclusively to analyze repositories you
+              explicitly connect and to generate engineering intelligence
+              reports. We do not sell, rent, or share your information with
+              third parties.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">3. GitHub OAuth</h2>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              3. GitHub OAuth
+            </h2>
             <p>
-              Authentication is handled securely through GitHub OAuth. DevLens only
-              requests the minimum permissions needed to read repository metadata and
-              structure. You can revoke access from your GitHub settings at any time.
+              Authentication is handled securely through GitHub OAuth. DevLens
+              only requests the minimum permissions needed to read repository
+              metadata and structure. You can revoke access from your GitHub
+              settings at any time.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">4. Data Retention</h2>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              4. Data Retention
+            </h2>
             <p>
-              Analysis results are retained only for the duration of your session unless
-              you choose to save them. You may request deletion of your data at any time
-              by contacting us.
+              Analysis results are retained only for the duration of your
+              session unless you choose to save them. You may request deletion
+              of your data at any time by contacting us.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">5. Contact</h2>
+            <h2 className="text-xl font-semibold text-white mb-3">
+              5. Contact
+            </h2>
             <p>
-              If you have any questions about this Privacy Policy, please reach out via
-              the{" "}
+              If you have any questions about this Privacy Policy, please reach
+              out via the{" "}
               <a
                 href="https://github.com/mayurCoder2004/devlens"
                 target="_blank"

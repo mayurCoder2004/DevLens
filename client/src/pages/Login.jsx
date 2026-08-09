@@ -48,8 +48,8 @@ export default function Login() {
 
             <p className="mt-6 max-w-lg text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
               Analyze repositories, detect technical debt, visualize
-              architecture, evaluate engineering health, and generate
-              AI-powered engineering reviews—all from one platform.
+              architecture, evaluate engineering health, and generate AI-powered
+              engineering reviews—all from one platform.
             </p>
 
             <div className="mt-10 space-y-6">
@@ -80,8 +80,8 @@ export default function Login() {
                   </p>
 
                   <p className="text-sm text-slate-400">
-                    Architecture, deployment, health, technical debt,
-                    pull request analysis and much more.
+                    Architecture, deployment, health, technical debt, pull
+                    request analysis and much more.
                   </p>
                 </div>
               </div>
@@ -114,8 +114,7 @@ export default function Login() {
               </h2>
 
               <p className="mt-3 text-slate-400">
-                Continue with GitHub to access your engineering
-                workspace.
+                Continue with GitHub to access your engineering workspace.
               </p>
             </div>
 
@@ -140,16 +139,16 @@ export default function Login() {
 
             <div className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
               <p className="text-sm leading-7 text-slate-400">
-                By continuing, you authorize DevLens to securely access
-                your GitHub repositories for analysis. Your data is only
-                used to generate engineering insights and is never shared
-                with third parties.
+                By continuing, you authorize DevLens to securely access your
+                GitHub repositories for analysis. Your data is only used to
+                generate engineering insights and is never shared with third
+                parties.
               </p>
             </div>
 
             <p className="mt-8 text-center text-sm text-slate-500">
-              © {new Date().getFullYear()} DevLens · Engineering
-              Intelligence Platform
+              © {new Date().getFullYear()} DevLens · Engineering Intelligence
+              Platform
             </p>
           </div>
         </div>

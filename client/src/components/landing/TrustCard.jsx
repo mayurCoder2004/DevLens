@@ -1,11 +1,7 @@
 import { motion } from "framer-motion";
 import { useMotionVariants } from "../../utils/motion";
 
-export default function TrustCard({
-  icon: Icon,
-  title,
-  description,
-}) {
+export default function TrustCard({ icon: Icon, title, description }) {
   const { staggerItem } = useMotionVariants();
 
   return (
@@ -42,20 +38,19 @@ export default function TrustCard({
           duration-200
           group-hover:bg-blue-500/20
         "
-        whileHover={{ scale: 1.1, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
+        whileHover={{
+          scale: 1.1,
+          transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+        }}
       >
         <Icon size={24} className="text-blue-400" />
       </motion.div>
 
       {/* Title */}
-      <h3 className="text-lg font-semibold text-white">
-        {title}
-      </h3>
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
 
       {/* Description */}
-      <p className="mt-3 text-sm leading-7 text-slate-400">
-        {description}
-      </p>
+      <p className="mt-3 text-sm leading-7 text-slate-400">{description}</p>
     </motion.div>
   );
 }

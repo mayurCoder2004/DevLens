@@ -4,22 +4,14 @@ import Container from "../ui/Container";
 import WorkspaceSidebar from "./WorkspaceSidebar";
 import WorkspaceContent from "./WorkspaceContent";
 import InsightPanel from "./InsightPanel";
-import {
-  useMotionVariants,
-  defaultViewport,
-} from "../../utils/motion";
+import { useMotionVariants, defaultViewport } from "../../utils/motion";
 
 export default function RepositoryWorkspace() {
-  const {
-    fadeUp,
-    workspaceStagger,
-    workspacePanel,
-    glowPulse,
-  } = useMotionVariants();
+  const { fadeUp, workspaceStagger, workspacePanel, glowPulse } =
+    useMotionVariants();
 
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-28">
-
       {/* Background Glow — slow opacity pulse */}
       <motion.div
         className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[700px] sm:w-[700px]"
@@ -28,7 +20,6 @@ export default function RepositoryWorkspace() {
       />
 
       <Container>
-
         {/* Heading — fades up on scroll */}
         <motion.div
           className="relative z-10 mx-auto max-w-3xl text-center"
@@ -74,14 +65,15 @@ export default function RepositoryWorkspace() {
               repeatType: "reverse",
             }}
             whileHover={{
-              boxShadow: "0 0 60px -12px rgba(59, 130, 246, 0.35), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+              boxShadow:
+                "0 0 60px -12px rgba(59, 130, 246, 0.35), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
               transition: { duration: 0.3 },
             }}
             style={{
-              boxShadow: "0 0 40px -10px rgba(59, 130, 246, 0.2), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+              boxShadow:
+                "0 0 40px -10px rgba(59, 130, 246, 0.2), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
             }}
           >
-
             {/* Browser Header */}
             <div className="flex h-12 items-center justify-between border-b border-slate-800 bg-slate-950 px-4 sm:h-14 sm:px-6">
               <div className="flex items-center gap-2">
@@ -123,7 +115,6 @@ export default function RepositoryWorkspace() {
                 <InsightPanel />
               </motion.div>
             </motion.div>
-
           </motion.div>
         </motion.div>
       </Container>

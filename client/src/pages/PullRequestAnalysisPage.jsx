@@ -44,13 +44,14 @@ export default function PullRequestAnalysisPage() {
         } catch (analysisError) {
           toast.error(
             analysisError.response?.data?.message ??
-              "Failed to analyze pull request."
+              "Failed to analyze pull request.",
           );
           setAnalysis(null);
         }
       } else {
         toast.error(
-          err.response?.data?.message ?? "Failed to load pull request analysis."
+          err.response?.data?.message ??
+            "Failed to load pull request analysis.",
         );
       }
     } finally {
@@ -65,12 +66,13 @@ export default function PullRequestAnalysisPage() {
   const handleReanalyze = async () => {
     setAnalyzing(true);
 
-    await toast.promise(runAnalysis(), {
-      loading: "Analyzing pull request...",
-      success: "Pull request analysis completed!",
-      error: (err) =>
-        err.response?.data?.message ?? "Failed to analyze pull request.",
-    })
+    await toast
+      .promise(runAnalysis(), {
+        loading: "Analyzing pull request...",
+        success: "Pull request analysis completed!",
+        error: (err) =>
+          err.response?.data?.message ?? "Failed to analyze pull request.",
+      })
       .catch(() => {})
       .finally(() => setAnalyzing(false));
   };

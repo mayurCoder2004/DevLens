@@ -23,7 +23,7 @@ export default function RepositoryLayout() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setRepository(data.repository);
@@ -62,13 +62,18 @@ export default function RepositoryLayout() {
       )}
 
       {/* Sidebar - Hidden on mobile, fixed on desktop */}
-      <div className={`
+      <div
+        className={`
         w-[min(18rem,calc(100vw-1rem))]
         fixed inset-y-0 left-0 z-50 lg:static lg:z-auto
         transform transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        <RepositorySidebar repository={repository} onClose={() => setIsSidebarOpen(false)} />
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}
+      >
+        <RepositorySidebar
+          repository={repository}
+          onClose={() => setIsSidebarOpen(false)}
+        />
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -84,10 +89,7 @@ export default function RepositoryLayout() {
           <Topbar />
         </div>
 
-        <main
-          id="main-content"
-          className="min-w-0 flex-1 overflow-y-auto"
-        >
+        <main id="main-content" className="min-w-0 flex-1 overflow-y-auto">
           <div className="mx-auto w-full min-w-0 max-w-[1700px] p-3 sm:p-4 md:p-6 lg:p-8">
             <Outlet
               context={{

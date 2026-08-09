@@ -1,11 +1,11 @@
 /**
  * StatCardSkeleton Component
- * 
+ *
  * A reusable skeleton for stat/metric cards.
  * Used for dashboard metrics, overview cards, and similar components.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const StatCardSkeleton = () => {
   return (

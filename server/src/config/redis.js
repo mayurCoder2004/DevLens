@@ -8,7 +8,7 @@ const connection = new IORedis(env.REDIS_URL, {
   retryStrategy(times) {
     if (times > 10) {
       logger.error(
-        "Redis connection failed after 10 retries. Running without Redis."
+        "Redis connection failed after 10 retries. Running without Redis.",
       );
 
       return null;
@@ -16,9 +16,7 @@ const connection = new IORedis(env.REDIS_URL, {
 
     const delay = Math.min(times * 1000, 5000);
 
-    logger.warn(
-      `Redis connection attempt ${times}. Retrying in ${delay}ms...`
-    );
+    logger.warn(`Redis connection attempt ${times}. Retrying in ${delay}ms...`);
 
     return delay;
   },

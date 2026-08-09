@@ -92,10 +92,10 @@ export default function RepositoryPreview() {
         repeatType: "reverse",
       }}
       style={{
-        boxShadow: "0 0 60px -15px rgba(59, 130, 246, 0.3), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
+        boxShadow:
+          "0 0 60px -15px rgba(59, 130, 246, 0.3), 0 20px 60px -15px rgba(0, 0, 0, 0.5)",
       }}
     >
-
       {/* Browser Header */}
       <div className="flex items-center justify-between border-b border-slate-700 bg-slate-950 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2">
@@ -185,14 +185,18 @@ export default function RepositoryPreview() {
 
                 <div className="flex items-center gap-1 sm:gap-2">
                   <Trend size={14} className={metric.color} />
-                  <span className={`text-lg font-bold sm:text-xl ${metric.color}`}>
+                  <span
+                    className={`text-lg font-bold sm:text-xl ${metric.color}`}
+                  >
                     {metric.value}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <p className="text-xs text-slate-400 sm:text-sm">{metric.title}</p>
+                <p className="text-xs text-slate-400 sm:text-sm">
+                  {metric.title}
+                </p>
                 <span className={`text-xs ${metric.color}`}>
                   {metric.trend}
                 </span>
@@ -233,7 +237,10 @@ export default function RepositoryPreview() {
                 variants={staggerItem}
                 className="flex items-start gap-2 text-sm text-slate-300"
               >
-                <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0 text-green-400" />
+                <CheckCircle2
+                  size={16}
+                  className="mt-0.5 flex-shrink-0 text-green-400"
+                />
                 <span>{item}</span>
               </motion.div>
             ))}

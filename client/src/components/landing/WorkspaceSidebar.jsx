@@ -41,7 +41,6 @@ const navigationItems = [
 export default function WorkspaceSidebar() {
   return (
     <aside className="flex flex-col border-r border-slate-800 bg-slate-950/40">
-
       {/* Repository Header */}
       <div className="border-b border-slate-800 p-5">
         <div className="flex items-center gap-3">
@@ -50,12 +49,8 @@ export default function WorkspaceSidebar() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white">
-              DevLens
-            </h3>
-            <p className="text-xs text-slate-500">
-              Engineering Workspace
-            </p>
+            <h3 className="font-semibold text-white">DevLens</h3>
+            <p className="text-xs text-slate-500">Engineering Workspace</p>
           </div>
         </div>
       </div>
@@ -96,7 +91,10 @@ export default function WorkspaceSidebar() {
                   !item.active
                     ? {
                         x: 2,
-                        transition: { duration: 0.15, ease: [0.25, 0.1, 0.25, 1] },
+                        transition: {
+                          duration: 0.15,
+                          ease: [0.25, 0.1, 0.25, 1],
+                        },
                       }
                     : undefined
                 }

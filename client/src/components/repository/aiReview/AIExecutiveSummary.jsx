@@ -52,7 +52,8 @@ export default function AIExecutiveSummary({ data }) {
           </h3>
 
           <MarkdownText>
-            {data?.engineeringSummary || "Engineering summary is not available."}
+            {data?.engineeringSummary ||
+              "Engineering summary is not available."}
           </MarkdownText>
         </div>
       </div>

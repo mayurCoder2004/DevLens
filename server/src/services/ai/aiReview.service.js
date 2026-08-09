@@ -38,58 +38,58 @@ class AIReviewService {
   }
 
   async generateRepositoryReview(repositoryId) {
-  const existingReview =
-    await this.repositoryAIReviewRepository.getReviewByRepositoryId(
-      repositoryId,
+    const existingReview =
+      await this.repositoryAIReviewRepository.getReviewByRepositoryId(
+        repositoryId,
+      );
+
+    if (existingReview) {
+      return existingReview;
+    }
+
+    const repositoryAnalysis =
+      await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+        repositoryId,
+      );
+
+    const engineeringHealth =
+      await engineeringHealthService.getEngineeringHealth(repositoryId);
+
+    const analysis = this.buildAnalysisObject(
+      repositoryAnalysis,
+      engineeringHealth,
     );
 
-  if (existingReview) {
-    return existingReview;
-  }
+    const prompt = buildRepositoryReviewPrompt(analysis);
 
-  const repositoryAnalysis =
-    await this.repositoryAnalysisRepository.getRepositoryAnalysis(
-      repositoryId,
+    logger.info(
+      `Generating AI review | Prompt length: ${prompt.length} characters`,
     );
 
-  const engineeringHealth =
-    await engineeringHealthService.getEngineeringHealth(repositoryId);
+    const review = await this.provider.generateStructuredResponse(prompt);
 
-  const analysis = this.buildAnalysisObject(
-    repositoryAnalysis,
-    engineeringHealth,
-  );
+    logger.info("AI review generated successfully.");
 
-  const prompt = buildRepositoryReviewPrompt(analysis);
-
-  logger.info(`Generating AI review | Prompt length: ${prompt.length} characters`);
-
-  const review =
-    await this.provider.generateStructuredResponse(prompt);
-
-  logger.info("AI review generated successfully.");
-
-  // Note: provider.model is not available in orchestrator
-  // The orchestrator automatically selects the best available provider
-  const savedReview =
-    await this.repositoryAIReviewRepository.saveReview(
+    // Note: provider.model is not available in orchestrator
+    // The orchestrator automatically selects the best available provider
+    const savedReview = await this.repositoryAIReviewRepository.saveReview(
       repositoryId,
       review,
       "AI Orchestrator", // Generic label since orchestrator manages providers
     );
 
-  await logActivity({
-    repositoryId,
-    type: "AI_REVIEW",
-    title: "AI Review Generated",
-    description: `Repository analyzed using AI Orchestrator with automatic provider fallback.`,
-    metadata: {
-      system: "AI Orchestrator",
-    },
-  });
+    await logActivity({
+      repositoryId,
+      type: "AI_REVIEW",
+      title: "AI Review Generated",
+      description: `Repository analyzed using AI Orchestrator with automatic provider fallback.`,
+      metadata: {
+        system: "AI Orchestrator",
+      },
+    });
 
-  return savedReview;
-}
+    return savedReview;
+  }
 
   async getRepositoryReview(repositoryId) {
     return await this.repositoryAIReviewRepository.getReviewByRepositoryId(
@@ -98,45 +98,45 @@ class AIReviewService {
   }
 
   async refreshRepositoryReview(repositoryId) {
-  const repositoryAnalysis =
-    await this.repositoryAnalysisRepository.getRepositoryAnalysis(
-      repositoryId,
+    const repositoryAnalysis =
+      await this.repositoryAnalysisRepository.getRepositoryAnalysis(
+        repositoryId,
+      );
+
+    const engineeringHealth =
+      await engineeringHealthService.getEngineeringHealth(repositoryId);
+
+    const analysis = this.buildAnalysisObject(
+      repositoryAnalysis,
+      engineeringHealth,
     );
 
-  const engineeringHealth =
-    await engineeringHealthService.getEngineeringHealth(repositoryId);
+    const prompt = buildRepositoryReviewPrompt(analysis);
 
-  const analysis = this.buildAnalysisObject(
-    repositoryAnalysis,
-    engineeringHealth,
-  );
+    logger.info(
+      `Refreshing AI review | Prompt length: ${prompt.length} characters`,
+    );
 
-  const prompt = buildRepositoryReviewPrompt(analysis);
+    const review = await this.provider.generateStructuredResponse(prompt);
 
-  logger.info(`Refreshing AI review | Prompt length: ${prompt.length} characters`);
-
-  const review =
-    await this.provider.generateStructuredResponse(prompt);
-
-  const savedReview =
-    await this.repositoryAIReviewRepository.saveReview(
+    const savedReview = await this.repositoryAIReviewRepository.saveReview(
       repositoryId,
       review,
       "AI Orchestrator",
     );
 
-  await logActivity({
-    repositoryId,
-    type: "AI_REVIEW",
-    title: "AI Review Refreshed",
-    description: `Repository review regenerated using AI Orchestrator with automatic provider fallback.`,
-    metadata: {
-      system: "AI Orchestrator",
-    },
-  });
+    await logActivity({
+      repositoryId,
+      type: "AI_REVIEW",
+      title: "AI Review Refreshed",
+      description: `Repository review regenerated using AI Orchestrator with automatic provider fallback.`,
+      metadata: {
+        system: "AI Orchestrator",
+      },
+    });
 
-  return savedReview;
-}
+    return savedReview;
+  }
 }
 
 module.exports = AIReviewService;

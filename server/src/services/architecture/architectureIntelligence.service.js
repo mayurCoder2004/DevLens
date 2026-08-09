@@ -46,12 +46,11 @@ class ArchitectureIntelligenceService {
     // Recommendations
     // -----------------------------------------------------
 
-    const recommendations =
-      await architectureRecommendations.generate({
-        architecture: repositoryArchitecture,
-        analytics,
-        insights,
-      });
+    const recommendations = await architectureRecommendations.generate({
+      architecture: repositoryArchitecture,
+      analytics,
+      insights,
+    });
 
     return {
       analytics,

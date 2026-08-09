@@ -38,9 +38,7 @@ const logActivity = async ({
     }
 
     if (!resolvedUserId) {
-      throw new Error(
-        "Either userId or repositoryId must be provided."
-      );
+      throw new Error("Either userId or repositoryId must be provided.");
     }
 
     return await prisma.activity.create({

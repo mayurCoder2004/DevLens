@@ -24,13 +24,10 @@ const getRecentActivities = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
-    const result = await activityService.getRecentActivities(
-      req.user.userId,
-      {
-        page,
-        limit,
-      }
-    );
+    const result = await activityService.getRecentActivities(req.user.userId, {
+      page,
+      limit,
+    });
 
     return res.json({
       success: true,

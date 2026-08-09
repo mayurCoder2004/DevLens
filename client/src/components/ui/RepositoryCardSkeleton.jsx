@@ -1,11 +1,11 @@
 /**
  * RepositoryCardSkeleton Component
- * 
+ *
  * A specialized skeleton for repository cards.
  * Closely matches the RepositoryCard component layout.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const RepositoryCardSkeleton = () => {
   return (

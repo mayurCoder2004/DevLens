@@ -1,7 +1,9 @@
 const { z } = require("zod");
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
 
   PORT: z.coerce.number().int().positive(),
 
@@ -19,9 +21,13 @@ const envSchema = z.object({
 
   OPENROUTER_BASE_URL: z.string().url().default("https://openrouter.ai/api/v1"),
 
-  OPENROUTER_MODEL_PRIMARY: z.string().default("qwen/qwen-2.5-coder-32b-instruct:free"),
+  OPENROUTER_MODEL_PRIMARY: z
+    .string()
+    .default("qwen/qwen-2.5-coder-32b-instruct:free"),
 
-  OPENROUTER_MODEL_SECONDARY: z.string().default("meta-llama/llama-3.3-70b-instruct:free"),
+  OPENROUTER_MODEL_SECONDARY: z
+    .string()
+    .default("meta-llama/llama-3.3-70b-instruct:free"),
 
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
 

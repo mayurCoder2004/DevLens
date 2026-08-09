@@ -44,7 +44,8 @@ export default function AIReviewRecommendations({
         </div>
       </div>
 
-      {architectureSuggestions.length === 0 && technologyInsights.length === 0 ? (
+      {architectureSuggestions.length === 0 &&
+      technologyInsights.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/40 py-14 text-center">
           <Lightbulb className="mx-auto h-12 w-12 text-slate-500" />
           <h3 className="mt-5 text-xl font-semibold text-white">

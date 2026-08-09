@@ -1,13 +1,13 @@
 /**
  * TableRowSkeleton Component
- * 
+ *
  * A reusable skeleton for table rows and list items.
  * Used for data tables, activity lists, and similar components.
- * 
+ *
  * @param {number} rows - Number of rows to render (default: 5)
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const TableRowSkeleton = ({ rows = 5 }) => {
   return (

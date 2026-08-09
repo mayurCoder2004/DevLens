@@ -1,8 +1,4 @@
-import {
-  Activity,
-  FolderGit2,
-  Sparkles,
-} from "lucide-react";
+import { Activity, FolderGit2, Sparkles } from "lucide-react";
 
 import HeroStatCard from "./HeroStatCard";
 

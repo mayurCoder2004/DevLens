@@ -1,8 +1,4 @@
-import {
-  BrainCircuit,
-  RefreshCw,
-  Sparkles,
-} from "lucide-react";
+import { BrainCircuit, RefreshCw, Sparkles } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -43,20 +39,15 @@ const actions = [
   {
     id: 4,
     title: "Open on GitHub",
-    description:
-      "Open this repository directly on GitHub.",
+    description: "Open this repository directly on GitHub.",
     icon: FaGithub,
     iconColor: "text-slate-200",
     action: "github",
   },
 ];
 
-export default function WorkspaceActions({
-  repository,
-  refreshRepository,
-}) {
-  const [loadingAction, setLoadingAction] =
-    useState(null);
+export default function WorkspaceActions({ repository, refreshRepository }) {
+  const [loadingAction, setLoadingAction] = useState(null);
 
   const handleAction = async (action) => {
     try {
@@ -64,14 +55,11 @@ export default function WorkspaceActions({
 
       switch (action) {
         case "refresh":
-          await toast.promise(
-            refreshRepository(),
-            {
-              loading: 'Refreshing repository...',
-              success: 'Repository refreshed successfully!',
-              error: 'Failed to refresh repository.',
-            }
-          );
+          await toast.promise(refreshRepository(), {
+            loading: "Refreshing repository...",
+            success: "Repository refreshed successfully!",
+            error: "Failed to refresh repository.",
+          });
           break;
 
         case "analyze":
@@ -81,10 +69,10 @@ export default function WorkspaceActions({
               await refreshRepository();
             })(),
             {
-              loading: 'Analyzing repository...',
-              success: 'Repository analysis completed successfully!',
-              error: 'Failed to analyze repository.',
-            }
+              loading: "Analyzing repository...",
+              success: "Repository analysis completed successfully!",
+              error: "Failed to analyze repository.",
+            },
           );
           break;
 
@@ -95,19 +83,15 @@ export default function WorkspaceActions({
               await refreshRepository();
             })(),
             {
-              loading: 'Generating AI review...',
-              success: 'AI Review generated successfully!',
-              error: 'Failed to generate AI review.',
-            }
+              loading: "Generating AI review...",
+              success: "AI Review generated successfully!",
+              error: "Failed to generate AI review.",
+            },
           );
           break;
 
         case "github":
-          window.open(
-            repository.repoUrl,
-            "_blank",
-            "noopener,noreferrer"
-          );
+          window.open(repository.repoUrl, "_blank", "noopener,noreferrer");
           break;
 
         default:
@@ -116,8 +100,10 @@ export default function WorkspaceActions({
     } catch (error) {
       console.error("Workspace action failed:", error.message);
 
-      const errorMessage = error.response?.data?.message ?? "Failed to perform the requested action.";
-      
+      const errorMessage =
+        error.response?.data?.message ??
+        "Failed to perform the requested action.";
+
       // Only show toast if it's not already shown by toast.promise
       if (action === "github") {
         toast.error(errorMessage);
@@ -147,23 +133,19 @@ export default function WorkspaceActions({
             description={action.description}
             icon={action.icon}
             iconColor={action.iconColor}
-            loading={
-              loadingAction === action.action
-            }
-            onClick={() =>
-              handleAction(action.action)
-            }
+            loading={loadingAction === action.action}
+            onClick={() => handleAction(action.action)}
             buttonText="Run Action"
             loadingText={
               action.action === "refresh"
                 ? "Refreshing..."
                 : action.action === "analyze"
-                ? "Analyzing..."
-                : action.action === "ai-review"
-                ? "Generating..."
-                : action.action === "github"
-                ? "Opening..."
-                : "Processing..."
+                  ? "Analyzing..."
+                  : action.action === "ai-review"
+                    ? "Generating..."
+                    : action.action === "github"
+                      ? "Opening..."
+                      : "Processing..."
             }
           />
         ))}

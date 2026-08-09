@@ -36,7 +36,9 @@ export default function MarkdownText({ children, className = "" }) {
                   className="flex min-w-0 gap-3 text-sm leading-7 text-slate-300"
                 >
                   <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400" />
-                  <span className="min-w-0 break-words">{renderInline(line.replace(/^[-*]\s+/, ""))}</span>
+                  <span className="min-w-0 break-words">
+                    {renderInline(line.replace(/^[-*]\s+/, ""))}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -52,7 +54,10 @@ export default function MarkdownText({ children, className = "" }) {
         }
 
         return (
-          <p key={index} className="break-words text-sm leading-7 text-slate-300">
+          <p
+            key={index}
+            className="break-words text-sm leading-7 text-slate-300"
+          >
             {renderInline(trimmed)}
           </p>
         );
@@ -74,6 +79,6 @@ function renderInline(text) {
       </code>
     ) : (
       part
-    )
+    ),
   );
 }

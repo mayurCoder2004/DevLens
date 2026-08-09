@@ -28,14 +28,14 @@ class GeminiProvider extends AIProvider {
     if (prompt.length > MAX_PROMPT_LENGTH) {
       throw new ApiError(
         400,
-        `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters.`
+        `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters.`,
       );
     }
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         logger.info(
-          `Gemini Request | Model: ${this.model} | Attempt: ${attempt}/${MAX_RETRIES}`
+          `Gemini Request | Model: ${this.model} | Attempt: ${attempt}/${MAX_RETRIES}`,
         );
 
         const response = await this.client.models.generateContent({
@@ -48,11 +48,10 @@ class GeminiProvider extends AIProvider {
           },
         });
 
-        const finishReason =
-          response?.candidates?.[0]?.finishReason;
+        const finishReason = response?.candidates?.[0]?.finishReason;
 
         logger.info(
-          `Gemini Finish Reason: ${finishReason ?? "UNKNOWN"} | Model: ${this.model}`
+          `Gemini Finish Reason: ${finishReason ?? "UNKNOWN"} | Model: ${this.model}`,
         );
 
         if (!response?.text) {
@@ -71,14 +70,14 @@ class GeminiProvider extends AIProvider {
           return parsedResponse;
         } catch (parseError) {
           logger.warn(
-            `Gemini Invalid JSON (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
+            `Gemini Invalid JSON (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`,
           );
           logger.warn(`Parse Error: ${parseError.message}`);
 
           if (attempt === MAX_RETRIES) {
             throw new ApiError(
               502,
-              "Gemini returned an invalid structured response."
+              "Gemini returned an invalid structured response.",
             );
           }
         }
@@ -88,26 +87,21 @@ class GeminiProvider extends AIProvider {
         }
 
         logger.warn(
-          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
+          `Gemini request failed (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`,
         );
         logger.warn(error.message);
 
         if (attempt === MAX_RETRIES) {
           logger.error(
-            `Gemini failed after ${MAX_RETRIES} attempts | Model: ${this.model}`
+            `Gemini failed after ${MAX_RETRIES} attempts | Model: ${this.model}`,
           );
           logger.error(error.stack || error.message);
 
-          throw new ApiError(
-            502,
-            "Gemini service is temporarily unavailable."
-          );
+          throw new ApiError(502, "Gemini service is temporarily unavailable.");
         }
 
         // Exponential backoff before retry
-        await new Promise((resolve) =>
-          setTimeout(resolve, attempt * 1000)
-        );
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
       }
     }
   }

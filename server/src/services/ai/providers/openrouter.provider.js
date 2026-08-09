@@ -35,14 +35,14 @@ class OpenRouterProvider extends AIProvider {
     if (prompt.length > MAX_PROMPT_LENGTH) {
       throw new ApiError(
         400,
-        `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters.`
+        `Prompt exceeds maximum length of ${MAX_PROMPT_LENGTH} characters.`,
       );
     }
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         logger.info(
-          `OpenRouter Request | Model: ${this.model} | Attempt: ${attempt}/${MAX_RETRIES}`
+          `OpenRouter Request | Model: ${this.model} | Attempt: ${attempt}/${MAX_RETRIES}`,
         );
 
         const response = await axios.post(
@@ -69,14 +69,14 @@ class OpenRouterProvider extends AIProvider {
               "X-Title": "DevLens",
             },
             timeout: TIMEOUT_MS,
-          }
+          },
         );
 
         const content = response.data?.choices?.[0]?.message?.content;
         const finishReason = response.data?.choices?.[0]?.finish_reason;
 
         logger.info(
-          `OpenRouter Finish Reason: ${finishReason || "UNKNOWN"} | Model: ${this.model}`
+          `OpenRouter Finish Reason: ${finishReason || "UNKNOWN"} | Model: ${this.model}`,
         );
 
         if (!content) {
@@ -91,20 +91,20 @@ class OpenRouterProvider extends AIProvider {
           const parsedResponse = JSONValidator.parseAndValidate(content);
 
           logger.info(
-            `OpenRouter JSON parsed successfully | Model: ${this.model}`
+            `OpenRouter JSON parsed successfully | Model: ${this.model}`,
           );
 
           return parsedResponse;
         } catch (parseError) {
           logger.warn(
-            `OpenRouter Invalid JSON (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
+            `OpenRouter Invalid JSON (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`,
           );
           logger.warn(`Parse Error: ${parseError.message}`);
 
           if (attempt === MAX_RETRIES) {
             throw new ApiError(
               502,
-              "OpenRouter returned an invalid structured response."
+              "OpenRouter returned an invalid structured response.",
             );
           }
         }
@@ -120,20 +120,17 @@ class OpenRouterProvider extends AIProvider {
           const errorMsg = error.response.data?.error?.message || error.message;
 
           logger.warn(
-            `OpenRouter HTTP ${status} (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
+            `OpenRouter HTTP ${status} (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`,
           );
           logger.warn(`Error: ${errorMsg}`);
 
           // Don't retry on quota exceeded or authentication errors
           if (status === 429 || status === 401 || status === 403) {
-            throw new ApiError(
-              502,
-              `OpenRouter error: ${errorMsg}`
-            );
+            throw new ApiError(502, `OpenRouter error: ${errorMsg}`);
           }
         } else {
           logger.warn(
-            `OpenRouter request failed (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`
+            `OpenRouter request failed (attempt ${attempt}/${MAX_RETRIES}) | Model: ${this.model}`,
           );
           logger.warn(error.message);
         }
@@ -141,20 +138,18 @@ class OpenRouterProvider extends AIProvider {
         // Last attempt failed
         if (attempt === MAX_RETRIES) {
           logger.error(
-            `OpenRouter failed after ${MAX_RETRIES} attempts | Model: ${this.model}`
+            `OpenRouter failed after ${MAX_RETRIES} attempts | Model: ${this.model}`,
           );
           logger.error(error.stack || error.message);
 
           throw new ApiError(
             502,
-            "OpenRouter service is temporarily unavailable."
+            "OpenRouter service is temporarily unavailable.",
           );
         }
 
         // Exponential backoff before retry
-        await new Promise((resolve) =>
-          setTimeout(resolve, attempt * 1000)
-        );
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
       }
     }
   }

@@ -1,11 +1,11 @@
 /**
  * HeroSkeleton Component
- * 
+ *
  * A reusable skeleton for hero sections.
  * Used for page headers with titles, descriptions, and stats.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const HeroSkeleton = () => {
   return (

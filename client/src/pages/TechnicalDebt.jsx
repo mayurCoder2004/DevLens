@@ -57,7 +57,7 @@ export default function TechnicalDebt() {
         success: "Technical debt analysis completed successfully!",
         error: (err) =>
           err.response?.data?.message ?? "Failed to analyze technical debt.",
-      }
+      },
     );
   };
 
@@ -92,7 +92,8 @@ export default function TechnicalDebt() {
           <p className="mx-auto mt-4 max-w-2xl text-slate-400">
             This repository hasn't been analyzed yet. Run a technical debt
             analysis to identify maintainability issues, code smells, large
-            files, dead code, and receive AI-powered refactoring recommendations.
+            files, dead code, and receive AI-powered refactoring
+            recommendations.
           </p>
 
           <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">

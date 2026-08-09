@@ -11,18 +11,17 @@ const getAuthHeaders = () => ({
 export const getDashboardOverview = async () => {
   const response = await axios.get(
     `${API_URL}/dashboard/overview`,
-    getAuthHeaders()
+    getAuthHeaders(),
   );
 
   return response.data;
 };
 
-export const getRepositoriesNeedingAttention =
-  async () => {
-    const response = await axios.get(
-      `${API_URL}/dashboard/attention`,
-      getAuthHeaders()
-    );
+export const getRepositoriesNeedingAttention = async () => {
+  const response = await axios.get(
+    `${API_URL}/dashboard/attention`,
+    getAuthHeaders(),
+  );
 
-    return response.data;
-  };
+  return response.data;
+};

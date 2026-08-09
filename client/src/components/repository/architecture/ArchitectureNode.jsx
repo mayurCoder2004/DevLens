@@ -1,15 +1,15 @@
-import { memo } from 'react';
-import { Handle, Position } from '@xyflow/react';
+import { memo } from "react";
+import { Handle, Position } from "@xyflow/react";
 import {
   getFileIcon,
   getFileTypeLabel,
   getNodeColorScheme,
-} from './nodeColors';
+} from "./nodeColors";
 
 /**
  * Professional custom node component for architecture visualization
  * Inspired by Linear, Vercel, and GitHub's design systems
- * 
+ *
  * Features:
  * - Dynamic colors based on file type
  * - Animated hover states with glow effect
@@ -19,7 +19,7 @@ import {
  */
 function ArchitectureNode({ data, selected }) {
   const { label, imports = 0, importedBy = 0, totalConnections = 0 } = data;
-  
+
   const icon = getFileIcon(label);
   const fileType = getFileTypeLabel(label);
   const colors = getNodeColorScheme(label);
@@ -33,7 +33,7 @@ function ArchitectureNode({ data, selected }) {
         className="!h-2.5 !w-2.5 !border-2 !transition-all !duration-200"
         style={{
           borderColor: colors.border,
-          backgroundColor: 'rgb(15, 23, 42)',
+          backgroundColor: "rgb(15, 23, 42)",
           top: -6,
         }}
       />
@@ -45,7 +45,7 @@ function ArchitectureNode({ data, selected }) {
         className="!h-2.5 !w-2.5 !border-2 !transition-all !duration-200"
         style={{
           borderColor: colors.border,
-          backgroundColor: 'rgb(15, 23, 42)',
+          backgroundColor: "rgb(15, 23, 42)",
           bottom: -6,
         }}
       />
@@ -54,13 +54,13 @@ function ArchitectureNode({ data, selected }) {
       <div
         className="relative overflow-hidden rounded-xl border-2 shadow-xl backdrop-blur-sm transition-all duration-300 ease-out group-hover:scale-[1.05] group-hover:shadow-2xl"
         style={{
-          minWidth: '200px',
-          maxWidth: '280px',
-          backgroundColor: 'rgb(15, 23, 42)',
+          minWidth: "200px",
+          maxWidth: "280px",
+          backgroundColor: "rgb(15, 23, 42)",
           borderColor: selected ? colors.borderHover : colors.border,
           boxShadow: selected
             ? `0 0 0 3px ${colors.glow}, 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)`
-            : '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)',
+            : "0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)",
         }}
       >
         {/* Animated Border Glow on Hover */}
@@ -68,8 +68,8 @@ function ArchitectureNode({ data, selected }) {
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
             background: `linear-gradient(135deg, ${colors.glow} 0%, transparent 50%, ${colors.glow} 100%)`,
-            backgroundSize: '200% 200%',
-            animation: 'gradient-shift 3s ease infinite',
+            backgroundSize: "200% 200%",
+            animation: "gradient-shift 3s ease infinite",
           }}
         />
 
@@ -77,7 +77,7 @@ function ArchitectureNode({ data, selected }) {
         <div
           className="relative border-b px-3.5 py-3 transition-colors duration-200"
           style={{
-            borderColor: 'rgba(71, 85, 105, 0.3)',
+            borderColor: "rgba(71, 85, 105, 0.3)",
             backgroundColor: colors.background,
           }}
         >
@@ -85,7 +85,7 @@ function ArchitectureNode({ data, selected }) {
             {/* File Icon */}
             <span
               className="text-2xl leading-none transition-transform duration-200 group-hover:scale-110"
-              style={{ marginTop: '1px' }}
+              style={{ marginTop: "1px" }}
             >
               {icon}
             </span>
@@ -96,7 +96,7 @@ function ArchitectureNode({ data, selected }) {
                 className="truncate font-mono text-sm font-semibold leading-tight tracking-tight text-white transition-colors duration-200"
                 title={label}
                 style={{
-                  textShadow: selected ? `0 0 8px ${colors.glow}` : 'none',
+                  textShadow: selected ? `0 0 8px ${colors.glow}` : "none",
                 }}
               >
                 {label}
@@ -139,7 +139,7 @@ function ArchitectureNode({ data, selected }) {
                     />
                   </svg>
                   <span>
-                    {imports} {imports === 1 ? 'import' : 'imports'}
+                    {imports} {imports === 1 ? "import" : "imports"}
                   </span>
                 </div>
               )}
@@ -161,7 +161,7 @@ function ArchitectureNode({ data, selected }) {
                     />
                   </svg>
                   <span>
-                    {importedBy} {importedBy === 1 ? 'dependent' : 'dependents'}
+                    {importedBy} {importedBy === 1 ? "dependent" : "dependents"}
                   </span>
                 </div>
               )}

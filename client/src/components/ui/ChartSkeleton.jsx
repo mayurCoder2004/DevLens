@@ -1,11 +1,11 @@
 /**
  * ChartSkeleton Component
- * 
+ *
  * A reusable skeleton for chart/graph components.
  * Used for analytics charts, graphs, and visual data displays.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const ChartSkeleton = () => {
   return (
@@ -24,7 +24,15 @@ const ChartSkeleton = () => {
         {/* Bar Chart Representation */}
         <div className="flex items-end justify-between gap-2">
           {Array.from({ length: 7 }).map((_, index) => {
-            const heights = ['h-32', 'h-24', 'h-40', 'h-28', 'h-36', 'h-20', 'h-32'];
+            const heights = [
+              "h-32",
+              "h-24",
+              "h-40",
+              "h-28",
+              "h-36",
+              "h-20",
+              "h-32",
+            ];
             return (
               <Skeleton
                 key={index}

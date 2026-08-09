@@ -15,7 +15,7 @@ const analysisWorker = new Worker(
     logger.info(`Repository ID: ${job.data.repositoryId}`);
 
     const result = await repositoryAnalysisService.analyzeRepository(
-      job.data.repositoryId
+      job.data.repositoryId,
     );
 
     logger.info(`Repository analysis completed for job ${job.id}`);
@@ -25,7 +25,7 @@ const analysisWorker = new Worker(
   {
     connection,
     concurrency: 3,
-  }
+  },
 );
 
 // ===============================
@@ -38,7 +38,7 @@ analysisWorker.on("completed", (job) => {
 
 analysisWorker.on("failed", (job, err) => {
   logger.error(
-    `Job ${job?.id ?? "unknown"} failed: ${err.stack || err.message}`
+    `Job ${job?.id ?? "unknown"} failed: ${err.stack || err.message}`,
   );
 });
 

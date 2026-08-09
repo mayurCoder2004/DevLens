@@ -1,17 +1,11 @@
-import {
-  ArrowRight,
-  Check,
-} from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import Button from "../ui/Button";
 import Container from "../ui/Container";
-import {
-  useMotionVariants,
-  defaultViewport,
-} from "../../utils/motion";
+import { useMotionVariants, defaultViewport } from "../../utils/motion";
 
 export default function LandingCTA() {
   const navigate = useNavigate();
@@ -19,7 +13,6 @@ export default function LandingCTA() {
 
   return (
     <section className="relative overflow-hidden bg-[#0B0F19] py-16 sm:py-28">
-
       {/* Background Glow — slow opacity pulse */}
       <motion.div
         className="absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[550px] sm:w-[550px]"
@@ -29,7 +22,6 @@ export default function LandingCTA() {
 
       <Container>
         <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 px-4 py-12 text-center shadow-2xl sm:rounded-3xl sm:px-10 sm:py-20">
-
           {/* Sequential stagger: Badge → Heading → Description → Button → Trust */}
           <motion.div
             variants={heroStagger}
@@ -37,7 +29,6 @@ export default function LandingCTA() {
             whileInView="visible"
             viewport={defaultViewport}
           >
-
             {/* Badge — scale + fade */}
             <motion.div
               variants={scaleIn}
@@ -108,7 +99,11 @@ export default function LandingCTA() {
                   }}
                   style={{ pointerEvents: "none" }}
                 />
-                <Button variant="primary" onClick={() => navigate("/login")} className="w-full sm:w-auto">
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/login")}
+                  className="w-full sm:w-auto"
+                >
                   <div className="flex min-w-0 flex-wrap items-center justify-center gap-3">
                     <FaGithub size={18} />
 
@@ -118,8 +113,20 @@ export default function LandingCTA() {
                     <motion.span
                       className="inline-flex"
                       variants={{
-                        rest: { x: 0, transition: { duration: 0.15, ease: [0.25, 0.1, 0.25, 1] } },
-                        hover: { x: 4, transition: { duration: 0.15, ease: [0.25, 0.1, 0.25, 1] } },
+                        rest: {
+                          x: 0,
+                          transition: {
+                            duration: 0.15,
+                            ease: [0.25, 0.1, 0.25, 1],
+                          },
+                        },
+                        hover: {
+                          x: 4,
+                          transition: {
+                            duration: 0.15,
+                            ease: [0.25, 0.1, 0.25, 1],
+                          },
+                        },
                       }}
                     >
                       <ArrowRight size={18} />
@@ -148,15 +155,11 @@ export default function LandingCTA() {
                   }}
                 >
                   <Check size={18} className="flex-shrink-0 text-green-400" />
-                  <span className="text-sm text-slate-400">
-                    {item}
-                  </span>
+                  <span className="text-sm text-slate-400">{item}</span>
                 </motion.div>
               ))}
             </motion.div>
-
           </motion.div>
-
         </div>
       </Container>
     </section>

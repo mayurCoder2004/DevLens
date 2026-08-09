@@ -1,8 +1,4 @@
-import {
-  AlertTriangle,
-  ArrowRight,
-  ShieldAlert,
-} from "lucide-react";
+import { AlertTriangle, ArrowRight, ShieldAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function AttentionCard({
@@ -17,26 +13,18 @@ export default function AttentionCard({
   link,
 }) {
   const severityStyles = {
-    LOW:
-      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    MEDIUM:
-      "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
-    HIGH:
-      "bg-orange-500/10 text-orange-400 border-orange-500/20",
-    CRITICAL:
-      "bg-red-500/10 text-red-400 border-red-500/20",
+    LOW: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    MEDIUM: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
+    HIGH: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    CRITICAL: "bg-red-500/10 text-red-400 border-red-500/20",
   };
 
   const ProgressBar = ({ label, value }) => (
     <div>
       <div className="mb-2 flex items-center justify-between text-xs">
-        <span className="text-slate-400">
-          {label}
-        </span>
+        <span className="text-slate-400">{label}</span>
 
-        <span className="font-semibold text-white">
-          {value ?? "--"}%
-        </span>
+        <span className="font-semibold text-white">{value ?? "--"}%</span>
       </div>
 
       <div className="h-2 overflow-hidden rounded-full bg-slate-800">
@@ -79,9 +67,7 @@ export default function AttentionCard({
             {repository}
           </h3>
 
-          <p className="mt-1 break-words text-sm text-slate-400">
-            {owner}
-          </p>
+          <p className="mt-1 break-words text-sm text-slate-400">{owner}</p>
         </div>
 
         <span
@@ -94,53 +80,34 @@ export default function AttentionCard({
       {/* Risk */}
 
       <div className="mt-5 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-        <ShieldAlert
-          className="text-red-400"
-          size={22}
-        />
+        <ShieldAlert className="text-red-400" size={22} />
 
         <div>
           <p className="text-xs uppercase tracking-wide text-slate-400">
             Engineering Risk
           </p>
 
-          <p className="text-3xl font-bold text-white">
-            {riskScore}
-          </p>
+          <p className="text-3xl font-bold text-white">{riskScore}</p>
         </div>
       </div>
 
       {/* Metrics */}
 
       <div className="mt-5 space-y-4">
-        <ProgressBar
-          label="Engineering Health"
-          value={healthScore}
-        />
+        <ProgressBar label="Engineering Health" value={healthScore} />
 
-        <ProgressBar
-          label="Deployment"
-          value={deploymentScore}
-        />
+        <ProgressBar label="Deployment" value={deploymentScore} />
 
-        <ProgressBar
-          label="Maintainability"
-          value={maintainabilityScore}
-        />
+        <ProgressBar label="Maintainability" value={maintainabilityScore} />
       </div>
 
       {/* Issues */}
 
       <div className="mt-6 flex-1">
         <div className="mb-3 flex items-center gap-2">
-          <AlertTriangle
-            size={16}
-            className="text-yellow-400"
-          />
+          <AlertTriangle size={16} className="text-yellow-400" />
 
-          <span className="text-sm font-medium text-white">
-            Issues
-          </span>
+          <span className="text-sm font-medium text-white">Issues</span>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -189,7 +156,6 @@ export default function AttentionCard({
           "
         >
           Open Repository
-
           <ArrowRight
             size={16}
             className="transition-transform duration-300 group-hover:translate-x-1"

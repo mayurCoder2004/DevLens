@@ -1,4 +1,11 @@
-import { Lightbulb, AlertTriangle, Info, Layers3, Trash2, Network } from "lucide-react";
+import {
+  Lightbulb,
+  AlertTriangle,
+  Info,
+  Layers3,
+  Trash2,
+  Network,
+} from "lucide-react";
 
 const PRIORITY_STYLES = {
   HIGH: {
@@ -120,7 +127,9 @@ export default function TechnicalDebtRecommendations({ technicalDebt }) {
                   </div>
                 </div>
 
-                <p className="mt-4 leading-7 text-slate-300">{recommendation}</p>
+                <p className="mt-4 leading-7 text-slate-300">
+                  {recommendation}
+                </p>
               </div>
             );
           })}

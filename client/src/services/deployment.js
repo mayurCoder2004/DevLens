@@ -22,6 +22,6 @@ export const analyzeDeployment = (repositoryId) => {
     {},
     {
       headers: getAuthHeaders(),
-    }
+    },
   );
 };

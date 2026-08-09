@@ -1,11 +1,4 @@
-import {
-  Database,
-  Box,
-  Server,
-  Cpu,
-  Layers,
-  Container,
-} from "lucide-react";
+import { Database, Box, Server, Cpu, Layers, Container } from "lucide-react";
 
 import TechnologyCard from "./TechnologyCard";
 
@@ -44,9 +37,7 @@ export default function TechnologyInsights({ data }) {
         {data.map((technology) => (
           <TechnologyCard
             key={technology.name}
-            icon={
-              technologyIcons[technology.name] || Layers
-            }
+            icon={technologyIcons[technology.name] || Layers}
             name={technology.name}
             category={technology.category}
             insight={technology.insight}

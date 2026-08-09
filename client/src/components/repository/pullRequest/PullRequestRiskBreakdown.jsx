@@ -137,14 +137,18 @@ export default function PullRequestRiskBreakdown({ pullRequestAnalysis }) {
                     </span>
                   </div>
 
-                  <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    {item.description}
+                  </p>
                 </div>
               </div>
 
               <div className="mt-4">
                 <div className="mb-1.5 flex items-center justify-between">
                   <span className="text-xs text-slate-500">Score</span>
-                  <span className="text-sm font-bold text-white">{item.value}%</span>
+                  <span className="text-sm font-bold text-white">
+                    {item.value}%
+                  </span>
                 </div>
 
                 <div className="h-2 overflow-hidden rounded-full bg-slate-800">

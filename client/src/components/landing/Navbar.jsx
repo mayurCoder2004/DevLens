@@ -34,22 +34,21 @@ export default function Navbar() {
       animate="visible"
     >
       <Container className="flex h-16 items-center justify-between">
-
         {/* Logo → scrolls to hero */}
         <div
           onClick={() => handleNavClick("hero")}
           className="flex cursor-pointer items-center gap-3"
         >
           <div
-  onClick={() => handleNavClick("hero")}
-  className="flex cursor-pointer items-center"
->
-  <img
-    src="/logo-dark.png"
-    alt="DevLens"
-    className="h-10 w-auto object-contain"
-  />
-</div>
+            onClick={() => handleNavClick("hero")}
+            className="flex cursor-pointer items-center"
+          >
+            <img
+              src="/logo-dark.png"
+              alt="DevLens"
+              className="h-10 w-auto object-contain"
+            />
+          </div>
         </div>
 
         {/* Desktop Navigation */}
@@ -105,7 +104,6 @@ export default function Navbar() {
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-
       </Container>
 
       {/* Mobile Drawer */}
@@ -152,14 +150,20 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 fullWidth
-                onClick={() => { navigate("/login"); setMobileOpen(false); }}
+                onClick={() => {
+                  navigate("/login");
+                  setMobileOpen(false);
+                }}
               >
                 Sign In
               </Button>
               <Button
                 variant="primary"
                 fullWidth
-                onClick={() => { navigate("/login"); setMobileOpen(false); }}
+                onClick={() => {
+                  navigate("/login");
+                  setMobileOpen(false);
+                }}
               >
                 Get Started
               </Button>

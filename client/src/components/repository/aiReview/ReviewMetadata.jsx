@@ -1,4 +1,10 @@
-import { Brain, GitBranch, Layers3, ListChecks, ShieldCheck } from "lucide-react";
+import {
+  Brain,
+  GitBranch,
+  Layers3,
+  ListChecks,
+  ShieldCheck,
+} from "lucide-react";
 
 export default function ReviewMetadata({ repository, review }) {
   if (!review) return null;

@@ -1,12 +1,6 @@
 const prisma = require("../config/prisma");
 
-const getRecentActivities = async (
-  userId,
-  {
-    page = 1,
-    limit = 20,
-  } = {},
-) => {
+const getRecentActivities = async (userId, { page = 1, limit = 20 } = {}) => {
   const skip = (page - 1) * limit;
 
   const [activities, total] = await Promise.all([

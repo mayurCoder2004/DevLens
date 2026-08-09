@@ -46,14 +46,13 @@ function Section({ title, icon: Icon, children }) {
 }
 
 const formatLabel = (key) =>
-  key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (char) => char.toUpperCase());
+  key.replace(/([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
 
 export default function DeploymentConfigurationBreakdown({ deployment }) {
   if (!deployment) return null;
 
-  const platform = deployment.platforms?.platforms?.join(", ") || "None detected";
+  const platform =
+    deployment.platforms?.platforms?.join(", ") || "None detected";
 
   return (
     <section>
@@ -73,7 +72,7 @@ export default function DeploymentConfigurationBreakdown({ deployment }) {
           {Object.entries(deployment.dockerQuality?.checks || {}).map(
             ([key, value]) => (
               <CheckRow key={key} label={formatLabel(key)} value={value} />
-            )
+            ),
           )}
         </Section>
 
@@ -82,7 +81,7 @@ export default function DeploymentConfigurationBreakdown({ deployment }) {
           {Object.entries(deployment.workflowQuality?.checks || {}).map(
             ([key, value]) => (
               <CheckRow key={key} label={formatLabel(key)} value={value} />
-            )
+            ),
           )}
         </Section>
 
@@ -91,7 +90,7 @@ export default function DeploymentConfigurationBreakdown({ deployment }) {
           {Object.entries(deployment.runtime?.checks || {}).map(
             ([key, value]) => (
               <CheckRow key={key} label={formatLabel(key)} value={value} />
-            )
+            ),
           )}
         </Section>
 
@@ -100,7 +99,7 @@ export default function DeploymentConfigurationBreakdown({ deployment }) {
           {Object.entries(deployment.lockFiles?.checks || {}).map(
             ([key, value]) => (
               <CheckRow key={key} label={formatLabel(key)} value={value} />
-            )
+            ),
           )}
         </Section>
 

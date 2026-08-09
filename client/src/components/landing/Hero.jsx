@@ -19,8 +19,10 @@ export default function Hero() {
   } = useMotionVariants();
 
   return (
-    <section id="hero" className="relative overflow-hidden bg-[#0B0F19] py-12 sm:py-16">
-
+    <section
+      id="hero"
+      className="relative overflow-hidden bg-[#0B0F19] py-12 sm:py-16"
+    >
       {/* Background Glow — very slow opacity pulse, almost invisible */}
       <motion.div
         className="absolute left-1/2 top-0 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[180px] sm:h-[600px] sm:w-[600px]"
@@ -41,9 +43,7 @@ export default function Hero() {
       />
 
       <Container className="relative z-10">
-
         <div className="grid items-center gap-12 lg:min-h-[700px] lg:grid-cols-2 lg:gap-20">
-
           {/* ================= LEFT — staggered sequence ================= */}
 
           <motion.div
@@ -52,7 +52,6 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
           >
-
             {/* Badge — scale + fade */}
             <motion.div
               variants={scaleIn}
@@ -79,10 +78,10 @@ export default function Hero() {
               variants={staggerItem}
               className="mx-auto mt-6 max-w-lg text-base leading-7 text-slate-400 sm:mt-8 sm:text-lg sm:leading-8 lg:mx-0"
             >
-              Analyze repositories, detect technical debt,
-              review architecture, evaluate deployment readiness,
-              analyze pull request risk, and generate AI-powered
-              engineering insights from one intelligent workspace.
+              Analyze repositories, detect technical debt, review architecture,
+              evaluate deployment readiness, analyze pull request risk, and
+              generate AI-powered engineering insights from one intelligent
+              workspace.
             </motion.p>
 
             {/* CTA Buttons — fade up after description */}
@@ -91,7 +90,10 @@ export default function Hero() {
               className="mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center lg:justify-start"
             >
               <motion.div
-                whileHover={{ scale: 1.03, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
+                whileHover={{
+                  scale: 1.03,
+                  transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+                }}
                 className="w-full sm:w-auto"
               >
                 <Button
@@ -106,7 +108,10 @@ export default function Hero() {
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.03, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
+                whileHover={{
+                  scale: 1.03,
+                  transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+                }}
                 className="w-full sm:w-auto"
               >
                 <a
@@ -132,7 +137,6 @@ export default function Hero() {
               variants={staggerItem}
               className="mt-8 flex flex-wrap justify-center gap-4 sm:mt-10 sm:gap-6 lg:justify-start"
             >
-
               {[
                 "Sign in with GitHub",
                 "Free Repository Analysis",
@@ -141,15 +145,19 @@ export default function Hero() {
                 <motion.div
                   key={label}
                   className="flex items-center gap-2 text-sm text-slate-400"
-                  whileHover={{ color: "#cbd5e1", transition: { duration: 0.15 } }}
+                  whileHover={{
+                    color: "#cbd5e1",
+                    transition: { duration: 0.15 },
+                  }}
                 >
-                  <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
+                  <CheckCircle
+                    size={18}
+                    className="text-green-400 flex-shrink-0"
+                  />
                   <span>{label}</span>
                 </motion.div>
               ))}
-
             </motion.div>
-
           </motion.div>
 
           {/* ================= RIGHT — strongest entrance ================= */}
@@ -162,11 +170,8 @@ export default function Hero() {
           >
             <RepositoryPreview />
           </motion.div>
-
         </div>
-
       </Container>
-
     </section>
   );
 }

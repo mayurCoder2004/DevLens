@@ -2,7 +2,7 @@ const AIOrchestrator = require("./AIOrchestrator");
 
 /**
  * AIProviderFactory
- * 
+ *
  * Factory pattern for creating AI provider instances.
  * Provides a singleton orchestrator instance to ensure consistent provider management.
  */

@@ -5,9 +5,7 @@ const router = express.Router();
 const authMiddleware = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
 
-const {
-  repositoryIdSchema,
-} = require("../validations/repository.validation");
+const { repositoryIdSchema } = require("../validations/repository.validation");
 
 const {
   analyze,
@@ -18,14 +16,14 @@ router.post(
   "/analyze/:repositoryId",
   authMiddleware,
   validate(repositoryIdSchema),
-  analyze
+  analyze,
 );
 
 router.get(
   "/:repositoryId",
   authMiddleware,
   validate(repositoryIdSchema),
-  getByRepository
+  getByRepository,
 );
 
 module.exports = router;

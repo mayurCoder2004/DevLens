@@ -9,16 +9,13 @@ const getAuthHeaders = () => ({
 });
 
 export const getRepositoryPullRequests = (repositoryId) => {
-  return axios.get(
-    `${API}/pull-requests/${repositoryId}`,
-    getAuthHeaders()
-  );
+  return axios.get(`${API}/pull-requests/${repositoryId}`, getAuthHeaders());
 };
 
 export const getPullRequestAnalysis = (repositoryId, prNumber) => {
   return axios.get(
     `${API}/pull-requests/${repositoryId}/${prNumber}`,
-    getAuthHeaders()
+    getAuthHeaders(),
   );
 };
 
@@ -26,6 +23,6 @@ export const analyzePullRequest = (repositoryId, prNumber) => {
   return axios.post(
     `${API}/pull-requests/analyze/${repositoryId}/${prNumber}`,
     {},
-    getAuthHeaders()
+    getAuthHeaders(),
   );
 };

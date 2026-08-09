@@ -1,6 +1,6 @@
 /**
  * Skeleton Components Showcase
- * 
+ *
  * This file demonstrates all available skeleton components.
  * Use this as a reference or testing page during development.
  * Can be removed in production or kept as documentation.
@@ -17,7 +17,7 @@ import {
   MetricGridSkeleton,
   RepositoryCardSkeleton,
   ArchitectureGraphSkeleton,
-} from './skeletons';
+} from "./skeletons";
 
 const SkeletonShowcase = () => {
   return (
@@ -53,7 +53,9 @@ const SkeletonShowcase = () => {
 
         {/* Metric Grid Skeleton */}
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-white">Metric Grid Skeleton</h2>
+          <h2 className="text-2xl font-bold text-white">
+            Metric Grid Skeleton
+          </h2>
           <MetricGridSkeleton columns={4} />
         </section>
 

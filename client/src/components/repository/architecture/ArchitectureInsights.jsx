@@ -1,12 +1,6 @@
-import {
-  CheckCircle2,
-  AlertTriangle,
-  Info,
-} from "lucide-react";
+import { CheckCircle2, AlertTriangle, Info } from "lucide-react";
 
-export default function ArchitectureInsights({
-  insights,
-}) {
+export default function ArchitectureInsights({ insights }) {
   if (!insights) {
     return null;
   }
@@ -14,28 +8,13 @@ export default function ArchitectureInsights({
   const getIcon = (type) => {
     switch (type) {
       case "success":
-        return (
-          <CheckCircle2
-            size={20}
-            className="text-emerald-400"
-          />
-        );
+        return <CheckCircle2 size={20} className="text-emerald-400" />;
 
       case "warning":
-        return (
-          <AlertTriangle
-            size={20}
-            className="text-amber-400"
-          />
-        );
+        return <AlertTriangle size={20} className="text-amber-400" />;
 
       default:
-        return (
-          <Info
-            size={20}
-            className="text-blue-400"
-          />
-        );
+        return <Info size={20} className="text-blue-400" />;
     }
   };
 
@@ -74,9 +53,7 @@ export default function ArchitectureInsights({
               {getIcon(insight.type)}
 
               <div>
-                <h3 className="font-semibold text-white">
-                  {insight.title}
-                </h3>
+                <h3 className="font-semibold text-white">{insight.title}</h3>
 
                 <p className="mt-1 text-sm leading-6 text-slate-400">
                   {insight.description}

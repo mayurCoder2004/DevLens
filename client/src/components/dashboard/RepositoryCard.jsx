@@ -1,10 +1,4 @@
-import {
-  ArrowRight,
-  Clock,
-  Globe,
-  Lock,
-  Star,
-} from "lucide-react";
+import { ArrowRight, Clock, Globe, Lock, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function RepositoryCard({
@@ -59,23 +53,20 @@ export default function RepositoryCard({
   const isPrivate = visibility.toLowerCase() === "private";
 
   const formatLastUpdated = (date) => {
-  if (!date) return "Unknown";
+    if (!date) return "Unknown";
 
-  const diff =
-    Date.now() - new Date(date).getTime();
+    const diff = Date.now() - new Date(date).getTime();
 
-  const days = Math.floor(
-    diff / (1000 * 60 * 60 * 24)
-  );
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days === 0) return "Today";
+    if (days === 0) return "Today";
 
-  if (days === 1) return "Yesterday";
+    if (days === 1) return "Yesterday";
 
-  if (days < 30) return `${days} days ago`;
+    if (days < 30) return `${days} days ago`;
 
-  return new Date(date).toLocaleDateString();
-};
+    return new Date(date).toLocaleDateString();
+  };
 
   return (
     <article
@@ -173,9 +164,7 @@ export default function RepositoryCard({
 
       {/* Engineering Score */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-800/50 pt-3">
-        <span className="text-sm text-slate-500">
-          Engineering Score
-        </span>
+        <span className="text-sm text-slate-500">Engineering Score</span>
 
         <span
           className={`

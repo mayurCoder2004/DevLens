@@ -1,6 +1,6 @@
 /**
  * ArchitectureSkeleton Component
- * 
+ *
  * Skeleton loading state for the Architecture page.
  * Matches the layout of:
  * - ArchitectureSummaryCards (header + 4 metric cards)
@@ -10,8 +10,8 @@
  * - ArchitectureInsights & ArchitectureRecommendations (2-column grid)
  */
 
-import { ArchitectureGraphSkeleton } from '../../ui/skeletons';
-import Skeleton from '../../ui/Skeleton';
+import { ArchitectureGraphSkeleton } from "../../ui/skeletons";
+import Skeleton from "../../ui/Skeleton";
 
 const ArchitectureSkeleton = () => {
   return (

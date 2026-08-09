@@ -73,12 +73,8 @@ export default function RepositoryGrid({ repos = [] }) {
               language={repo.language}
               stars={repo.stars}
               engineeringScore={repo.engineeringScore}
-              lastUpdated={
-                repo.updatedAtGithub || repo.createdAt
-              }
-              visibility={
-                repo.private ? "Private" : "Public"
-              }
+              lastUpdated={repo.updatedAtGithub || repo.createdAt}
+              visibility={repo.private ? "Private" : "Public"}
               workspaceLink={`/repository/${repo.id}`}
             />
           ))}

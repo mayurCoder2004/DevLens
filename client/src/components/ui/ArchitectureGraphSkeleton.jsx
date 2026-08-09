@@ -1,11 +1,11 @@
 /**
  * ArchitectureGraphSkeleton Component
- * 
+ *
  * A specialized skeleton for architecture/dependency graph visualizations.
  * Used for graph-based components with nodes and connections.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const ArchitectureGraphSkeleton = () => {
   return (

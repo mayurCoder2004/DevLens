@@ -1,8 +1,4 @@
-import {
-  Rocket,
-  Clock3,
-  Sparkles,
-} from "lucide-react";
+import { Rocket, Clock3, Sparkles } from "lucide-react";
 import MarkdownText from "./MarkdownText";
 
 export default function ActionPlanCard({
@@ -15,27 +11,20 @@ export default function ActionPlanCard({
 }) {
   const priorityStyles = {
     High: {
-      badge:
-        "bg-red-500/10 text-red-400 border border-red-500/20",
-      phase:
-        "bg-red-500/10 text-red-300 border border-red-500/20",
+      badge: "bg-red-500/10 text-red-400 border border-red-500/20",
+      phase: "bg-red-500/10 text-red-300 border border-red-500/20",
     },
     Medium: {
-      badge:
-        "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
-      phase:
-        "bg-yellow-500/10 text-yellow-300 border border-yellow-500/20",
+      badge: "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
+      phase: "bg-yellow-500/10 text-yellow-300 border border-yellow-500/20",
     },
     Low: {
-      badge:
-        "bg-blue-500/10 text-blue-400 border border-blue-500/20",
-      phase:
-        "bg-blue-500/10 text-blue-300 border border-blue-500/20",
+      badge: "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+      phase: "bg-blue-500/10 text-blue-300 border border-blue-500/20",
     },
   };
 
-  const style =
-    priorityStyles[priority] || priorityStyles.Low;
+  const style = priorityStyles[priority] || priorityStyles.Low;
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60">
@@ -60,9 +49,7 @@ export default function ActionPlanCard({
               </span>
             </div>
 
-            <h3 className="mt-4 text-lg font-semibold text-white">
-              {title}
-            </h3>
+            <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
 
             <MarkdownText className="mt-3">{description}</MarkdownText>
           </div>
@@ -71,9 +58,7 @@ export default function ActionPlanCard({
         <div className="flex items-center gap-2 rounded-lg bg-slate-800 px-3 py-2">
           <Clock3 className="h-4 w-4 text-slate-400" />
 
-          <span className="text-sm text-slate-300">
-            {estimatedTime}
-          </span>
+          <span className="text-sm text-slate-300">{estimatedTime}</span>
         </div>
       </div>
 

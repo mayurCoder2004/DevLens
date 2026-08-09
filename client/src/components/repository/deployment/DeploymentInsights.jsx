@@ -1,6 +1,10 @@
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 
-export default function DeploymentInsights({ title, items = [], type = "info" }) {
+export default function DeploymentInsights({
+  title,
+  items = [],
+  type = "info",
+}) {
   const config = {
     success: {
       icon: CheckCircle2,

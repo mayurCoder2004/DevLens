@@ -5,9 +5,7 @@ const router = express.Router();
 const authMiddleware = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
 
-const {
-  repositoryIdSchema,
-} = require("../validations/repository.validation");
+const { repositoryIdSchema } = require("../validations/repository.validation");
 
 const {
   syncRepositories,
@@ -36,7 +34,7 @@ router.get(
   "/:repositoryId",
   authMiddleware,
   validate(repositoryIdSchema),
-  getRepositoryById
+  getRepositoryById,
 );
 
 // ============================
@@ -47,7 +45,7 @@ router.get(
   "/:repositoryId/architecture",
   authMiddleware,
   validate(repositoryIdSchema),
-  getRepositoryArchitecture
+  getRepositoryArchitecture,
 );
 
 module.exports = router;

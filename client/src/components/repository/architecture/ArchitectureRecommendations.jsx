@@ -51,7 +51,8 @@ function RecommendationCard({ recommendation, index }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
-  const priority = PRIORITY_STYLES[recommendation.priority] ?? PRIORITY_STYLES.LOW;
+  const priority =
+    PRIORITY_STYLES[recommendation.priority] ?? PRIORITY_STYLES.LOW;
   const PriorityIcon = priority.icon;
 
   const handleCopy = async () => {
@@ -162,12 +163,18 @@ ${recommendation.implementation}`;
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           aria-expanded={isExpanded}
-          aria-label={isExpanded ? "Hide implementation details" : "Show implementation details"}
+          aria-label={
+            isExpanded
+              ? "Hide implementation details"
+              : "Show implementation details"
+          }
           className="flex w-full items-center justify-between text-left transition-colors duration-200 hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-500/10"
         >
           <div className="flex items-center gap-2">
             <Wrench className="h-5 w-5 text-blue-400" />
-            <h4 className="font-semibold text-white">Recommended Implementation</h4>
+            <h4 className="font-semibold text-white">
+              Recommended Implementation
+            </h4>
           </div>
 
           {isExpanded ? (
@@ -241,17 +248,17 @@ export default function ArchitectureRecommendations({ recommendations = [] }) {
       )}
 
       {/* Recommendation Cards */}
-{recommendations.length > 0 && (
-  <div className="space-y-6">
-    {recommendations.map((recommendation, index) => (
-      <RecommendationCard
-        key={`${recommendation.title}-${index}`}
-        recommendation={recommendation}
-        index={index}
-      />
-    ))}
-  </div>
-)}
+      {recommendations.length > 0 && (
+        <div className="space-y-6">
+          {recommendations.map((recommendation, index) => (
+            <RecommendationCard
+              key={`${recommendation.title}-${index}`}
+              recommendation={recommendation}
+              index={index}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -20,42 +20,42 @@ export default function RepositorySidebar({ repository, onClose }) {
   const { repositoryId } = useParams();
 
   const navigation = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    path: "overview",
-  },
-  {
-    label: "Architecture",
-    icon: Boxes,
-    path: "architecture",
-  },
-  {
-    label: "Technical Debt",
-    icon: Wrench,
-    path: "technical-debt",
-  },
-  {
-    label: "Deployment",
-    icon: Rocket,
-    path: "deployment",
-  },
-  {
-    label: "Engineering Health",
-    icon: Activity,
-    path: "engineering-health",
-  },
-  {
-    label: "Pull Requests",
-    icon: GitPullRequest,
-    path: "pull-requests",
-  },
-  {
-    label: "AI Review",
-    icon: Sparkles,
-    path: "ai-review",
-  },
-];
+    {
+      label: "Overview",
+      icon: LayoutDashboard,
+      path: "overview",
+    },
+    {
+      label: "Architecture",
+      icon: Boxes,
+      path: "architecture",
+    },
+    {
+      label: "Technical Debt",
+      icon: Wrench,
+      path: "technical-debt",
+    },
+    {
+      label: "Deployment",
+      icon: Rocket,
+      path: "deployment",
+    },
+    {
+      label: "Engineering Health",
+      icon: Activity,
+      path: "engineering-health",
+    },
+    {
+      label: "Pull Requests",
+      icon: GitPullRequest,
+      path: "pull-requests",
+    },
+    {
+      label: "AI Review",
+      icon: Sparkles,
+      path: "ai-review",
+    },
+  ];
 
   return (
     <aside className="flex h-screen w-[270px] sm:w-72 flex-col border-r border-slate-800 bg-[#0F172A]">

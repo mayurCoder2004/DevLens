@@ -12,10 +12,8 @@ export default function Repositories() {
   const [loading, setLoading] = useState(true);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [visibilityFilter, setVisibilityFilter] =
-    useState("all");
-  const [ownerFilter, setOwnerFilter] =
-    useState("all");
+  const [visibilityFilter, setVisibilityFilter] = useState("all");
+  const [ownerFilter, setOwnerFilter] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
 
   useEffect(() => {
@@ -36,17 +34,12 @@ export default function Repositories() {
     }
   };
 
-  const owners = [
-    "all",
-    ...new Set(repos.map((repo) => repo.owner)),
-  ];
+  const owners = ["all", ...new Set(repos.map((repo) => repo.owner))];
 
   const filteredRepositories = [...repos]
     .filter((repo) => {
       const matchesSearch =
-        repo.name
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
+        repo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (repo.description || "")
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
@@ -55,19 +48,13 @@ export default function Repositories() {
         visibilityFilter === "all"
           ? true
           : visibilityFilter === "public"
-          ? !repo.private
-          : repo.private;
+            ? !repo.private
+            : repo.private;
 
       const matchesOwner =
-        ownerFilter === "all"
-          ? true
-          : repo.owner === ownerFilter;
+        ownerFilter === "all" ? true : repo.owner === ownerFilter;
 
-      return (
-        matchesSearch &&
-        matchesVisibility &&
-        matchesOwner
-      );
+      return matchesSearch && matchesVisibility && matchesOwner;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -85,28 +72,21 @@ export default function Repositories() {
 
         default:
           return (
-            new Date(b.updatedAtGithub || 0) -
-            new Date(a.updatedAtGithub || 0)
+            new Date(b.updatedAtGithub || 0) - new Date(a.updatedAtGithub || 0)
           );
       }
     });
 
   return (
     <DashboardLayout>
-      <RepositoryHero
-        totalRepositories={repos.length}
-      />
+      <RepositoryHero totalRepositories={repos.length} />
 
       <RepositoryToolbar
-        totalRepositories={
-          filteredRepositories.length
-        }
+        totalRepositories={filteredRepositories.length}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         visibilityFilter={visibilityFilter}
-        onVisibilityChange={
-          setVisibilityFilter
-        }
+        onVisibilityChange={setVisibilityFilter}
         ownerFilter={ownerFilter}
         onOwnerChange={setOwnerFilter}
         owners={owners}
@@ -114,10 +94,7 @@ export default function Repositories() {
         onSortChange={setSortBy}
       />
 
-      <RepositoryGrid
-        repos={filteredRepositories}
-        loading={loading}
-      />
+      <RepositoryGrid repos={filteredRepositories} loading={loading} />
     </DashboardLayout>
   );
 }

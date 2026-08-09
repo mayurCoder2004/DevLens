@@ -13,10 +13,7 @@ async function analyzeRepositoryDeployment(repository, githubToken) {
 
   const report = await deploymentAnalyzer.analyzeDeployment(contents);
 
-  await deploymentAnalyzer.saveDeploymentReport(
-    repository.id,
-    report,
-  );
+  await deploymentAnalyzer.saveDeploymentReport(repository.id, report);
 
   await logActivity({
     repositoryId: repository.id,

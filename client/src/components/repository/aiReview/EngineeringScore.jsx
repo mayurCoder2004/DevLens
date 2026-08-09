@@ -107,25 +107,18 @@ export default function EngineeringScore({ data }) {
         </div>
 
         <div className="w-full rounded-2xl border border-violet-500/20 bg-violet-500/10 px-5 py-4 text-center sm:w-auto sm:px-6">
-          <p className="text-sm text-violet-300">
-            Overall Score
-          </p>
+          <p className="text-sm text-violet-300">Overall Score</p>
 
           <h3 className="mt-1 text-4xl font-bold text-white">
             {data.overall}
-            <span className="text-xl text-slate-400">
-              /100
-            </span>
+            <span className="text-xl text-slate-400">/100</span>
           </h3>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {engineeringScores.map((metric) => (
-          <EngineeringScoreCard
-            key={metric.title}
-            {...metric}
-          />
+          <EngineeringScoreCard key={metric.title} {...metric} />
         ))}
       </div>
     </section>

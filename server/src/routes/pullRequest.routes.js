@@ -20,21 +20,21 @@ router.post(
   "/analyze/:repositoryId/:prNumber",
   authMiddleware,
   validate(pullRequestSchema),
-  analyzePullRequestController
+  analyzePullRequestController,
 );
 
 router.get(
   "/:repositoryId/:prNumber",
   authMiddleware,
   validate(pullRequestSchema),
-  getPullRequestAnalysis
+  getPullRequestAnalysis,
 );
 
 router.get(
   "/:repositoryId",
   authMiddleware,
   validate(repositoryIdSchema),
-  getRepositoryPullRequests
+  getRepositoryPullRequests,
 );
 
 module.exports = router;

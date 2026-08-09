@@ -1,23 +1,13 @@
-import {
-  Activity,
-  Bug,
-  Rocket,
-  Sparkles,
-} from "lucide-react";
+import { Activity, Bug, Rocket, Sparkles } from "lucide-react";
 
 import OverviewMetricCard from "./OverviewMetricCard";
 
-export default function EngineeringOverview({
-  overview,
-  loading,
-}) {
+export default function EngineeringOverview({ overview, loading }) {
   if (loading || !overview) {
     return (
       <section className="mt-10">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white">
-            Engineering Health
-          </h2>
+          <h2 className="text-2xl font-bold text-white">Engineering Health</h2>
 
           <p className="mt-2 text-sm text-slate-400">
             Loading engineering insights...
@@ -49,14 +39,11 @@ export default function EngineeringOverview({
 
       <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">
-            Engineering Health
-          </h2>
+          <h2 className="text-2xl font-bold text-white">Engineering Health</h2>
 
           <p className="mt-2 text-sm leading-6 text-slate-400">
-            Monitor engineering quality, maintainability,
-            deployment readiness, and AI insights across
-            all repositories.
+            Monitor engineering quality, maintainability, deployment readiness,
+            and AI insights across all repositories.
           </p>
         </div>
 

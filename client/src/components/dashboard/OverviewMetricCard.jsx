@@ -39,9 +39,7 @@ export default function OverviewMetricCard({
 
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-slate-400">
-            {title}
-          </p>
+          <p className="text-sm font-medium text-slate-400">{title}</p>
 
           <h3 className="mt-3 text-4xl font-bold tracking-tight text-white">
             {value}
@@ -68,7 +66,7 @@ export default function OverviewMetricCard({
             size={20}
             className={clsx(
               iconColor,
-              "transition-transform duration-300 group-hover:scale-110"
+              "transition-transform duration-300 group-hover:scale-110",
             )}
             aria-hidden="true"
           />
@@ -86,7 +84,7 @@ export default function OverviewMetricCard({
           <span
             className={clsx(
               "whitespace-nowrap rounded-full px-2 py-1 text-xs font-semibold",
-              trendColor
+              trendColor,
             )}
             aria-label={`Trend: ${trend}`}
           >

@@ -1,10 +1,4 @@
-import {
-  Lightbulb,
-  FileCode,
-  Trash2,
-  GitBranch,
-  Network,
-} from "lucide-react";
+import { Lightbulb, FileCode, Trash2, GitBranch, Network } from "lucide-react";
 
 export default function TechnicalDebtInsights({ technicalDebt }) {
   if (!technicalDebt) return null;

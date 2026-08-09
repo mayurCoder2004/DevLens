@@ -11,10 +11,7 @@ const getAuthHeaders = () => {
 };
 
 export const getEngineeringHealth = (repositoryId) => {
-  return axios.get(
-    `${API_URL}/engineering-health/${repositoryId}`,
-    {
-      headers: getAuthHeaders(),
-    }
-  );
+  return axios.get(`${API_URL}/engineering-health/${repositoryId}`, {
+    headers: getAuthHeaders(),
+  });
 };

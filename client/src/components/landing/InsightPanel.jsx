@@ -19,7 +19,6 @@ export default function InsightPanel() {
 
   return (
     <aside className="flex flex-col border-l border-slate-800 bg-slate-950/50">
-
       {/* Header */}
       <div className="border-b border-slate-800 p-5">
         <div className="flex items-center gap-3">
@@ -28,18 +27,13 @@ export default function InsightPanel() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-white">
-              AI Copilot
-            </h3>
-            <p className="text-xs text-slate-500">
-              Engineering Intelligence
-            </p>
+            <h3 className="font-semibold text-white">AI Copilot</h3>
+            <p className="text-xs text-slate-500">Engineering Intelligence</p>
           </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-5">
-
         {/* Repository Health */}
         <motion.div
           className="rounded-2xl border border-green-500/20 bg-green-500/10 p-4"
@@ -56,8 +50,8 @@ export default function InsightPanel() {
           </div>
 
           <p className="mt-3 text-sm leading-6 text-slate-300">
-            Strong architecture, healthy deployment readiness,
-            and maintainable project structure.
+            Strong architecture, healthy deployment readiness, and maintainable
+            project structure.
           </p>
         </motion.div>
 
@@ -72,13 +66,10 @@ export default function InsightPanel() {
           </h4>
 
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            DevLens analyzed repository structure,
-            dependencies, deployment configuration,
-            and engineering health.
-
-            The repository follows good engineering
-            practices with only a few improvements
-            recommended for long-term scalability.
+            DevLens analyzed repository structure, dependencies, deployment
+            configuration, and engineering health. The repository follows good
+            engineering practices with only a few improvements recommended for
+            long-term scalability.
           </p>
         </motion.div>
 
@@ -106,9 +97,7 @@ export default function InsightPanel() {
                 className="flex items-start gap-3"
               >
                 <CheckCircle2 size={18} className="mt-0.5 text-blue-400" />
-                <span className="text-sm leading-6 text-slate-300">
-                  {item}
-                </span>
+                <span className="text-sm leading-6 text-slate-300">{item}</span>
               </motion.div>
             ))}
           </motion.div>
@@ -124,16 +113,13 @@ export default function InsightPanel() {
         >
           <div className="flex items-center gap-2">
             <AlertTriangle size={18} className="text-yellow-400" />
-            <span className="font-medium text-yellow-400">
-              Risk Level: Low
-            </span>
+            <span className="font-medium text-yellow-400">Risk Level: Low</span>
           </div>
 
           <p className="mt-3 text-sm text-slate-300">
             No critical engineering risks detected.
           </p>
         </motion.div>
-
       </div>
 
       {/* Footer */}
@@ -164,7 +150,6 @@ export default function InsightPanel() {
           whileTap={{ scale: 0.98 }}
         >
           Open Full Report
-
           <motion.span
             whileHover={{ x: 3, transition: { duration: 0.15 } }}
             className="inline-flex"
@@ -173,7 +158,6 @@ export default function InsightPanel() {
           </motion.span>
         </motion.button>
       </div>
-
     </aside>
   );
 }

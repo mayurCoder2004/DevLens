@@ -31,8 +31,7 @@ class ArchitecturePersistenceService {
 
     const metrics = architectureMetrics.calculate(graph);
 
-    const hasCircularDependency =
-      circularDependencyDetector.detect(graph);
+    const hasCircularDependency = circularDependencyDetector.detect(graph);
 
     const analytics = architectureAnalytics.calculate(graph);
 
@@ -88,12 +87,11 @@ class ArchitecturePersistenceService {
   }
 
   async getArchitecture(repositoryId) {
-    const architecture =
-      await prisma.repositoryArchitecture.findUnique({
-        where: {
-          repositoryId,
-        },
-      });
+    const architecture = await prisma.repositoryArchitecture.findUnique({
+      where: {
+        repositoryId,
+      },
+    });
 
     if (!architecture) {
       throw new Error("Architecture analysis not found");

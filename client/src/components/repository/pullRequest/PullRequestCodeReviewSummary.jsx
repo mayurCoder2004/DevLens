@@ -95,9 +95,7 @@ export default function PullRequestCodeReviewSummary({ pullRequestAnalysis }) {
               >
                 <Icon className="h-5 w-5" />
               </div>
-              <p className="text-sm font-medium text-slate-400">
-                {item.label}
-              </p>
+              <p className="text-sm font-medium text-slate-400">{item.label}</p>
               <p className="mt-2 text-xl font-bold text-white">{item.value}</p>
               <p className="mt-2 text-sm leading-6 text-slate-500">
                 {item.description}

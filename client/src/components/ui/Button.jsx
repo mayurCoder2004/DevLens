@@ -18,11 +18,9 @@ export default function Button({
     secondary:
       "border border-slate-700 bg-transparent text-slate-300 hover:border-blue-500 hover:text-white",
 
-    ghost:
-      "bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white",
+    ghost: "bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white",
 
-    danger:
-      "bg-red-600 text-white hover:bg-red-700",
+    danger: "bg-red-600 text-white hover:bg-red-700",
   };
 
   const sizes = {

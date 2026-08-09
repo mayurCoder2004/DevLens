@@ -35,7 +35,7 @@ const analyze = asyncHandler(async (req, res) => {
   const report = await technicalDebtService.analyzeTechnicalDebt(
     repository.owner,
     repository.name,
-    user.githubToken
+    user.githubToken,
   );
 
   await technicalDebtService.saveTechnicalDebt(repositoryId, report);

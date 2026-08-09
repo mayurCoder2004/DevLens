@@ -2,10 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import {
-  analyzeArchitecture,
-  getArchitecture,
-} from "../services/architecture";
+import { analyzeArchitecture, getArchitecture } from "../services/architecture";
 
 import RepositoryArchitecture from "../components/repository/architecture/RepositoryArchitecture";
 import ArchitectureSkeleton from "../components/repository/architecture/ArchitectureSkeleton";
@@ -64,7 +61,7 @@ export default function ArchitecturePage() {
         error: (err) =>
           err.response?.data?.message ??
           "Failed to analyze repository architecture.",
-      }
+      },
     );
   };
 
@@ -104,36 +101,28 @@ export default function ArchitecturePage() {
 
           <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">
-                ✓ Dependency Graph
-              </h4>
+              <h4 className="font-medium text-white">✓ Dependency Graph</h4>
               <p className="mt-1 text-sm text-slate-400">
                 Visualize relationships between modules.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">
-                ✓ Architecture Metrics
-              </h4>
+              <h4 className="font-medium text-white">✓ Architecture Metrics</h4>
               <p className="mt-1 text-sm text-slate-400">
                 Complexity, nodes, edges and dependencies.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">
-                ✓ AI Insights
-              </h4>
+              <h4 className="font-medium text-white">✓ AI Insights</h4>
               <p className="mt-1 text-sm text-slate-400">
                 Understand architectural strengths and weaknesses.
               </p>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
-              <h4 className="font-medium text-white">
-                ✓ Recommendations
-              </h4>
+              <h4 className="font-medium text-white">✓ Recommendations</h4>
               <p className="mt-1 text-sm text-slate-400">
                 Receive actionable improvement suggestions.
               </p>

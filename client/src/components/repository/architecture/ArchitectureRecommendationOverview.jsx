@@ -1,10 +1,5 @@
 import { useMemo } from "react";
-import {
-  Sparkles,
-  AlertTriangle,
-  Info,
-  ShieldCheck,
-} from "lucide-react";
+import { Sparkles, AlertTriangle, Info, ShieldCheck } from "lucide-react";
 
 const PRIORITY = {
   HIGH: {
@@ -87,7 +82,9 @@ export default function ArchitectureRecommendationOverview({
           </div>
 
           <div className="mt-8">
-            <p className="text-4xl font-bold text-white sm:text-5xl">{stats.total}</p>
+            <p className="text-4xl font-bold text-white sm:text-5xl">
+              {stats.total}
+            </p>
             <p className="mt-3 text-sm text-slate-500">Recommendations</p>
           </div>
         </div>
@@ -103,7 +100,8 @@ export default function ArchitectureRecommendationOverview({
             >
               <div className="flex items-start justify-between">
                 <h3 className="text-sm font-medium text-slate-400">
-                  {priority.charAt(0) + priority.slice(1).toLowerCase()} Priority
+                  {priority.charAt(0) + priority.slice(1).toLowerCase()}{" "}
+                  Priority
                 </h3>
 
                 <div className="rounded-xl bg-slate-900/60 p-3">

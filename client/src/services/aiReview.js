@@ -8,21 +8,17 @@ const getHeaders = () => ({
   },
 });
 
-export const getRepositoryAIReview = (
-  repositoryId
-) => {
+export const getRepositoryAIReview = (repositoryId) => {
   return axios.get(
     `${API}/repositories/${repositoryId}/ai-review`,
-    getHeaders()
+    getHeaders(),
   );
 };
 
-export const refreshRepositoryAIReview = (
-  repositoryId
-) => {
+export const refreshRepositoryAIReview = (repositoryId) => {
   return axios.put(
     `${API}/repositories/${repositoryId}/ai-review`,
     {},
-    getHeaders()
+    getHeaders(),
   );
 };

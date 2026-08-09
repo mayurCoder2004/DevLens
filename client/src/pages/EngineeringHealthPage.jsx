@@ -16,37 +16,37 @@ export default function EngineeringHealthPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadEngineeringHealth = useCallback(async ({
-    silent = false,
-    rethrow = false,
-  } = {}) => {
-    try {
-      if (!silent) {
-        setLoading(true);
-      }
+  const loadEngineeringHealth = useCallback(
+    async ({ silent = false, rethrow = false } = {}) => {
+      try {
+        if (!silent) {
+          setLoading(true);
+        }
 
-      const response = await getEngineeringHealth(repositoryId);
+        const response = await getEngineeringHealth(repositoryId);
 
-      setEngineeringHealth(response.data.data);
-    } catch (err) {
-      if (err.response?.status === 404) {
-        setEngineeringHealth(null);
-      } else if (!rethrow) {
-        console.error("Failed to load engineering health:", err.message);
-        toast.error(
-          err.response?.data?.message ?? "Failed to load engineering health."
-        );
-      }
+        setEngineeringHealth(response.data.data);
+      } catch (err) {
+        if (err.response?.status === 404) {
+          setEngineeringHealth(null);
+        } else if (!rethrow) {
+          console.error("Failed to load engineering health:", err.message);
+          toast.error(
+            err.response?.data?.message ?? "Failed to load engineering health.",
+          );
+        }
 
-      if (rethrow) {
-        throw err;
+        if (rethrow) {
+          throw err;
+        }
+      } finally {
+        if (!silent) {
+          setLoading(false);
+        }
       }
-    } finally {
-      if (!silent) {
-        setLoading(false);
-      }
-    }
-  }, [repositoryId]);
+    },
+    [repositoryId],
+  );
 
   useEffect(() => {
     Promise.resolve().then(() => loadEngineeringHealth());
@@ -55,18 +55,20 @@ export default function EngineeringHealthPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
 
-    await toast.promise(
-      (async () => {
-        await loadEngineeringHealth({ silent: true, rethrow: true });
-        await refreshRepository();
-      })(),
-      {
-        loading: "Re-analyzing engineering health...",
-        success: "Engineering health re-analyzed successfully!",
-        error: (err) =>
-          err.response?.data?.message ?? "Failed to refresh engineering health.",
-      }
-    )
+    await toast
+      .promise(
+        (async () => {
+          await loadEngineeringHealth({ silent: true, rethrow: true });
+          await refreshRepository();
+        })(),
+        {
+          loading: "Re-analyzing engineering health...",
+          success: "Engineering health re-analyzed successfully!",
+          error: (err) =>
+            err.response?.data?.message ??
+            "Failed to refresh engineering health.",
+        },
+      )
       .catch(() => {})
       .finally(() => setRefreshing(false));
   };

@@ -1,10 +1,4 @@
-import {
-  Search,
-  ArrowUpDown,
-  Filter,
-  Users,
-  RotateCcw,
-} from "lucide-react";
+import { Search, ArrowUpDown, Filter, Users, RotateCcw } from "lucide-react";
 
 export default function RepositoryToolbar({
   totalRepositories,
@@ -36,13 +30,11 @@ export default function RepositoryToolbar({
 
       <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">
-            Repository Library
-          </h1>
+          <h1 className="text-3xl font-bold text-white">Repository Library</h1>
 
           <p className="mt-2 max-w-2xl text-slate-400">
-            Browse, filter, organize and launch engineering
-            workspaces for your GitHub repositories.
+            Browse, filter, organize and launch engineering workspaces for your
+            GitHub repositories.
           </p>
         </div>
 
@@ -76,9 +68,7 @@ export default function RepositoryToolbar({
               type="text"
               placeholder="Search repositories..."
               value={searchQuery}
-              onChange={(e) =>
-                onSearchChange(e.target.value)
-              }
+              onChange={(e) => onSearchChange(e.target.value)}
               className="
                 w-full
                 rounded-xl
@@ -111,9 +101,7 @@ export default function RepositoryToolbar({
 
               <select
                 value={visibilityFilter}
-                onChange={(e) =>
-                  onVisibilityChange(e.target.value)
-                }
+                onChange={(e) => onVisibilityChange(e.target.value)}
                 className="
                   w-full
                   appearance-none
@@ -146,9 +134,7 @@ export default function RepositoryToolbar({
 
               <select
                 value={ownerFilter}
-                onChange={(e) =>
-                  onOwnerChange(e.target.value)
-                }
+                onChange={(e) => onOwnerChange(e.target.value)}
                 className="
                   w-full
                   appearance-none
@@ -166,13 +152,8 @@ export default function RepositoryToolbar({
                 "
               >
                 {owners.map((owner) => (
-                  <option
-                    key={owner}
-                    value={owner}
-                  >
-                    {owner === "all"
-                      ? "All Owners"
-                      : owner}
+                  <option key={owner} value={owner}>
+                    {owner === "all" ? "All Owners" : owner}
                   </option>
                 ))}
               </select>
@@ -188,9 +169,7 @@ export default function RepositoryToolbar({
 
               <select
                 value={sortBy}
-                onChange={(e) =>
-                  onSortChange(e.target.value)
-                }
+                onChange={(e) => onSortChange(e.target.value)}
                 className="
                   w-full
                   appearance-none
@@ -207,25 +186,15 @@ export default function RepositoryToolbar({
                   focus:outline-none
                 "
               >
-                <option value="updated">
-                  Recently Updated
-                </option>
+                <option value="updated">Recently Updated</option>
 
-                <option value="name-asc">
-                  Name (A-Z)
-                </option>
+                <option value="name-asc">Name (A-Z)</option>
 
-                <option value="name-desc">
-                  Name (Z-A)
-                </option>
+                <option value="name-desc">Name (Z-A)</option>
 
-                <option value="stars-desc">
-                  Stars (High-Low)
-                </option>
+                <option value="stars-desc">Stars (High-Low)</option>
 
-                <option value="stars-asc">
-                  Stars (Low-High)
-                </option>
+                <option value="stars-asc">Stars (Low-High)</option>
               </select>
             </div>
 

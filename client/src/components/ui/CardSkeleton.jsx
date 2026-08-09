@@ -1,11 +1,11 @@
 /**
  * CardSkeleton Component
- * 
+ *
  * A reusable skeleton for generic card layouts.
  * Used for repository cards, content cards, and similar components.
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const CardSkeleton = () => {
   return (

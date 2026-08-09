@@ -1,13 +1,13 @@
 /**
  * ListSkeleton Component
- * 
+ *
  * A reusable skeleton for list items with icon and content.
  * Used for activity feeds, notifications, and similar components.
- * 
+ *
  * @param {number} items - Number of items to render (default: 3)
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const ListSkeleton = ({ items = 3 }) => {
   return (

@@ -1,8 +1,4 @@
-import {
-  Activity,
-  Rocket,
-  Sparkles,
-} from "lucide-react";
+import { Activity, Rocket, Sparkles } from "lucide-react";
 
 import { FaGithub } from "react-icons/fa";
 
@@ -30,8 +26,7 @@ const actions = [
   {
     id: 3,
     title: "Engineering Health",
-    description:
-      "Review engineering quality metrics across your repositories.",
+    description: "Review engineering quality metrics across your repositories.",
     icon: Activity,
     iconColor: "text-emerald-400",
     to: "/engineering-health",
@@ -39,8 +34,7 @@ const actions = [
   {
     id: 4,
     title: "Deployment Report",
-    description:
-      "Analyze deployment readiness and infrastructure quality.",
+    description: "Analyze deployment readiness and infrastructure quality.",
     icon: Rocket,
     iconColor: "text-sky-400",
     to: "/deployment",

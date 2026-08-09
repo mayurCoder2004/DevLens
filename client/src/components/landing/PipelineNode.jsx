@@ -8,14 +8,11 @@ export default function PipelineNode({
 }) {
   const { staggerItem } = useMotionVariants();
   const variants = {
-    default:
-      "border-slate-800 bg-slate-900/60 hover:border-blue-500/30",
+    default: "border-slate-800 bg-slate-900/60 hover:border-blue-500/30",
 
-    primary:
-      "border-blue-500/40 bg-blue-500/10 hover:border-blue-500/60",
+    primary: "border-blue-500/40 bg-blue-500/10 hover:border-blue-500/60",
 
-    success:
-      "border-green-500/40 bg-green-500/10 hover:border-green-500/60",
+    success: "border-green-500/40 bg-green-500/10 hover:border-green-500/60",
   };
 
   return (
@@ -61,10 +58,7 @@ export default function PipelineNode({
         "
         whileHover={{ scale: 1.08, rotate: 3, transition: { duration: 0.2 } }}
       >
-        <Icon
-          size={26}
-          className="text-blue-400 sm:text-[28px]"
-        />
+        <Icon size={26} className="text-blue-400 sm:text-[28px]" />
       </motion.div>
 
       {/* Title */}

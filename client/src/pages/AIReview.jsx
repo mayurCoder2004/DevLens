@@ -20,34 +20,36 @@ export default function AIReview() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
 
-  const loadReview = useCallback(async ({
-    silent = false,
-    rethrow = false,
-  } = {}) => {
-    try {
-      if (!silent) {
-        setLoading(true);
-      }
+  const loadReview = useCallback(
+    async ({ silent = false, rethrow = false } = {}) => {
+      try {
+        if (!silent) {
+          setLoading(true);
+        }
 
-      const response = await getRepositoryAIReview(repositoryId);
+        const response = await getRepositoryAIReview(repositoryId);
 
-      setReview(response.data.data);
-    } catch (err) {
-      if (err.response?.status === 404) {
-        setReview(null);
-      } else if (!rethrow) {
-        toast.error(err.response?.data?.message ?? "Failed to load AI review.");
-      }
+        setReview(response.data.data);
+      } catch (err) {
+        if (err.response?.status === 404) {
+          setReview(null);
+        } else if (!rethrow) {
+          toast.error(
+            err.response?.data?.message ?? "Failed to load AI review.",
+          );
+        }
 
-      if (rethrow) {
-        throw err;
+        if (rethrow) {
+          throw err;
+        }
+      } finally {
+        if (!silent) {
+          setLoading(false);
+        }
       }
-    } finally {
-      if (!silent) {
-        setLoading(false);
-      }
-    }
-  }, [repositoryId]);
+    },
+    [repositoryId],
+  );
 
   useEffect(() => {
     Promise.resolve().then(() => loadReview());
@@ -56,22 +58,25 @@ export default function AIReview() {
   const refreshReview = async () => {
     setGenerating(true);
 
-    await toast.promise(
-      (async () => {
-        const response = await refreshRepositoryAIReview(repositoryId);
-        setReview(response.data.data);
-        await loadReview({ silent: true, rethrow: true });
-        await refreshRepository();
-      })(),
-      {
-        loading: review ? "Regenerating AI review..." : "Generating AI review...",
-        success: review
-          ? "AI review regenerated successfully!"
-          : "AI review generated successfully!",
-        error: (err) =>
-          err.response?.data?.message ?? "Failed to generate AI review.",
-      }
-    )
+    await toast
+      .promise(
+        (async () => {
+          const response = await refreshRepositoryAIReview(repositoryId);
+          setReview(response.data.data);
+          await loadReview({ silent: true, rethrow: true });
+          await refreshRepository();
+        })(),
+        {
+          loading: review
+            ? "Regenerating AI review..."
+            : "Generating AI review...",
+          success: review
+            ? "AI review regenerated successfully!"
+            : "AI review generated successfully!",
+          error: (err) =>
+            err.response?.data?.message ?? "Failed to generate AI review.",
+        },
+      )
       .catch(() => {})
       .finally(() => setGenerating(false));
   };

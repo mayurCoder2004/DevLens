@@ -2,10 +2,7 @@ import { ShieldCheck } from "lucide-react";
 
 import AttentionCard from "./AttentionCard";
 
-export default function AttentionPanel({
-  repositories = [],
-  loading,
-}) {
+export default function AttentionPanel({ repositories = [], loading }) {
   if (loading) {
     return (
       <section className="mt-10">
@@ -53,10 +50,7 @@ export default function AttentionPanel({
 
         <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-10 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15">
-            <ShieldCheck
-              size={28}
-              className="text-emerald-400"
-            />
+            <ShieldCheck size={28} className="text-emerald-400" />
           </div>
 
           <h3 className="text-xl font-semibold text-white">
@@ -64,9 +58,8 @@ export default function AttentionPanel({
           </h3>
 
           <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-300">
-            All analyzed repositories are currently healthy.
-            No repositories require immediate engineering
-            attention.
+            All analyzed repositories are currently healthy. No repositories
+            require immediate engineering attention.
           </p>
         </div>
       </section>

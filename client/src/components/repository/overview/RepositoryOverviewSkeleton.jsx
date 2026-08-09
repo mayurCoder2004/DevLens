@@ -1,6 +1,6 @@
 /**
  * RepositoryOverviewSkeleton Component
- * 
+ *
  * Skeleton loading state for the Repository Overview page.
  * Matches the layout of:
  * - EngineeringScoreCard
@@ -8,8 +8,8 @@
  * - WorkspaceActions (3 action cards)
  */
 
-import { HeroSkeleton } from '../../ui/skeletons';
-import Skeleton from '../../ui/Skeleton';
+import { HeroSkeleton } from "../../ui/skeletons";
+import Skeleton from "../../ui/Skeleton";
 
 const RepositoryOverviewSkeleton = () => {
   return (

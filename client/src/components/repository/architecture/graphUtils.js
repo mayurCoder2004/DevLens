@@ -11,14 +11,14 @@
  */
 export function calculateDependencyStats(nodeId, edges) {
   // Outgoing edges = files this node imports
-  const imports = edges.filter(edge => edge.source === nodeId).length;
-  
+  const imports = edges.filter((edge) => edge.source === nodeId).length;
+
   // Incoming edges = files that import this node
-  const importedBy = edges.filter(edge => edge.target === nodeId).length;
-  
+  const importedBy = edges.filter((edge) => edge.target === nodeId).length;
+
   return {
-    imports,        // Files this node depends on
-    importedBy,     // Files that depend on this node
+    imports, // Files this node depends on
+    importedBy, // Files that depend on this node
     total: imports + importedBy,
   };
 }
@@ -34,14 +34,11 @@ export function createNodesFromArchitecture(architecture) {
   }
 
   return architecture.graph.nodes.map((node) => {
-    const stats = calculateDependencyStats(
-      node.id,
-      architecture.graph.edges
-    );
+    const stats = calculateDependencyStats(node.id, architecture.graph.edges);
 
     return {
       id: node.id,
-      type: 'architectureNode',
+      type: "architectureNode",
       data: {
         label: node.id,
         imports: stats.imports,
@@ -67,10 +64,10 @@ export function createEdgesFromArchitecture(architecture) {
     id: `edge-${edge.source}-${edge.target}-${index}`,
     source: edge.source,
     target: edge.target,
-    type: 'smoothstep',
+    type: "smoothstep",
     animated: true,
     style: {
-      stroke: 'rgb(59, 130, 246)',
+      stroke: "rgb(59, 130, 246)",
       strokeWidth: 2,
     },
   }));
@@ -83,8 +80,8 @@ export function createEdgesFromArchitecture(architecture) {
  */
 export function findMostConnectedNodes(nodes, limit = 10) {
   return [...nodes]
-    .sort((a, b) => 
-      (b.data.totalConnections || 0) - (a.data.totalConnections || 0)
+    .sort(
+      (a, b) => (b.data.totalConnections || 0) - (a.data.totalConnections || 0),
     )
     .slice(0, limit);
 }
@@ -100,22 +97,21 @@ export function analyzeGraphComplexity(architecture) {
       nodeCount: 0,
       edgeCount: 0,
       avgConnections: 0,
-      complexity: 'low',
+      complexity: "low",
     };
   }
 
   const nodeCount = architecture.graph.nodes.length;
   const edgeCount = architecture.graph.edges.length;
-  const avgConnections = nodeCount > 0 
-    ? (edgeCount * 2 / nodeCount).toFixed(1) 
-    : 0;
+  const avgConnections =
+    nodeCount > 0 ? ((edgeCount * 2) / nodeCount).toFixed(1) : 0;
 
   // Determine complexity level
-  let complexity = 'low';
+  let complexity = "low";
   if (nodeCount > 100 || avgConnections > 10) {
-    complexity = 'high';
+    complexity = "high";
   } else if (nodeCount > 50 || avgConnections > 5) {
-    complexity = 'medium';
+    complexity = "medium";
   }
 
   return {

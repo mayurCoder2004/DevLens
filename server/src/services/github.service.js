@@ -97,11 +97,7 @@ const getPullRequest = async (owner, repo, prNumber, accessToken) => {
   }
 };
 
-const getRepositoryPullRequests = async (
-  owner,
-  repo,
-  githubToken
-) => {
+const getRepositoryPullRequests = async (owner, repo, githubToken) => {
   return makeGitHubRequest({
     url: `https://api.github.com/repos/${owner}/${repo}/pulls`,
     githubToken,

@@ -1,4 +1,10 @@
-import { Sparkles, Activity, BadgeCheck, Lightbulb, Clock3 } from "lucide-react";
+import {
+  Sparkles,
+  Activity,
+  BadgeCheck,
+  Lightbulb,
+  Clock3,
+} from "lucide-react";
 
 export default function EngineeringHealthOverview({ engineeringHealth }) {
   if (!engineeringHealth) return null;
@@ -22,10 +28,10 @@ export default function EngineeringHealthOverview({ engineeringHealth }) {
     engineeringScore >= 90
       ? "Excellent"
       : engineeringScore >= 75
-      ? "Good"
-      : engineeringScore >= 60
-      ? "Fair"
-      : "Needs Improvement";
+        ? "Good"
+        : engineeringScore >= 60
+          ? "Fair"
+          : "Needs Improvement";
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
@@ -119,7 +125,9 @@ export default function EngineeringHealthOverview({ engineeringHealth }) {
       <div className="mt-6 flex flex-wrap items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 sm:px-5">
         <Clock3 className="h-4 w-4 text-slate-500" />
         <span className="text-sm text-slate-500">Last analyzed:</span>
-        <span className="text-sm font-medium text-slate-300">{formattedDate}</span>
+        <span className="text-sm font-medium text-slate-300">
+          {formattedDate}
+        </span>
       </div>
     </section>
   );

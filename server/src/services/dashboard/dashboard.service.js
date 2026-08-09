@@ -4,7 +4,7 @@ const average = (values) => {
   if (!values.length) return 0;
 
   return Math.round(
-    values.reduce((sum, value) => sum + value, 0) / values.length
+    values.reduce((sum, value) => sum + value, 0) / values.length,
   );
 };
 
@@ -24,64 +24,60 @@ const getDeploymentStatus = (score) => {
 };
 
 const getDashboardOverview = async (userId) => {
-  const [
-    engineeringHealth,
-    technicalDebt,
-    deployment,
-    aiReviews,
-  ] = await Promise.all([
-    prisma.repositoryHealth.findMany({
-      where: {
-        repository: {
-          userId,
+  const [engineeringHealth, technicalDebt, deployment, aiReviews] =
+    await Promise.all([
+      prisma.repositoryHealth.findMany({
+        where: {
+          repository: {
+            userId,
+          },
         },
-      },
-      select: {
-        healthScore: true,
-      },
-    }),
+        select: {
+          healthScore: true,
+        },
+      }),
 
-    prisma.repositoryTechnicalDebt.findMany({
-      where: {
-        repository: {
-          userId,
+      prisma.repositoryTechnicalDebt.findMany({
+        where: {
+          repository: {
+            userId,
+          },
         },
-      },
-      select: {
-        maintainabilityScore: true,
-      },
-    }),
+        select: {
+          maintainabilityScore: true,
+        },
+      }),
 
-    prisma.repositoryDeployment.findMany({
-      where: {
-        repository: {
-          userId,
+      prisma.repositoryDeployment.findMany({
+        where: {
+          repository: {
+            userId,
+          },
         },
-      },
-      select: {
-        deploymentScore: true,
-      },
-    }),
+        select: {
+          deploymentScore: true,
+        },
+      }),
 
-    prisma.repositoryAIReview.count({
-      where: {
-        repository: {
-          userId,
+      prisma.repositoryAIReview.count({
+        where: {
+          repository: {
+            userId,
+          },
         },
-      },
-    }),
-  ]);
+      }),
+    ]);
 
   const engineeringScore = average(
-    engineeringHealth.map((item) => item.healthScore)
+    engineeringHealth.map((item) => item.healthScore),
   );
 
   const maintainabilityScore = average(
-    technicalDebt.map((item) => item.maintainabilityScore)
+    technicalDebt.map((item) => item.maintainabilityScore),
   );
 
   const deploymentScore = average(
-    deployment.map((item) => item.deploymentScore)
+    deployment.map((item) => item.deploymentScore),
   );
 
   return {
@@ -95,9 +91,7 @@ const getDashboardOverview = async (userId) => {
       score: maintainabilityScore,
       scoreText: `${maintainabilityScore}%`,
       status:
-        maintainabilityScore >= 80
-          ? "Low Technical Debt"
-          : "Needs Refactoring",
+        maintainabilityScore >= 80 ? "Low Technical Debt" : "Needs Refactoring",
     },
 
     deployment: {
@@ -129,21 +123,15 @@ const getRepositoriesNeedingAttention = async (userId) => {
 
   const attentionItems = repositories
     .map((repo) => {
-      if (
-        !repo.health &&
-        !repo.technicalDebt &&
-        !repo.deployment
-      ) {
+      if (!repo.health && !repo.technicalDebt && !repo.deployment) {
         return null;
       }
 
       const issues = [];
 
       const healthScore = repo.health?.healthScore;
-      const deploymentScore =
-        repo.deployment?.deploymentScore;
-      const maintainabilityScore =
-        repo.technicalDebt?.maintainabilityScore;
+      const deploymentScore = repo.deployment?.deploymentScore;
+      const maintainabilityScore = repo.technicalDebt?.maintainabilityScore;
 
       // -------------------------
       // Technical Debt Risk
@@ -151,23 +139,17 @@ const getRepositoriesNeedingAttention = async (userId) => {
 
       let technicalDebtRisk = 0;
 
-      if (
-        (repo.technicalDebt?.circularDependencyCount ?? 0) > 0
-      ) {
+      if ((repo.technicalDebt?.circularDependencyCount ?? 0) > 0) {
         technicalDebtRisk += 30;
         issues.push("Circular dependencies detected");
       }
 
-      if (
-        (repo.technicalDebt?.largeFileCount ?? 0) > 0
-      ) {
+      if ((repo.technicalDebt?.largeFileCount ?? 0) > 0) {
         technicalDebtRisk += 15;
         issues.push("Large files detected");
       }
 
-      if (
-        (repo.technicalDebt?.deadFileCount ?? 0) > 0
-      ) {
+      if ((repo.technicalDebt?.deadFileCount ?? 0) > 0) {
         technicalDebtRisk += 15;
         issues.push("Dead files detected");
       }
@@ -187,23 +169,20 @@ const getRepositoriesNeedingAttention = async (userId) => {
       }
 
       if (repo.deployment) {
-        weightedRisk += (100 - deploymentScore) * 0.30;
-        totalWeight += 0.30;
+        weightedRisk += (100 - deploymentScore) * 0.3;
+        totalWeight += 0.3;
       }
 
       if (repo.technicalDebt) {
-        weightedRisk +=
-          (100 - maintainabilityScore) * 0.15;
+        weightedRisk += (100 - maintainabilityScore) * 0.15;
         totalWeight += 0.15;
 
-        weightedRisk += technicalDebtRisk * 0.10;
-        totalWeight += 0.10;
+        weightedRisk += technicalDebtRisk * 0.1;
+        totalWeight += 0.1;
       }
 
       const riskScore =
-        totalWeight > 0
-          ? Math.round(weightedRisk / totalWeight)
-          : 0;
+        totalWeight > 0 ? Math.round(weightedRisk / totalWeight) : 0;
 
       // -------------------------
       // Human-readable Issues
@@ -215,9 +194,7 @@ const getRepositoriesNeedingAttention = async (userId) => {
         } else if (healthScore < 60) {
           issues.unshift("Poor engineering health");
         } else if (healthScore < 70) {
-          issues.unshift(
-            "Engineering health needs improvement"
-          );
+          issues.unshift("Engineering health needs improvement");
         }
       }
 
@@ -235,9 +212,7 @@ const getRepositoriesNeedingAttention = async (userId) => {
         } else if (maintainabilityScore < 60) {
           issues.push("Low maintainability");
         } else if (maintainabilityScore < 70) {
-          issues.push(
-            "Maintainability could be improved"
-          );
+          issues.push("Maintainability could be improved");
         }
       }
 

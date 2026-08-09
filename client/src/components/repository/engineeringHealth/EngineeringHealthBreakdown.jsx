@@ -105,8 +105,8 @@ export default function EngineeringHealthBreakdown({ engineeringHealth }) {
         </h2>
 
         <p className="mt-2 text-slate-400">
-          Detailed performance of every engineering dimension contributing to the
-          overall health score.
+          Detailed performance of every engineering dimension contributing to
+          the overall health score.
         </p>
       </div>
 
@@ -115,9 +115,7 @@ export default function EngineeringHealthBreakdown({ engineeringHealth }) {
           const Icon = item.icon;
           const status = getStatus(item.score);
           const scoreValue =
-            item.score !== null && item.score !== undefined
-              ? item.score
-              : 0;
+            item.score !== null && item.score !== undefined ? item.score : 0;
 
           return (
             <div

@@ -1,7 +1,4 @@
-import {
-  Sparkles,
-  ArrowUpRight,
-} from "lucide-react";
+import { Sparkles, ArrowUpRight } from "lucide-react";
 import MarkdownText from "./MarkdownText";
 
 export default function TechnologyCard({
@@ -19,13 +16,9 @@ export default function TechnologyCard({
           </div>
 
           <div className="min-w-0">
-            <h3 className="text-lg font-semibold text-white">
-              {name}
-            </h3>
+            <h3 className="text-lg font-semibold text-white">{name}</h3>
 
-            <p className="mt-1 text-sm text-slate-400">
-              {category}
-            </p>
+            <p className="mt-1 text-sm text-slate-400">{category}</p>
           </div>
         </div>
 
@@ -37,9 +30,7 @@ export default function TechnologyCard({
           <Sparkles className="mt-0.5 h-5 w-5 text-violet-400" />
 
           <div className="min-w-0">
-            <p className="text-sm font-medium text-violet-300">
-              AI Insight
-            </p>
+            <p className="text-sm font-medium text-violet-300">AI Insight</p>
 
             <MarkdownText className="mt-2">{insight}</MarkdownText>
           </div>

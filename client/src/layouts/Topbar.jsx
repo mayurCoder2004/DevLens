@@ -87,13 +87,9 @@ export default function Topbar() {
 
           {/* User */}
           <div className="hidden text-left sm:block">
-            <p className="text-sm font-semibold text-white">
-              Mayur Pawar
-            </p>
+            <p className="text-sm font-semibold text-white">Mayur Pawar</p>
 
-            <p className="text-[11px] text-slate-400">
-              Connected
-            </p>
+            <p className="text-[11px] text-slate-400">Connected</p>
           </div>
 
           <ChevronDown

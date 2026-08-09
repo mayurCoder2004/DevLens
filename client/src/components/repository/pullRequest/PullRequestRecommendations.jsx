@@ -28,9 +28,7 @@ export default function PullRequestRecommendations({ pullRequestAnalysis }) {
         <div className="rounded-xl border border-dashed border-slate-700 bg-slate-900/40 py-14 text-center">
           <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
 
-          <h3 className="mt-5 text-xl font-semibold text-white">
-            All Clear
-          </h3>
+          <h3 className="mt-5 text-xl font-semibold text-white">All Clear</h3>
 
           <p className="mt-2 text-sm text-slate-400">
             No recommendations generated. This pull request looks healthy.

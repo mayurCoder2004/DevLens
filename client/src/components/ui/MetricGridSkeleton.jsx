@@ -1,14 +1,14 @@
 /**
  * MetricGridSkeleton Component
- * 
+ *
  * A reusable skeleton for metric grids.
  * Used for dashboard stats, overview metrics, and similar grid layouts.
- * 
+ *
  * @param {number} columns - Number of columns (default: 4)
  * @param {number} rows - Number of rows (default: 1)
  */
 
-import Skeleton from './Skeleton';
+import Skeleton from "./Skeleton";
 
 const MetricGridSkeleton = ({ columns = 4, rows = 1 }) => {
   const totalCards = columns * rows;

@@ -1,12 +1,7 @@
 import { motion } from "framer-motion";
 import { useMotionVariants } from "../../utils/motion";
 
-export default function StepCard({
-  icon: Icon,
-  step,
-  title,
-  description,
-}) {
+export default function StepCard({ icon: Icon, step, title, description }) {
   const { staggerItem } = useMotionVariants();
 
   return (
@@ -56,20 +51,19 @@ export default function StepCard({
           duration-200
           group-hover:bg-blue-500/20
         "
-        whileHover={{ scale: 1.08, transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] } }}
+        whileHover={{
+          scale: 1.08,
+          transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+        }}
       >
         <Icon size={34} className="text-blue-400" />
       </motion.div>
 
       {/* Title */}
-      <h3 className="mt-8 text-xl font-semibold text-white">
-        {title}
-      </h3>
+      <h3 className="mt-8 text-xl font-semibold text-white">{title}</h3>
 
       {/* Description */}
-      <p className="mt-4 text-sm leading-7 text-slate-400">
-        {description}
-      </p>
+      <p className="mt-4 text-sm leading-7 text-slate-400">{description}</p>
     </motion.div>
   );
 }

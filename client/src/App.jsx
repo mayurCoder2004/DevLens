@@ -68,55 +68,34 @@ function App() {
       {/* ===================== */}
 
       <Route
-  path="/repository/:repositoryId"
-  element={
-    <ProtectedRoute>
-      <RepositoryLayout />
-    </ProtectedRoute>
-  }
->
-  <Route index element={<Navigate to="overview" replace />} />
+        path="/repository/:repositoryId"
+        element={
+          <ProtectedRoute>
+            <RepositoryLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="overview" replace />} />
 
-  <Route
-    path="overview"
-    element={<RepositoryWorkspace />}
-  />
+        <Route path="overview" element={<RepositoryWorkspace />} />
 
-  <Route
-    path="architecture"
-    element={<ArchitecturePage />}
-  />
+        <Route path="architecture" element={<ArchitecturePage />} />
 
-  <Route
-    path="technical-debt"
-    element={<TechnicalDebt />}
-  />
+        <Route path="technical-debt" element={<TechnicalDebt />} />
 
-  <Route
-    path="deployment"
-    element={<Deployment />}
-  />
+        <Route path="deployment" element={<Deployment />} />
 
-  <Route
-    path="engineering-health"
-    element={<EngineeringHealthPage />}
-  />
+        <Route path="engineering-health" element={<EngineeringHealthPage />} />
 
-  <Route
-  path="pull-requests"
-  element={<PullRequestsPage />}
-/>
+        <Route path="pull-requests" element={<PullRequestsPage />} />
 
-<Route
-  path="pull-requests/:prNumber"
-  element={<PullRequestAnalysisPage />}
-/>
+        <Route
+          path="pull-requests/:prNumber"
+          element={<PullRequestAnalysisPage />}
+        />
 
-  <Route
-    path="ai-review"
-    element={<AIReview />}
-  />
-</Route>
+        <Route path="ai-review" element={<AIReview />} />
+      </Route>
     </Routes>
   );
 }

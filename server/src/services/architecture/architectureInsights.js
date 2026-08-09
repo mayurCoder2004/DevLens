@@ -5,11 +5,7 @@ const SEVERITY = {
 };
 
 class ArchitectureInsights {
-  generate({
-    metrics,
-    analytics,
-    hasCircularDependency,
-  }) {
+  generate({ metrics, analytics, hasCircularDependency }) {
     const insights = [];
 
     // ---------------------------------
@@ -173,8 +169,7 @@ class ArchitectureInsights {
     // Leaf Modules
     // ---------------------------------
 
-    const leafRatio =
-      analytics.leafModules / metrics.nodeCount;
+    const leafRatio = analytics.leafModules / metrics.nodeCount;
 
     if (leafRatio >= 0.6) {
       insights.push({
@@ -220,9 +215,7 @@ class ArchitectureInsights {
     // Sort by Severity
     // ---------------------------------
 
-    return insights.sort(
-      (a, b) => b.severity - a.severity,
-    );
+    return insights.sort((a, b) => b.severity - a.severity);
   }
 }
 

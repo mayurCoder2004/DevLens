@@ -50,14 +50,14 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 // Parse JSON requests
 app.use(
   express.json({
     limit: REQUEST_SIZE_LIMIT,
-  })
+  }),
 );
 
 // Parse URL Encoded requests
@@ -65,7 +65,7 @@ app.use(
   express.urlencoded({
     extended: true,
     limit: REQUEST_SIZE_LIMIT,
-  })
+  }),
 );
 
 // ============================
@@ -108,11 +108,7 @@ app.use("/api/engineering-health", aiLimiter, engineeringHealthRoutes);
 app.use("/api", aiLimiter, aiReviewRoutes);
 
 // Dashboard routes
-app.use(
-  "/api/dashboard",
-  apiLimiter,
-  dashboardRoutes
-);
+app.use("/api/dashboard", apiLimiter, dashboardRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

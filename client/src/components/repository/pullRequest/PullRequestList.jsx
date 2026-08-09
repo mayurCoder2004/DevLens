@@ -55,8 +55,7 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
 
     return pullRequests.filter((pr) => {
       const stateKey = pr.draft ? "draft" : pr.state;
-      const matchesFilter =
-        statusFilter === "all" || statusFilter === stateKey;
+      const matchesFilter = statusFilter === "all" || statusFilter === stateKey;
       const matchesQuery =
         !normalizedQuery ||
         pr.title?.toLowerCase().includes(normalizedQuery) ||
@@ -203,7 +202,7 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
                   <button
                     onClick={() =>
                       navigate(
-                        `/repository/${repositoryId}/pull-requests/${pr.number}`
+                        `/repository/${repositoryId}/pull-requests/${pr.number}`,
                       )
                     }
                     className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-violet-700 sm:w-auto"

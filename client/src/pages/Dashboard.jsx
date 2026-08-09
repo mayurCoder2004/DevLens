@@ -22,18 +22,14 @@ const Dashboard = () => {
   const [syncLoading, setSyncLoading] = useState(false);
 
   const [activities, setActivities] = useState([]);
-  const [activityLoading, setActivityLoading] =
-    useState(true);
+  const [activityLoading, setActivityLoading] = useState(true);
 
   const [overview, setOverview] = useState(null);
-  const [overviewLoading, setOverviewLoading] =
-    useState(true);
+  const [overviewLoading, setOverviewLoading] = useState(true);
 
-  const [attentionRepositories, setAttentionRepositories] =
-    useState([]);
+  const [attentionRepositories, setAttentionRepositories] = useState([]);
 
-  const [attentionLoading, setAttentionLoading] =
-    useState(true);
+  const [attentionLoading, setAttentionLoading] = useState(true);
 
   useEffect(() => {
     fetchRepos();
@@ -46,14 +42,11 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        `${API_URL}/repositories`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}/repositories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setRepos(response.data.repositories);
     } catch (error) {
@@ -69,10 +62,7 @@ const Dashboard = () => {
 
       setActivities(response.data);
     } catch (error) {
-      console.error(
-        "Failed to fetch activities:",
-        error.message
-      );
+      console.error("Failed to fetch activities:", error.message);
     } finally {
       setActivityLoading(false);
     }
@@ -82,38 +72,29 @@ const Dashboard = () => {
     try {
       setOverviewLoading(true);
 
-      const response =
-        await getDashboardOverview();
+      const response = await getDashboardOverview();
 
       setOverview(response.data);
     } catch (error) {
-      console.error(
-        "Failed to fetch dashboard overview:",
-        error.message
-      );
+      console.error("Failed to fetch dashboard overview:", error.message);
     } finally {
       setOverviewLoading(false);
     }
   };
 
-  const fetchAttentionRepositories =
-    async () => {
-      try {
-        setAttentionLoading(true);
+  const fetchAttentionRepositories = async () => {
+    try {
+      setAttentionLoading(true);
 
-        const response =
-          await getRepositoriesNeedingAttention();
+      const response = await getRepositoriesNeedingAttention();
 
-        setAttentionRepositories(response.data);
-      } catch (error) {
-        console.error(
-          "Failed to fetch attention repositories:",
-          error.message
-        );
-      } finally {
-        setAttentionLoading(false);
-      }
-    };
+      setAttentionRepositories(response.data);
+    } catch (error) {
+      console.error("Failed to fetch attention repositories:", error.message);
+    } finally {
+      setAttentionLoading(false);
+    }
+  };
 
   const handleSync = async () => {
     const syncPromise = async () => {
@@ -126,7 +107,7 @@ const Dashboard = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       await Promise.all([
@@ -139,36 +120,28 @@ const Dashboard = () => {
 
     setSyncLoading(true);
 
-    toast.promise(
-      syncPromise(),
-      {
-        loading: 'Synchronizing GitHub repositories...',
-        success: 'Repositories synchronized successfully!',
-        error: 'Failed to synchronize GitHub repositories.',
-      }
-    ).finally(() => {
-      setSyncLoading(false);
-    });
+    toast
+      .promise(syncPromise(), {
+        loading: "Synchronizing GitHub repositories...",
+        success: "Repositories synchronized successfully!",
+        error: "Failed to synchronize GitHub repositories.",
+      })
+      .finally(() => {
+        setSyncLoading(false);
+      });
   };
 
   return (
     <DashboardLayout>
       <DashboardHero
         totalRepositories={repos.length}
-        averageScore={
-          overview?.engineeringHealth?.score ?? 0
-        }
-        recentAnalyses={
-          overview?.analyzedRepositories ?? 0
-        }
+        averageScore={overview?.engineeringHealth?.score ?? 0}
+        recentAnalyses={overview?.analyzedRepositories ?? 0}
         onSync={handleSync}
         syncLoading={syncLoading}
       />
 
-      <EngineeringOverview
-        overview={overview}
-        loading={overviewLoading}
-      />
+      <EngineeringOverview overview={overview} loading={overviewLoading} />
 
       <AttentionPanel
         repositories={attentionRepositories}
@@ -177,10 +150,7 @@ const Dashboard = () => {
 
       <WorkspaceActions />
 
-      <RecentActivity
-        activities={activities}
-        loading={activityLoading}
-      />
+      <RecentActivity activities={activities} loading={activityLoading} />
     </DashboardLayout>
   );
 };

@@ -55,26 +55,22 @@ export default function Footer() {
           <div className="max-w-md">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-  <img
-    src="/favicon.png"
-    alt="DevLens"
-    className="h-11 w-11"
-  />
+                <img src="/favicon.png" alt="DevLens" className="h-11 w-11" />
 
-  <div>
-    <h3 className="text-xl font-bold text-white">DevLens</h3>
+                <div>
+                  <h3 className="text-xl font-bold text-white">DevLens</h3>
 
-    <p className="text-sm text-slate-400">
-      AI Engineering Intelligence Platform
-    </p>
-  </div>
-</div>
+                  <p className="text-sm text-slate-400">
+                    AI Engineering Intelligence Platform
+                  </p>
+                </div>
+              </div>
             </div>
 
             <p className="mt-5 text-sm leading-7 text-slate-400 sm:mt-6">
-              Analyze repositories, understand architecture,
-              detect technical debt, evaluate deployment readiness,
-              and generate AI-powered engineering insights from one platform.
+              Analyze repositories, understand architecture, detect technical
+              debt, evaluate deployment readiness, and generate AI-powered
+              engineering insights from one platform.
             </p>
           </div>
 
@@ -110,7 +106,7 @@ export default function Footer() {
                     className="transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-blue-400"
                   />
                 </Link>
-              )
+              ),
             )}
           </div>
         </div>
@@ -118,17 +114,12 @@ export default function Footer() {
         {/* Bottom */}
 
         <div className="flex flex-col items-center gap-3 border-t border-slate-800 py-6 text-sm text-slate-500 sm:gap-4 md:flex-row md:justify-between">
-          <span>
-            © {currentYear} DevLens. All rights reserved.
-          </span>
+          <span>© {currentYear} DevLens. All rights reserved.</span>
 
           <div className="flex items-center gap-2">
             <span>Designed &amp; Developed with</span>
 
-            <Heart
-              size={15}
-              className="fill-red-500 text-red-500"
-            />
+            <Heart size={15} className="fill-red-500 text-red-500" />
 
             <span>by Mayur Pawar</span>
           </div>

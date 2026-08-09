@@ -137,12 +137,7 @@ const repositoryReviewSchema = {
             },
           },
         },
-        required: [
-          "title",
-          "priority",
-          "recommendation",
-          "benefits",
-        ],
+        required: ["title", "priority", "recommendation", "benefits"],
       },
     },
   },

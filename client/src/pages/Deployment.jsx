@@ -2,10 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import {
-  getDeploymentReport,
-  analyzeDeployment,
-} from "../services/deployment";
+import { getDeploymentReport, analyzeDeployment } from "../services/deployment";
 
 import RepositoryDeployment from "../components/repository/workspace/RepositoryDeployment";
 import DeploymentSkeleton from "../components/repository/deployment/DeploymentSkeleton";
@@ -57,7 +54,7 @@ export default function Deployment() {
         success: "Deployment analysis completed successfully!",
         error: (err) =>
           err.response?.data?.message ?? "Failed to analyze deployment.",
-      }
+      },
     );
   };
 
@@ -146,10 +143,7 @@ export default function Deployment() {
         loading={loading}
       />
 
-      <RepositoryDeployment
-        repository={repository}
-        deployment={deployment}
-      />
+      <RepositoryDeployment repository={repository} deployment={deployment} />
     </div>
   );
 }

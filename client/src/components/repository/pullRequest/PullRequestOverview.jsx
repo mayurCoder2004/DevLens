@@ -142,9 +142,7 @@ export default function PullRequestOverview({ pullRequestAnalysis }) {
         <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-5 sm:p-6 lg:col-span-2">
           <div className="mb-5 flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-            <h3 className="text-lg font-semibold text-white">
-              Review Signals
-            </h3>
+            <h3 className="text-lg font-semibold text-white">Review Signals</h3>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">

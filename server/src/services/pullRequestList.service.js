@@ -1,16 +1,11 @@
 const githubService = require("./github.service");
 
-const listRepositoryPullRequests = async ({
-  owner,
-  repo,
-  githubToken,
-}) => {
-  const pullRequests =
-    await githubService.getRepositoryPullRequests(
-      owner,
-      repo,
-      githubToken
-    );
+const listRepositoryPullRequests = async ({ owner, repo, githubToken }) => {
+  const pullRequests = await githubService.getRepositoryPullRequests(
+    owner,
+    repo,
+    githubToken,
+  );
 
   return pullRequests.map((pr) => ({
     number: pr.number,

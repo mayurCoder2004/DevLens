@@ -9,13 +9,9 @@ import RepositoryOverviewSkeleton from "./RepositoryOverviewSkeleton";
 import { analyzeRepository } from "../../../services/analysis";
 
 export default function RepositoryOverview() {
-  const {
-    repository,
-    refreshRepository,
-  } = useOutletContext();
+  const { repository, refreshRepository } = useOutletContext();
 
-  const [analyzing, setAnalyzing] =
-    useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
 
   if (!repository) {
     return <RepositoryOverviewSkeleton />;
@@ -24,19 +20,22 @@ export default function RepositoryOverview() {
   const handleAnalyze = async () => {
     setAnalyzing(true);
 
-    toast.promise(
-      (async () => {
-        await analyzeRepository(repository.id);
-        await refreshRepository();
-      })(),
-      {
-        loading: 'Analyzing repository...',
-        success: 'Repository analysis completed successfully!',
-        error: (err) => err.response?.data?.message ?? 'Failed to analyze repository.',
-      }
-    ).finally(() => {
-      setAnalyzing(false);
-    });
+    toast
+      .promise(
+        (async () => {
+          await analyzeRepository(repository.id);
+          await refreshRepository();
+        })(),
+        {
+          loading: "Analyzing repository...",
+          success: "Repository analysis completed successfully!",
+          error: (err) =>
+            err.response?.data?.message ?? "Failed to analyze repository.",
+        },
+      )
+      .finally(() => {
+        setAnalyzing(false);
+      });
   };
 
   return (
@@ -48,15 +47,11 @@ export default function RepositoryOverview() {
         onAnalyze={handleAnalyze}
       />
 
-      <RepositoryMetricsGrid
-        repository={repository}
-      />
+      <RepositoryMetricsGrid repository={repository} />
 
       <QuickActions
         repository={repository}
-        refreshRepository={
-          refreshRepository
-        }
+        refreshRepository={refreshRepository}
       />
     </div>
   );

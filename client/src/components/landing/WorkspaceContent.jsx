@@ -32,22 +32,19 @@ const findings = [
 ];
 
 export default function WorkspaceContent() {
-  const { progressBar, previewStagger, staggerItem, CARD_HOVER } = useMotionVariants();
+  const { progressBar, previewStagger, staggerItem, CARD_HOVER } =
+    useMotionVariants();
 
   return (
     <main className="flex flex-col bg-slate-900">
-
       {/* Top Toolbar */}
       <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3 sm:px-6 sm:py-4">
-
         {/* Tabs */}
         <div className="flex items-center gap-4 overflow-x-auto scrollbar-none sm:gap-6">
           <span className="flex-shrink-0 text-sm font-medium text-blue-400">
             Overview
           </span>
-          <span className="flex-shrink-0 text-sm text-slate-400">
-            Commits
-          </span>
+          <span className="flex-shrink-0 text-sm text-slate-400">Commits</span>
           <span className="flex-shrink-0 text-sm text-slate-400">
             Pull Requests
           </span>
@@ -59,11 +56,9 @@ export default function WorkspaceContent() {
         <div className="ml-4 flex-shrink-0 rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-400 sm:px-3">
           Last Scan • 2 min ago
         </div>
-
       </div>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-4 sm:space-y-6 sm:p-6">
-
         {/* Repository Header Card */}
         <motion.div
           className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-6"
@@ -104,16 +99,13 @@ export default function WorkspaceContent() {
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-
           {/* Engineering Score — animated progress bar */}
           <motion.div
             className="rounded-2xl border border-slate-800 bg-slate-950 p-4 sm:p-5"
             whileHover={CARD_HOVER}
             style={{ willChange: "transform, box-shadow" }}
           >
-            <p className="text-sm text-slate-400">
-              Engineering Score
-            </p>
+            <p className="text-sm text-slate-400">Engineering Score</p>
             <h3 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
               91
             </h3>
@@ -150,7 +142,6 @@ export default function WorkspaceContent() {
               CI/CD and Docker configuration verified.
             </p>
           </motion.div>
-
         </div>
 
         {/* Activity */}
@@ -161,9 +152,7 @@ export default function WorkspaceContent() {
         >
           <div className="mb-4 flex items-center gap-2 sm:mb-6">
             <Activity size={18} className="text-blue-400" />
-            <h3 className="font-semibold text-white">
-              Repository Activity
-            </h3>
+            <h3 className="font-semibold text-white">Repository Activity</h3>
           </div>
 
           <div className="flex h-28 items-end gap-1.5 sm:h-36 sm:gap-2">
@@ -202,16 +191,17 @@ export default function WorkspaceContent() {
                   variants={staggerItem}
                   className="flex items-start gap-3"
                 >
-                  <Icon size={18} className={`mt-0.5 flex-shrink-0 ${item.color}`} />
+                  <Icon
+                    size={18}
+                    className={`mt-0.5 flex-shrink-0 ${item.color}`}
+                  />
                   <span className="text-sm text-slate-300">{item.title}</span>
                 </motion.div>
               );
             })}
           </motion.div>
         </motion.div>
-
       </div>
-
     </main>
   );
 }

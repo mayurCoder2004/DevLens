@@ -37,16 +37,11 @@ export default function WorkspaceActionCard({
           bg-slate-800
         "
       >
-        <Icon
-          size={22}
-          className={iconColor}
-        />
+        <Icon size={22} className={iconColor} />
       </div>
 
       <div className="mt-5">
-        <h3 className="text-lg font-semibold text-white">
-          {title}
-        </h3>
+        <h3 className="text-lg font-semibold text-white">{title}</h3>
 
         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-400">
           {description}
@@ -72,9 +67,7 @@ export default function WorkspaceActionCard({
             disabled:opacity-50
           "
         >
-          {loading
-            ? "Refreshing..."
-            : "Run Action"}
+          {loading ? "Refreshing..." : "Run Action"}
 
           <ArrowRight size={16} />
         </button>

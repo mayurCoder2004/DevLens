@@ -15,35 +15,35 @@ export default function PullRequestsPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadPullRequests = useCallback(async ({
-    silent = false,
-    rethrow = false,
-  } = {}) => {
-    try {
-      if (!silent) {
-        setLoading(true);
-      }
+  const loadPullRequests = useCallback(
+    async ({ silent = false, rethrow = false } = {}) => {
+      try {
+        if (!silent) {
+          setLoading(true);
+        }
 
-      const response = await getRepositoryPullRequests(repositoryId);
+        const response = await getRepositoryPullRequests(repositoryId);
 
-      setPullRequests(response.data.data);
-    } catch (err) {
-      console.error("Failed to load pull requests:", err.message);
-      if (!rethrow) {
-        toast.error(
-          err.response?.data?.message ?? "Failed to load pull requests."
-        );
-      }
+        setPullRequests(response.data.data);
+      } catch (err) {
+        console.error("Failed to load pull requests:", err.message);
+        if (!rethrow) {
+          toast.error(
+            err.response?.data?.message ?? "Failed to load pull requests.",
+          );
+        }
 
-      if (rethrow) {
-        throw err;
+        if (rethrow) {
+          throw err;
+        }
+      } finally {
+        if (!silent) {
+          setLoading(false);
+        }
       }
-    } finally {
-      if (!silent) {
-        setLoading(false);
-      }
-    }
-  }, [repositoryId]);
+    },
+    [repositoryId],
+  );
 
   useEffect(() => {
     Promise.resolve().then(() => loadPullRequests());
@@ -52,18 +52,19 @@ export default function PullRequestsPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
 
-    await toast.promise(
-      (async () => {
-        await loadPullRequests({ silent: true, rethrow: true });
-        await refreshRepository();
-      })(),
-      {
-        loading: "Refreshing pull requests...",
-        success: "Pull requests refreshed successfully!",
-        error: (err) =>
-          err.response?.data?.message ?? "Failed to refresh pull requests.",
-      }
-    )
+    await toast
+      .promise(
+        (async () => {
+          await loadPullRequests({ silent: true, rethrow: true });
+          await refreshRepository();
+        })(),
+        {
+          loading: "Refreshing pull requests...",
+          success: "Pull requests refreshed successfully!",
+          error: (err) =>
+            err.response?.data?.message ?? "Failed to refresh pull requests.",
+        },
+      )
       .catch(() => {})
       .finally(() => setRefreshing(false));
   };

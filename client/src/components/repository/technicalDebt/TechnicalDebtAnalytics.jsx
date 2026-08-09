@@ -24,29 +24,29 @@ export default function TechnicalDebtAnalytics({ technicalDebt }) {
     technicalDebtScore <= 40
       ? "Low Debt"
       : technicalDebtScore <= 70
-      ? "Moderate Debt"
-      : "High Debt";
+        ? "Moderate Debt"
+        : "High Debt";
 
   const debtColor =
     technicalDebtScore <= 40
       ? "bg-emerald-500"
       : technicalDebtScore <= 70
-      ? "bg-amber-500"
-      : "bg-red-500";
+        ? "bg-amber-500"
+        : "bg-red-500";
 
   const maintainabilityStatus =
     maintainabilityScore >= 71
       ? "Good"
       : maintainabilityScore >= 41
-      ? "Fair"
-      : "Poor";
+        ? "Fair"
+        : "Poor";
 
   const maintainabilityColor =
     maintainabilityScore >= 71
       ? "bg-emerald-500"
       : maintainabilityScore >= 41
-      ? "bg-amber-500"
-      : "bg-red-500";
+        ? "bg-amber-500"
+        : "bg-red-500";
 
   const stats = [
     {

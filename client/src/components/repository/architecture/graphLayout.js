@@ -1,4 +1,4 @@
-import ELK from 'elkjs/lib/elk.bundled.js';
+import ELK from "elkjs/lib/elk.bundled.js";
 
 const elk = new ELK();
 
@@ -7,34 +7,34 @@ const elk = new ELK();
  * Prioritizes vertical space over horizontal to prevent extremely wide layouts
  */
 const elkOptions = {
-  'elk.algorithm': 'layered',
-  'elk.direction': 'DOWN', // Top to bottom
-  'elk.spacing.nodeNode': '50',
-  'elk.layered.spacing.nodeNodeBetweenLayers': '70',
-  'elk.spacing.edgeNode': '30',
-  'elk.spacing.edgeEdge': '20',
-  
+  "elk.algorithm": "layered",
+  "elk.direction": "DOWN", // Top to bottom
+  "elk.spacing.nodeNode": "50",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "70",
+  "elk.spacing.edgeNode": "30",
+  "elk.spacing.edgeEdge": "20",
+
   // Compact layout options
-  'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
-  'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
-  'elk.layered.cycleBreaking.strategy': 'GREEDY',
-  
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+  "elk.layered.cycleBreaking.strategy": "GREEDY",
+
   // Allow nodes to wrap instead of creating extremely wide rows
-  'elk.layered.wrapping.strategy': 'MULTI_EDGE',
-  'elk.layered.wrapping.additionalEdgeSpacing': '20',
-  'elk.layered.wrapping.correctionFactor': '1.5',
-  
+  "elk.layered.wrapping.strategy": "MULTI_EDGE",
+  "elk.layered.wrapping.additionalEdgeSpacing": "20",
+  "elk.layered.wrapping.correctionFactor": "1.5",
+
   // Compact node placement
-  'elk.layered.compaction.postCompaction.strategy': 'EDGE_LENGTH',
-  'elk.layered.nodePlacement.favorStraightEdges': 'true',
-  
+  "elk.layered.compaction.postCompaction.strategy": "EDGE_LENGTH",
+  "elk.layered.nodePlacement.favorStraightEdges": "true",
+
   // Reduce edge crossings
-  'elk.layered.thoroughness': '10',
-  'elk.layered.considerModelOrder.strategy': 'PREFER_EDGES',
-  
+  "elk.layered.thoroughness": "10",
+  "elk.layered.considerModelOrder.strategy": "PREFER_EDGES",
+
   // Better spacing for readability
-  'elk.padding': '[top=40,left=40,bottom=40,right=40]',
-  'elk.aspectRatio': '1.3', // Prefer taller graphs over wide ones
+  "elk.padding": "[top=40,left=40,bottom=40,right=40]",
+  "elk.aspectRatio": "1.3", // Prefer taller graphs over wide ones
 };
 
 /**
@@ -47,13 +47,13 @@ function calculateNodeSize(label) {
   const minWidth = 200;
   const maxWidth = 280;
   const baseHeight = 100;
-  
+
   // Adjust width based on filename length
   const estimatedWidth = Math.max(
     minWidth,
-    Math.min(maxWidth, label.length * 8 + 80)
+    Math.min(maxWidth, label.length * 8 + 80),
   );
-  
+
   return {
     width: estimatedWidth,
     height: baseHeight,
@@ -63,7 +63,7 @@ function calculateNodeSize(label) {
 /**
  * Layout graph nodes using ELK hierarchical algorithm
  * Optimized to prevent extremely wide layouts with many siblings
- * 
+ *
  * @param {Array} nodes - React Flow nodes
  * @param {Array} edges - React Flow edges
  * @returns {Promise<Array>} Nodes with calculated positions
@@ -86,7 +86,7 @@ export async function getLayoutedElements(nodes, edges) {
   }));
 
   const elkGraph = {
-    id: 'root',
+    id: "root",
     layoutOptions: elkOptions,
     children: elkNodes,
     edges: elkEdges,
@@ -99,7 +99,7 @@ export async function getLayoutedElements(nodes, edges) {
     // Map positions back to React Flow nodes
     const layoutedNodes = nodes.map((node) => {
       const elkNode = layoutedGraph.children.find((n) => n.id === node.id);
-      
+
       if (!elkNode) {
         console.warn(`Node ${node.id} not found in layout`);
         return node;
@@ -121,7 +121,7 @@ export async function getLayoutedElements(nodes, edges) {
 
     return layoutedNodes;
   } catch (error) {
-    console.error('ELK layout error:', error);
+    console.error("ELK layout error:", error);
     // Fallback to original positions if layout fails
     return nodes;
   }
@@ -134,7 +134,7 @@ export async function getLayoutedElements(nodes, edges) {
  */
 export function detectCircularDependencies(edges) {
   const graph = new Map();
-  
+
   // Build adjacency list
   edges.forEach(({ source, target }) => {
     if (!graph.has(source)) {
@@ -186,19 +186,20 @@ export function detectCircularDependencies(edges) {
 export function calculateGraphStats(nodes, edges) {
   const nodeCount = nodes.length;
   const edgeCount = edges.length;
-  
+
   // Calculate average connections per node
-  const avgConnections = nodeCount > 0 ? (edgeCount * 2 / nodeCount).toFixed(1) : 0;
-  
+  const avgConnections =
+    nodeCount > 0 ? ((edgeCount * 2) / nodeCount).toFixed(1) : 0;
+
   // Find most connected nodes
   const connectionCounts = new Map();
   edges.forEach(({ source, target }) => {
     connectionCounts.set(source, (connectionCounts.get(source) || 0) + 1);
     connectionCounts.set(target, (connectionCounts.get(target) || 0) + 1);
   });
-  
+
   const maxConnections = Math.max(...Array.from(connectionCounts.values()), 0);
-  
+
   return {
     nodeCount,
     edgeCount,

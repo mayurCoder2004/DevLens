@@ -17,12 +17,14 @@ export default function DashboardLayout({ children }) {
       )}
 
       {/* Sidebar - Hidden on mobile, fixed on desktop */}
-      <div className={`
+      <div
+        className={`
         w-[min(18rem,calc(100vw-1rem))]
         fixed inset-y-0 left-0 z-50 lg:static lg:z-auto
         transform transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}
+      >
         <Sidebar onClose={() => setIsSidebarOpen(false)} />
       </div>
 

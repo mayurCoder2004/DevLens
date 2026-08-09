@@ -14,34 +14,22 @@ export default function RepositoryArchitecture({
   return (
     <div className="space-y-8">
       {/* Repository Summary */}
-      <ArchitectureSummaryCards
-        architecture={architecture}
-      />
+      <ArchitectureSummaryCards architecture={architecture} />
 
       {/* Architecture Graph */}
-      <ArchitectureGraphCard
-        architecture={architecture}
-      />
+      <ArchitectureGraphCard architecture={architecture} />
 
       {/* Analytics */}
-      <ArchitectureAnalytics
-        analytics={analytics}
-      />
+      <ArchitectureAnalytics analytics={analytics} />
 
       {/* NEW: Full Width AI Overview */}
-      <ArchitectureRecommendationOverview
-        recommendations={recommendations}
-      />
+      <ArchitectureRecommendationOverview recommendations={recommendations} />
 
       {/* Details Section */}
       <div className="grid gap-8 xl:grid-cols-2">
-        <ArchitectureInsights
-          insights={insights}
-        />
+        <ArchitectureInsights insights={insights} />
 
-        <ArchitectureRecommendations
-          recommendations={recommendations}
-        />
+        <ArchitectureRecommendations recommendations={recommendations} />
       </div>
     </div>
   );

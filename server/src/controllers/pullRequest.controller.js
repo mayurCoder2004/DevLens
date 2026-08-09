@@ -14,7 +14,9 @@ const { Octokit } = require("@octokit/rest");
 
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
-const { listRepositoryPullRequests } = require("../services/pullRequestList.service");
+const {
+  listRepositoryPullRequests,
+} = require("../services/pullRequestList.service");
 
 // ============================
 // Analyze Pull Request
@@ -154,12 +156,11 @@ const getRepositoryPullRequests = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Repository not found");
   }
 
-  const pullRequests =
-    await listRepositoryPullRequests({
-      owner: repository.owner,
-      repo: repository.name,
-      githubToken: repository.user.githubToken,
-    });
+  const pullRequests = await listRepositoryPullRequests({
+    owner: repository.owner,
+    repo: repository.name,
+    githubToken: repository.user.githubToken,
+  });
 
   return res.status(200).json({
     success: true,

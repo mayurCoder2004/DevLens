@@ -11,8 +11,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.deploymentScore >= 80
           ? "Excellent"
           : deployment.deploymentScore >= 60
-          ? "Good"
-          : "Needs Improvement",
+            ? "Good"
+            : "Needs Improvement",
       color: "bg-blue-500",
     },
     {
@@ -22,8 +22,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.infrastructure.score === 100
           ? "Ready"
           : deployment.infrastructure.score > 0
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
       color: "bg-red-500",
     },
     {
@@ -33,8 +33,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.configuration.score >= 80
           ? "Ready"
           : deployment.configuration.score >= 50
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
       color: "bg-amber-500",
     },
     {
@@ -44,8 +44,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.buildReadiness.score >= 80
           ? "Ready"
           : deployment.buildReadiness.score >= 50
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
       color: "bg-emerald-500",
     },
     {
@@ -55,8 +55,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.ciCd.score === 100
           ? "Ready"
           : deployment.ciCd.score > 0
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
       color: "bg-violet-500",
     },
   ];
@@ -68,8 +68,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.infrastructure.score === 100
           ? "Ready"
           : deployment.infrastructure.score > 0
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
     },
     {
       title: "Configuration",
@@ -77,8 +77,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.configuration.score >= 80
           ? "Ready"
           : deployment.configuration.score >= 50
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
     },
     {
       title: "Build",
@@ -86,8 +86,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.buildReadiness.score >= 80
           ? "Ready"
           : deployment.buildReadiness.score >= 50
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
     },
     {
       title: "CI/CD",
@@ -95,8 +95,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.ciCd.score === 100
           ? "Ready"
           : deployment.ciCd.score > 0
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
     },
     {
       title: "Runtime",
@@ -104,8 +104,8 @@ export default function DeploymentAnalytics({ deployment }) {
         deployment.runtime.score === 100
           ? "Ready"
           : deployment.runtime.score > 0
-          ? "Partial"
-          : "Missing",
+            ? "Partial"
+            : "Missing",
     },
   ];
 
@@ -123,9 +123,7 @@ export default function DeploymentAnalytics({ deployment }) {
   return (
     <section>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white">
-          Deployment Analytics
-        </h2>
+        <h2 className="text-2xl font-bold text-white">Deployment Analytics</h2>
 
         <p className="mt-2 text-slate-400">
           Deployment readiness across infrastructure and DevOps categories.
@@ -162,7 +160,7 @@ export default function DeploymentAnalytics({ deployment }) {
 
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-semibold ${getBadgeClasses(
-                    item.status
+                    item.status,
                   )}`}
                 >
                   {item.status}

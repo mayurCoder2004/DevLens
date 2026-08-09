@@ -37,7 +37,9 @@ export default function AIReviewHero({ review }) {
           <p className="text-sm font-medium text-violet-300">Overall Score</p>
           <p className="mt-2 text-4xl font-bold text-white">
             {score}
-            {score !== "N/A" && <span className="text-xl text-slate-400">/100</span>}
+            {score !== "N/A" && (
+              <span className="text-xl text-slate-400">/100</span>
+            )}
           </p>
         </div>
       </div>
@@ -75,7 +77,9 @@ export default function AIReviewHero({ review }) {
 function HeroStat({ icon: Icon, label, value, tone }) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${tone}`}>
+      <div
+        className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${tone}`}
+      >
         <Icon className="h-5 w-5" />
       </div>
       <p className="text-sm text-slate-400">{label}</p>

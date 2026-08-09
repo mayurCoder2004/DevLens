@@ -9,9 +9,7 @@ import {
 
 import ArchitectureAnalyticsCard from "./ArchitectureAnalyticsCard";
 
-export default function ArchitectureAnalytics({
-  analytics,
-}) {
+export default function ArchitectureAnalytics({ analytics }) {
   if (!analytics) {
     return null;
   }
@@ -24,7 +22,8 @@ export default function ArchitectureAnalytics({
         </h2>
 
         <p className="mt-2 text-slate-400">
-          Engineering intelligence generated from the repository dependency graph.
+          Engineering intelligence generated from the repository dependency
+          graph.
         </p>
       </div>
 

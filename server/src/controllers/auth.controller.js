@@ -46,7 +46,7 @@ const login = async (req, res) => {
       env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     logger.info(`User logged in successfully: ${user.email}`);

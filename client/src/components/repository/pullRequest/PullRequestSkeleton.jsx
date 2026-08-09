@@ -84,7 +84,7 @@ const PullRequestSkeleton = () => {
               {Array.from({ length: sectionIndex === 0 ? 6 : 5 }).map(
                 (_, index) => (
                   <Skeleton key={index} className="h-28 rounded-xl" />
-                )
+                ),
               )}
             </div>
           </section>

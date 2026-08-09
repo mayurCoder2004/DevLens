@@ -1,8 +1,4 @@
-import {
-  LayoutDashboard,
-  FolderGit2,
-  X,
-} from "lucide-react";
+import { LayoutDashboard, FolderGit2, X } from "lucide-react";
 
 import SidebarItem from "./SidebarItem";
 
@@ -32,9 +28,7 @@ export default function Sidebar({ onClose }) {
           />
 
           <div className="leading-none">
-            <h1 className="text-[20px] font-bold text-white">
-              DevLens
-            </h1>
+            <h1 className="text-[20px] font-bold text-white">DevLens</h1>
 
             <p className="mt-1 text-[8px] uppercase tracking-[0.25em] text-slate-500">
               Engineering Intelligence
@@ -62,11 +56,7 @@ export default function Sidebar({ onClose }) {
 
         <div className="space-y-1">
           {overviewItems.map((item) => (
-            <SidebarItem
-              key={item.label}
-              {...item}
-              onClick={onClose}
-            />
+            <SidebarItem key={item.label} {...item} onClick={onClose} />
           ))}
         </div>
       </div>

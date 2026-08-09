@@ -1,8 +1,4 @@
-import {
-  Boxes,
-  Rocket,
-  Brain,
-} from "lucide-react";
+import { Boxes, Rocket, Brain } from "lucide-react";
 
 export default function RecentAnalyses() {
   const analyses = [
@@ -29,9 +25,7 @@ export default function RecentAnalyses() {
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-white">
-          Recent Analyses
-        </h2>
+        <h2 className="text-2xl font-semibold text-white">Recent Analyses</h2>
 
         <p className="mt-2 text-slate-400">
           Latest engineering analyses available for this repository.
@@ -58,20 +52,13 @@ export default function RecentAnalyses() {
             >
               <div className="flex items-center gap-4">
                 <div className="rounded-lg bg-slate-800 p-3">
-                  <Icon
-                    size={20}
-                    className="text-blue-400"
-                  />
+                  <Icon size={20} className="text-blue-400" />
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-white">
-                    {analysis.title}
-                  </h3>
+                  <h3 className="font-medium text-white">{analysis.title}</h3>
 
-                  <p className="mt-1 text-sm text-slate-400">
-                    {analysis.time}
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400">{analysis.time}</p>
                 </div>
               </div>
 

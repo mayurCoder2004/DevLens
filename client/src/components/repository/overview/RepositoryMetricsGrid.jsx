@@ -1,15 +1,8 @@
-import {
-  Boxes,
-  Wrench,
-  Rocket,
-  Activity,
-} from "lucide-react";
+import { Boxes, Wrench, Rocket, Activity } from "lucide-react";
 
 import MetricCard from "./MetricCard";
 
-export default function RepositoryMetricsGrid({
-  repository,
-}) {
+export default function RepositoryMetricsGrid({ repository }) {
   const getStatus = (score) => {
     if (score >= 90) return "Excellent";
     if (score >= 75) return "Healthy";
@@ -26,10 +19,7 @@ export default function RepositoryMetricsGrid({
         score={repository.architecture?.complexityScore ?? 0}
         status={
           repository.architecture
-            ? getStatus(
-                repository.architecture
-                  .complexityScore
-              )
+            ? getStatus(repository.architecture.complexityScore)
             : "Not Analyzed"
         }
         icon={Boxes}
@@ -39,16 +29,10 @@ export default function RepositoryMetricsGrid({
 
       <MetricCard
         title="Technical Debt"
-        score={
-          repository.technicalDebt
-            ?.technicalDebtScore ?? 0
-        }
+        score={repository.technicalDebt?.technicalDebtScore ?? 0}
         status={
           repository.technicalDebt
-            ? getStatus(
-                repository.technicalDebt
-                  .technicalDebtScore
-              )
+            ? getStatus(repository.technicalDebt.technicalDebtScore)
             : "Not Analyzed"
         }
         icon={Wrench}
@@ -58,16 +42,10 @@ export default function RepositoryMetricsGrid({
 
       <MetricCard
         title="Deployment"
-        score={
-          repository.deployment
-            ?.deploymentScore ?? 0
-        }
+        score={repository.deployment?.deploymentScore ?? 0}
         status={
           repository.deployment
-            ? getStatus(
-                repository.deployment
-                  .deploymentScore
-              )
+            ? getStatus(repository.deployment.deploymentScore)
             : "Not Analyzed"
         }
         icon={Rocket}
@@ -77,14 +55,10 @@ export default function RepositoryMetricsGrid({
 
       <MetricCard
         title="Engineering Health"
-        score={
-          repository.health?.healthScore ?? 0
-        }
+        score={repository.health?.healthScore ?? 0}
         status={
           repository.health
-            ? getStatus(
-                repository.health.healthScore
-              )
+            ? getStatus(repository.health.healthScore)
             : "Not Analyzed"
         }
         icon={Activity}

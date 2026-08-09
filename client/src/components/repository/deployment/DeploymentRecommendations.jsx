@@ -14,7 +14,9 @@ export default function DeploymentRecommendations({ deployment }) {
 
         <div>
           <h3 className="text-lg font-semibold text-white">Recommendations</h3>
-          <p className="text-sm text-slate-500">{recommendations.length} items</p>
+          <p className="text-sm text-slate-500">
+            {recommendations.length} items
+          </p>
         </div>
       </div>
 
@@ -22,7 +24,8 @@ export default function DeploymentRecommendations({ deployment }) {
         {recommendations.length === 0 ? (
           <div className="rounded-lg border border-emerald-900/40 bg-emerald-500/10 p-5 text-center">
             <p className="text-sm text-emerald-300">
-              No deployment recommendations. Your repository is deployment ready!
+              No deployment recommendations. Your repository is deployment
+              ready!
             </p>
           </div>
         ) : (
@@ -35,7 +38,9 @@ export default function DeploymentRecommendations({ deployment }) {
                 <Wrench className="h-4 w-4 text-blue-400" />
               </div>
 
-              <p className="text-sm leading-6 text-slate-300">{recommendation}</p>
+              <p className="text-sm leading-6 text-slate-300">
+                {recommendation}
+              </p>
             </div>
           ))
         )}

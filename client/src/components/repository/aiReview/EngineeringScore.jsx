@@ -93,9 +93,9 @@ export default function EngineeringScore({ data }) {
   }));
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
+    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-8">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div>
+        <div className="min-w-0">
           <h2 className="text-2xl font-semibold text-white">
             Engineering Score
           </h2>
@@ -106,7 +106,7 @@ export default function EngineeringScore({ data }) {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-violet-500/20 bg-violet-500/10 px-6 py-4 text-center">
+        <div className="w-full rounded-2xl border border-violet-500/20 bg-violet-500/10 px-5 py-4 text-center sm:w-auto sm:px-6">
           <p className="text-sm text-violet-300">
             Overall Score
           </p>

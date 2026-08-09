@@ -24,7 +24,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Large Files */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900">
-          <div className="flex items-center gap-3 border-b border-slate-800 p-6">
+          <div className="flex items-center gap-3 border-b border-slate-800 p-4 sm:p-6">
             <div className="rounded-lg bg-amber-500/10 p-2">
               <FileCode className="h-5 w-5 text-amber-400" />
             </div>
@@ -50,7 +50,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
                   className="flex items-center justify-between gap-4 p-5 transition-colors hover:bg-slate-800/50"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">
+                    <p className="break-all text-sm font-medium text-white">
                       {file.file}
                     </p>
 
@@ -68,7 +68,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
 
         {/* Dead Files */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900">
-          <div className="flex items-center gap-3 border-b border-slate-800 p-6">
+          <div className="flex items-center gap-3 border-b border-slate-800 p-4 sm:p-6">
             <div className="rounded-lg bg-rose-500/10 p-2">
               <Trash2 className="h-5 w-5 text-rose-400" />
             </div>
@@ -95,7 +95,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
                 >
                   <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-600" />
 
-                  <p className="min-w-0 flex-1 truncate text-sm text-slate-300">
+                  <p className="min-w-0 flex-1 break-all text-sm text-slate-300">
                     {file}
                   </p>
                 </div>
@@ -106,7 +106,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
 
         {/* Dependency Chains */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900">
-          <div className="flex items-center gap-3 border-b border-slate-800 p-6">
+          <div className="flex items-center gap-3 border-b border-slate-800 p-4 sm:p-6">
             <div className="rounded-lg bg-cyan-500/10 p-2">
               <Network className="h-5 w-5 text-cyan-400" />
             </div>
@@ -119,7 +119,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {deepDependencyChains.length === 0 ? (
               <div className="text-center">
                 <Network className="mx-auto h-10 w-10 text-slate-700" />
@@ -137,7 +137,7 @@ export default function TechnicalDebtFileBreakdown({ technicalDebt }) {
                     <div className="space-y-2">
                       {chain.chain.map((node, idx) => (
                         <div key={idx}>
-                          <p className="truncate text-sm text-slate-300">
+                          <p className="break-all text-sm text-slate-300">
                             {node}
                           </p>
 

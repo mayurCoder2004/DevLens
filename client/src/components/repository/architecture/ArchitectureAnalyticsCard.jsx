@@ -16,7 +16,7 @@ export default function ArchitectureAnalyticsCard({
         </div>
       </div>
 
-      <h3 className="mt-5 truncate text-2xl font-bold text-white">
+      <h3 className="mt-5 break-words text-2xl font-bold text-white">
         {value}
       </h3>
 

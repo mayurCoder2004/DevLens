@@ -249,7 +249,7 @@ export default function DependencyGraph({ architecture }) {
 
       {/* Graph statistics overlay */}
       {graphStats && (
-        <Panel position="top-left" className="space-y-2">
+        <Panel position="top-left" className="max-w-[calc(100vw-2rem)] space-y-2">
           <div className="rounded-lg border border-slate-700 bg-slate-800/90 p-3 shadow-xl backdrop-blur-sm">
             <div className="space-y-1.5 text-xs">
               <div className="flex items-center justify-between gap-4">

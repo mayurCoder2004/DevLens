@@ -69,12 +69,12 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
 
   if (!pullRequests.length) {
     return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-16 text-center">
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-4 py-10 text-center sm:px-10 sm:py-16">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/10">
           <GitPullRequest className="h-8 w-8 text-violet-400" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-white">
+        <h2 className="text-xl font-semibold text-white sm:text-2xl">
           No Pull Requests Found
         </h2>
 
@@ -116,7 +116,7 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
             />
           </label>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
             <div className="flex items-center gap-2 pr-1 text-sm text-slate-400">
               <SlidersHorizontal className="h-4 w-4" />
               Status
@@ -160,10 +160,10 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
             return (
               <div
                 key={pr.number}
-                className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60"
+                className="group rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-700 hover:bg-slate-800/60 sm:p-5"
               >
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="flex min-w-0 flex-1 items-start gap-4">
+                  <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10">
                       <GitPullRequest className="h-5 w-5 text-violet-400" />
                     </div>
@@ -174,7 +174,7 @@ export default function PullRequestList({ repositoryId, pullRequests }) {
                           #{pr.number}
                         </span>
 
-                        <h3 className="min-w-0 truncate font-semibold text-white">
+                        <h3 className="min-w-0 break-words font-semibold text-white">
                           {pr.title}
                         </h3>
                       </div>

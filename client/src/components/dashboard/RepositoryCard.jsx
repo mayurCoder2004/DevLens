@@ -96,15 +96,15 @@ export default function RepositoryCard({
       "
     >
       {/* Header - Repository Name & Visibility */}
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <h3
-            className="text-lg font-semibold text-white truncate"
+            className="text-lg font-semibold text-white break-words"
             title={repositoryName}
           >
             {repositoryName}
           </h3>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 break-words text-sm text-slate-500">
             @{repositoryOwner}
           </p>
         </div>
@@ -172,7 +172,7 @@ export default function RepositoryCard({
       </div>
 
       {/* Engineering Score */}
-      <div className="mt-4 flex items-center justify-between pt-3 border-t border-slate-800/50">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-800/50 pt-3">
         <span className="text-sm text-slate-500">
           Engineering Score
         </span>

@@ -72,8 +72,9 @@ export default function DashboardHero({
               variant="primary"
               onClick={onSync}
               disabled={syncLoading}
+              className="w-full sm:w-auto"
             >
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 flex-wrap items-center justify-center gap-2">
                 <RefreshCw
                   size={18}
                   className={

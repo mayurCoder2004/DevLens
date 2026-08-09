@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
@@ -18,6 +18,7 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar - Hidden on mobile, fixed on desktop */}
       <div className={`
+        w-[min(18rem,calc(100vw-1rem))]
         fixed inset-y-0 left-0 z-50 lg:static lg:z-auto
         transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -31,7 +32,7 @@ export default function DashboardLayout({ children }) {
         <div className="sticky top-0 z-30">
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="lg:hidden absolute left-4 top-1/2 -translate-y-1/2 z-10 rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+            className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white sm:left-4 lg:hidden"
             aria-label="Open menu"
           >
             <Menu size={24} />
@@ -40,8 +41,8 @@ export default function DashboardLayout({ children }) {
         </div>
 
         {/* Scrollable Main Content */}
-        <main className="flex-1 overflow-y-auto bg-[#0B0F19] p-3 sm:p-4 md:p-6 lg:p-8">
-          <div className="mx-auto w-full max-w-[1600px]">
+        <main className="min-w-0 flex-1 overflow-y-auto bg-[#0B0F19] p-3 sm:p-4 md:p-6 lg:p-8">
+          <div className="mx-auto w-full min-w-0 max-w-[1600px]">
             {children}
           </div>
         </main>

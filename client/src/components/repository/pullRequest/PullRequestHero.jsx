@@ -49,7 +49,7 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
   } = pullRequestAnalysis;
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -82,7 +82,7 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
           </div>
         </div>
 
-        <div className="flex shrink-0 flex-col gap-4 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:flex-row sm:items-center lg:flex-col lg:items-stretch">
+        <div className="flex w-full shrink-0 flex-col gap-4 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:flex-row sm:items-center lg:w-auto lg:flex-col lg:items-stretch">
           <div className="flex items-center gap-3">
             {authorAvatar ? (
               <img
@@ -96,9 +96,9 @@ export default function PullRequestHero({ pullRequestAnalysis }) {
               </div>
             )}
 
-            <div>
+            <div className="min-w-0">
               <p className="text-xs text-slate-500">Author</p>
-              <p className="font-medium text-white">{author || "Unknown"}</p>
+              <p className="break-words font-medium text-white">{author || "Unknown"}</p>
             </div>
           </div>
 
@@ -126,7 +126,7 @@ function InfoItem({ icon: Icon, label, value }) {
         <Icon className="h-3.5 w-3.5" />
         {label}
       </div>
-      <p className="truncate font-medium text-slate-200">{value || "Unknown"}</p>
+      <p className="break-words font-medium text-slate-200">{value || "Unknown"}</p>
     </div>
   );
 }

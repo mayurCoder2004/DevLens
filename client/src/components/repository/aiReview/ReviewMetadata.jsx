@@ -38,7 +38,7 @@ export default function ReviewMetadata({ repository, review }) {
   ];
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-white">Review Metadata</h2>
         <p className="mt-2 text-slate-400">
@@ -59,7 +59,7 @@ export default function ReviewMetadata({ repository, review }) {
                 <Icon className="h-5 w-5 text-violet-400" />
               </div>
               <p className="text-sm text-slate-400">{item.label}</p>
-              <p className="mt-2 truncate font-semibold text-white">
+              <p className="mt-2 break-words font-semibold text-white">
                 {item.value}
               </p>
             </div>

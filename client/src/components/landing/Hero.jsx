@@ -65,7 +65,7 @@ export default function Hero() {
             {/* Heading — fade up */}
             <motion.h1
               variants={staggerItem}
-              className="mt-6 max-w-2xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:mt-8 sm:text-5xl lg:text-6xl mx-auto lg:mx-0"
+              className="mx-auto mt-6 max-w-2xl text-3xl font-bold leading-[1.12] tracking-tight text-white sm:mt-8 sm:text-5xl lg:mx-0 lg:text-6xl"
             >
               Engineering Intelligence
               <br />
@@ -77,7 +77,7 @@ export default function Hero() {
             {/* Description — fade up after heading */}
             <motion.p
               variants={staggerItem}
-              className="mx-auto mt-6 max-w-lg text-base leading-8 text-slate-400 sm:mt-8 sm:text-lg lg:mx-0"
+              className="mx-auto mt-6 max-w-lg text-base leading-7 text-slate-400 sm:mt-8 sm:text-lg sm:leading-8 lg:mx-0"
             >
               Analyze repositories, detect technical debt,
               review architecture, evaluate deployment readiness,

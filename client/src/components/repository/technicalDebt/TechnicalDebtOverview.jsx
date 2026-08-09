@@ -6,13 +6,13 @@ export default function TechnicalDebtOverview({ technicalDebt }) {
   const recommendations = technicalDebt.recommendations || [];
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
-      <div className="mb-8 flex items-center gap-3">
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
+      <div className="mb-8 flex items-start gap-3">
         <div className="rounded-xl bg-yellow-500/10 p-3">
           <Sparkles className="h-6 w-6 text-yellow-400" />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h2 className="text-2xl font-bold text-white">
             AI Technical Debt Overview
           </h2>
@@ -24,21 +24,21 @@ export default function TechnicalDebtOverview({ technicalDebt }) {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-4">
-        <div className="rounded-xl border border-slate-700 bg-slate-900 p-6 min-h-[180px]">
+        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-5 sm:p-6">
           <div className="flex items-start justify-between">
             <h3 className="text-sm font-medium text-slate-400">Total</h3>
             <Sparkles className="h-5 w-5 text-slate-400" />
           </div>
 
           <div className="mt-8">
-            <p className="text-5xl font-bold text-white">
+            <p className="text-4xl font-bold text-white sm:text-5xl">
               {recommendations.length}
             </p>
             <p className="mt-3 text-sm text-slate-500">Recommendations</p>
           </div>
         </div>
 
-        <div className="lg:col-span-3 rounded-xl border border-slate-800 bg-slate-900 p-6">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 sm:p-6 lg:col-span-3">
           <div className="mb-5 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-amber-400" />
 

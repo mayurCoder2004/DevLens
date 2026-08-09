@@ -89,13 +89,13 @@ export default function PullRequestOverview({ pullRequestAnalysis }) {
   ];
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-6">
-      <div className="mb-8 flex items-center gap-3">
+    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-6">
+      <div className="mb-8 flex items-start gap-3">
         <div className="rounded-xl bg-yellow-500/10 p-3">
           <Sparkles className="h-6 w-6 text-yellow-400" />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h2 className="text-2xl font-bold text-white">
             AI Pull Request Overview
           </h2>
@@ -108,7 +108,7 @@ export default function PullRequestOverview({ pullRequestAnalysis }) {
 
       <div className="grid gap-6 lg:grid-cols-4">
         <div
-          className={`min-h-[180px] rounded-xl border ${riskConfig.border} ${riskConfig.bg} p-6`}
+          className={`min-h-[180px] rounded-xl border ${riskConfig.border} ${riskConfig.bg} p-5 sm:p-6`}
         >
           <div className="flex items-start justify-between">
             <h3 className="text-sm font-medium text-slate-400">Risk Score</h3>
@@ -118,14 +118,14 @@ export default function PullRequestOverview({ pullRequestAnalysis }) {
           </div>
 
           <div className="mt-8">
-            <p className={`text-5xl font-bold ${riskConfig.color}`}>
+            <p className={`text-4xl font-bold sm:text-5xl ${riskConfig.color}`}>
               {riskScore}%
             </p>
             <p className="mt-3 text-sm text-slate-500">{riskConfig.label}</p>
           </div>
         </div>
 
-        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-6">
+        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-5 sm:p-6">
           <div className="flex items-start justify-between">
             <h3 className="text-sm font-medium text-slate-400">Change Size</h3>
             <GitCompareArrows className="h-5 w-5 text-slate-400" />
@@ -139,7 +139,7 @@ export default function PullRequestOverview({ pullRequestAnalysis }) {
           </div>
         </div>
 
-        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-6 lg:col-span-2">
+        <div className="min-h-[180px] rounded-xl border border-slate-700 bg-slate-900 p-5 sm:p-6 lg:col-span-2">
           <div className="mb-5 flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-emerald-400" />
             <h3 className="text-lg font-semibold text-white">

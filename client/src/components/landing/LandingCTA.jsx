@@ -28,7 +28,7 @@ export default function LandingCTA() {
       />
 
       <Container>
-        <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 px-6 py-16 text-center shadow-2xl sm:rounded-3xl sm:px-10 sm:py-20">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 px-4 py-12 text-center shadow-2xl sm:rounded-3xl sm:px-10 sm:py-20">
 
           {/* Sequential stagger: Badge → Heading → Description → Button → Trust */}
           <motion.div
@@ -52,7 +52,7 @@ export default function LandingCTA() {
             {/* Heading */}
             <motion.h2
               variants={staggerItem}
-              className="mx-auto mt-6 max-w-4xl text-3xl font-bold leading-tight text-white sm:mt-8 sm:text-4xl md:text-5xl lg:text-6xl"
+              className="mx-auto mt-6 max-w-4xl text-2xl font-bold leading-tight text-white sm:mt-8 sm:text-4xl md:text-5xl lg:text-6xl"
             >
               Transform Your Repository
               <br />
@@ -91,7 +91,7 @@ export default function LandingCTA() {
                     transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
                   },
                 }}
-                className="relative overflow-hidden"
+                className="relative w-full max-w-sm overflow-hidden sm:w-auto sm:max-w-none"
                 style={{ willChange: "transform" }}
               >
                 {/* Shine animation */}
@@ -108,8 +108,8 @@ export default function LandingCTA() {
                   }}
                   style={{ pointerEvents: "none" }}
                 />
-                <Button variant="primary" onClick={() => navigate("/login")}>
-                  <div className="flex items-center gap-3">
+                <Button variant="primary" onClick={() => navigate("/login")} className="w-full sm:w-auto">
+                  <div className="flex min-w-0 flex-wrap items-center justify-center gap-3">
                     <FaGithub size={18} />
 
                     <span>Get Started with GitHub</span>

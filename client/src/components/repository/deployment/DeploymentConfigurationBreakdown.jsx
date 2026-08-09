@@ -2,8 +2,8 @@ import { CheckCircle, XCircle } from "lucide-react";
 
 function CheckRow({ label, value }) {
   return (
-    <div className="flex items-center justify-between py-2.5">
-      <span className="text-sm text-slate-300">{label}</span>
+    <div className="flex flex-wrap items-center justify-between gap-2 py-2.5">
+      <span className="min-w-0 text-sm text-slate-300">{label}</span>
 
       <span
         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
@@ -30,14 +30,14 @@ function CheckRow({ label, value }) {
 
 function Section({ title, icon: Icon, children }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-6">
       <div className="mb-5 flex items-center gap-3">
         {Icon && (
           <div className="rounded-lg bg-blue-500/10 p-2">
             <Icon className="h-5 w-5 text-blue-400" />
           </div>
         )}
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <h3 className="min-w-0 text-lg font-semibold text-white">{title}</h3>
       </div>
 
       <div className="space-y-1">{children}</div>

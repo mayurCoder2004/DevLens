@@ -46,7 +46,7 @@ export default function RepositoryToolbar({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {activeFilters > 0 && (
             <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">
               {activeFilters} Active Filter
@@ -62,7 +62,7 @@ export default function RepositoryToolbar({
 
       {/* Toolbar */}
 
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center">
           {/* Search */}
 
@@ -100,10 +100,10 @@ export default function RepositoryToolbar({
 
           {/* Controls */}
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {/* Visibility */}
 
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Filter
                 size={16}
                 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
@@ -115,6 +115,7 @@ export default function RepositoryToolbar({
                   onVisibilityChange(e.target.value)
                 }
                 className="
+                  w-full
                   appearance-none
                   rounded-xl
                   border
@@ -137,7 +138,7 @@ export default function RepositoryToolbar({
 
             {/* Owner */}
 
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <Users
                 size={16}
                 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
@@ -149,6 +150,7 @@ export default function RepositoryToolbar({
                   onOwnerChange(e.target.value)
                 }
                 className="
+                  w-full
                   appearance-none
                   rounded-xl
                   border
@@ -178,7 +180,7 @@ export default function RepositoryToolbar({
 
             {/* Sort */}
 
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <ArrowUpDown
                 size={16}
                 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
@@ -190,6 +192,7 @@ export default function RepositoryToolbar({
                   onSortChange(e.target.value)
                 }
                 className="
+                  w-full
                   appearance-none
                   rounded-xl
                   border
@@ -233,7 +236,9 @@ export default function RepositoryToolbar({
                 onClick={clearFilters}
                 className="
                   inline-flex
+                  w-full
                   items-center
+                  justify-center
                   gap-2
                   rounded-xl
                   border
@@ -246,6 +251,7 @@ export default function RepositoryToolbar({
                   transition
                   hover:border-red-500/30
                   hover:text-red-400
+                  sm:w-auto
                 "
               >
                 <RotateCcw size={16} />

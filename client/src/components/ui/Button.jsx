@@ -9,7 +9,7 @@ export default function Button({
   className = "",
 }) {
   const baseStyles =
-    "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40 disabled:cursor-not-allowed disabled:opacity-50";
+    "inline-flex min-w-0 max-w-full items-center justify-center gap-2 rounded-xl text-center font-medium whitespace-normal transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40 disabled:cursor-not-allowed disabled:opacity-50";
 
   const variants = {
     primary:

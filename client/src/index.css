@@ -4,6 +4,41 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  min-width: 320px;
+  overflow-x: clip;
+}
+
+#root {
+  min-width: 0;
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+}
+
+button,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+li {
+  overflow-wrap: anywhere;
+}
+
+pre,
+code {
+  overflow-wrap: normal;
+}
+
 @layer utilities {
   .engineering-health-hero {
     background-image: linear-gradient(

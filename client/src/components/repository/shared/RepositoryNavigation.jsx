@@ -45,7 +45,7 @@ export default function RepositoryNavigation({ repositoryId }) {
 
   return (
     <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-2">
-      <nav className="flex flex-wrap gap-2">
+      <nav className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
         {navigationItems.map((item) => {
           const Icon = item.icon;
 
@@ -57,6 +57,7 @@ export default function RepositoryNavigation({ repositoryId }) {
               className={({ isActive }) =>
                 `
                 inline-flex
+                shrink-0
                 items-center
                 gap-2
                 rounded-xl

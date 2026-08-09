@@ -9,7 +9,7 @@ export default function MarkdownText({ children, className = "" }) {
   }
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`min-w-0 space-y-4 ${className}`}>
       {blocks.map((block, index) => {
         const trimmed = block.trim();
 
@@ -17,7 +17,7 @@ export default function MarkdownText({ children, className = "" }) {
           return (
             <pre
               key={index}
-              className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-4 font-mono text-xs leading-6 text-slate-300"
+              className="max-w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-4 font-mono text-xs leading-6 text-slate-300"
             >
               {trimmed.replace(/^```[a-zA-Z]*\n?/, "").replace(/```$/, "")}
             </pre>
@@ -33,10 +33,10 @@ export default function MarkdownText({ children, className = "" }) {
               {lines.map((line, lineIndex) => (
                 <li
                   key={lineIndex}
-                  className="flex gap-3 text-sm leading-7 text-slate-300"
+                  className="flex min-w-0 gap-3 text-sm leading-7 text-slate-300"
                 >
                   <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400" />
-                  <span>{renderInline(line.replace(/^[-*]\s+/, ""))}</span>
+                  <span className="min-w-0 break-words">{renderInline(line.replace(/^[-*]\s+/, ""))}</span>
                 </li>
               ))}
             </ul>
@@ -52,7 +52,7 @@ export default function MarkdownText({ children, className = "" }) {
         }
 
         return (
-          <p key={index} className="text-sm leading-7 text-slate-300">
+          <p key={index} className="break-words text-sm leading-7 text-slate-300">
             {renderInline(trimmed)}
           </p>
         );
@@ -68,7 +68,7 @@ function renderInline(text) {
     index % 2 === 1 ? (
       <code
         key={index}
-        className="rounded-md border border-slate-800 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-violet-300"
+        className="break-all rounded-md border border-slate-800 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-violet-300"
       >
         {part}
       </code>

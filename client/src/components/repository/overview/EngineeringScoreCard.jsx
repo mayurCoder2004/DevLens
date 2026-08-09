@@ -26,16 +26,16 @@ export default function EngineeringScoreCard({
   };
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
+    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-8">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-        <div>
+        <div className="min-w-0">
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-sm text-blue-400">
             <Sparkles size={16} />
 
             Engineering Intelligence
           </div>
 
-          <h2 className="mt-6 text-3xl font-bold text-white">
+          <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl">
             Overall Engineering Score
           </h2>
 
@@ -47,9 +47,9 @@ export default function EngineeringScoreCard({
           </p>
         </div>
 
-        <div className="flex flex-col items-center rounded-2xl border border-slate-800 bg-slate-950 px-10 py-8">
+        <div className="flex w-full flex-col items-center rounded-2xl border border-slate-800 bg-slate-950 px-5 py-6 sm:w-auto sm:px-10 sm:py-8">
           <span
-            className={`text-7xl font-bold ${getScoreColor()}`}
+            className={`text-5xl font-bold sm:text-7xl ${getScoreColor()}`}
           >
             {score}
           </span>
@@ -64,7 +64,9 @@ export default function EngineeringScoreCard({
             className="
               mt-8
               inline-flex
+              w-full
               items-center
+              justify-center
               gap-2
               rounded-lg
               bg-blue-600
@@ -77,6 +79,7 @@ export default function EngineeringScoreCard({
               hover:bg-blue-700
               disabled:cursor-not-allowed
               disabled:opacity-50
+              sm:w-auto
             "
           >
             {analyzing

@@ -31,10 +31,10 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6">
-      <div className="grid w-full max-w-6xl overflow-hidden rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl lg:grid-cols-2">
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-3 py-4 sm:px-6">
+      <div className="grid w-full max-w-6xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl sm:rounded-3xl lg:grid-cols-2">
         {/* Left Side */}
-        <div className="relative flex flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950 p-12">
+        <div className="relative flex flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950 p-6 sm:p-8 lg:p-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.18),transparent_45%)]" />
 
           <div className="relative z-10">
@@ -42,11 +42,11 @@ export default function Login() {
               AI-Powered Engineering Intelligence
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold tracking-tight text-white">
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               DevLens
             </h1>
 
-            <p className="mt-6 max-w-lg text-lg leading-8 text-slate-400">
+            <p className="mt-6 max-w-lg text-base leading-7 text-slate-400 sm:text-lg sm:leading-8">
               Analyze repositories, detect technical debt, visualize
               architecture, evaluate engineering health, and generate
               AI-powered engineering reviews—all from one platform.
@@ -106,10 +106,10 @@ export default function Login() {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center justify-center bg-slate-950 p-12">
+        <div className="flex items-center justify-center bg-slate-950 p-6 sm:p-8 lg:p-12">
           <div className="w-full max-w-md">
             <div>
-              <h2 className="text-3xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
                 Welcome Back
               </h2>
 
@@ -122,7 +122,7 @@ export default function Login() {
             <button
               onClick={handleGithubLogin}
               disabled={loading}
-              className="mt-10 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-6 py-4 text-base font-semibold text-slate-900 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-100 active:scale-100 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100"
+              className="mt-10 flex w-full flex-wrap items-center justify-center gap-3 rounded-xl bg-white px-4 py-4 text-center text-base font-semibold text-slate-900 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-100 active:scale-100 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:scale-100 sm:px-6"
             >
               {loading ? (
                 <>

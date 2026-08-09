@@ -90,12 +90,12 @@ export default function EngineeringHealthPage() {
           loading={refreshing}
         />
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-10 py-16 text-center">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 px-4 py-10 text-center sm:px-10 sm:py-16">
           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10">
             <Activity className="h-8 w-8 text-blue-400" />
           </div>
 
-          <h2 className="text-2xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-white sm:text-2xl">
             No Engineering Health Data
           </h2>
 
@@ -136,7 +136,7 @@ export default function EngineeringHealthPage() {
             type="button"
             onClick={handleRefresh}
             disabled={refreshing}
-            className="mt-10 rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-10 inline-flex w-full items-center justify-center rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {refreshing ? "Re-analyzing..." : "Re-analyze Engineering Health"}
           </button>

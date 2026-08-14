@@ -27,6 +27,7 @@ const pullRequestRoutes = require("./routes/pullRequest.routes");
 const engineeringHealthRoutes = require("./routes/engineeringHealth.routes");
 const aiReviewRoutes = require("./routes/aiReview.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const changeImpactRoutes = require("./routes/changeImpact.routes");
 
 const app = express();
 
@@ -100,6 +101,7 @@ app.use("/api/health", healthRoutes);
 
 // AI / Heavy Processing Endpoints
 app.use("/api/architecture", aiLimiter, architectureRoutes);
+app.use("/api/change-impact", changeImpactRoutes);
 app.use("/api/deployment", aiLimiter, deploymentRoutes);
 app.use("/api/technical-debt", aiLimiter, technicalDebtRoutes);
 app.use("/api/analysis", aiLimiter, analysisRoutes);

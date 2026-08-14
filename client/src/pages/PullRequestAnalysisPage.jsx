@@ -8,6 +8,10 @@ import {
   getPullRequestAnalysis,
 } from "../services/pullRequest";
 
+import {
+  getChangeImpactAnalysis,
+} from "../services/changeImpact";
+
 import RepositoryPullRequest from "../components/repository/workspace/RepositoryPullRequest";
 import PullRequestSkeleton from "../components/repository/pullRequest/PullRequestSkeleton";
 import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
@@ -17,14 +21,40 @@ export default function PullRequestAnalysisPage() {
   const { repositoryId, prNumber } = useParams();
 
   const [analysis, setAnalysis] = useState(null);
+  const [changeImpact, setChangeImpact] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
 
   const fetchAnalysis = useCallback(async () => {
-    const response = await getPullRequestAnalysis(repositoryId, prNumber);
+  const response = await getPullRequestAnalysis(
+    repositoryId,
+    prNumber,
+  );
 
-    setAnalysis(response.data.data);
-  }, [repositoryId, prNumber]);
+  setAnalysis(response.data.data);
+
+  try {
+    const impactResponse =
+      await getChangeImpactAnalysis(
+        repositoryId,
+        prNumber,
+      );
+
+    setChangeImpact(
+      impactResponse.data.data.changeImpact,
+    );
+  } catch (err) {
+    // Change Impact is an additional analysis.
+    // The existing PR analysis should still render
+    // if Change Impact is unavailable.
+    setChangeImpact(null);
+
+    console.warn(
+      "Failed to load change impact analysis:",
+      err.response?.data?.message ?? err.message,
+    );
+  }
+}, [repositoryId, prNumber]);
 
   const runAnalysis = useCallback(async () => {
     await analyzePullRequest(repositoryId, prNumber);
@@ -163,6 +193,7 @@ export default function PullRequestAnalysisPage() {
       <RepositoryPullRequest
         repository={repository}
         pullRequestAnalysis={analysis}
+        changeImpact={changeImpact}
       />
     </div>
   );

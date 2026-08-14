@@ -5,27 +5,50 @@ import PullRequestOverview from "../pullRequest/PullRequestOverview";
 import PullRequestRecommendations from "../pullRequest/PullRequestRecommendations";
 import PullRequestRiskBreakdown from "../pullRequest/PullRequestRiskBreakdown";
 import PullRequestSummaryCards from "../pullRequest/PullRequestSummaryCards";
+import PullRequestChangeImpact from "../pullRequest/PullRequestChangeImpact";
 
-export default function RepositoryPullRequest({ pullRequestAnalysis }) {
+export default function RepositoryPullRequest({
+  pullRequestAnalysis,
+  changeImpact,
+}) {
   if (!pullRequestAnalysis) return null;
 
   return (
     <div className="space-y-8">
-      <PullRequestHero pullRequestAnalysis={pullRequestAnalysis} />
+      <PullRequestHero
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
 
-      <PullRequestSummaryCards pullRequestAnalysis={pullRequestAnalysis} />
+      <PullRequestSummaryCards
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
 
-      <PullRequestOverview pullRequestAnalysis={pullRequestAnalysis} />
+      <PullRequestOverview
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
 
       <div className="grid gap-8 xl:grid-cols-2">
-        <PullRequestRiskBreakdown pullRequestAnalysis={pullRequestAnalysis} />
+        <PullRequestRiskBreakdown
+          pullRequestAnalysis={pullRequestAnalysis}
+        />
 
-        <PullRequestRecommendations pullRequestAnalysis={pullRequestAnalysis} />
+        <PullRequestRecommendations
+          pullRequestAnalysis={pullRequestAnalysis}
+        />
       </div>
 
-      <PullRequestChangedFiles pullRequestAnalysis={pullRequestAnalysis} />
+      {/* Change Impact */}
+      <PullRequestChangeImpact
+        changeImpact={changeImpact}
+      />
 
-      <PullRequestCodeReviewSummary pullRequestAnalysis={pullRequestAnalysis} />
+      <PullRequestChangedFiles
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
+
+      <PullRequestCodeReviewSummary
+        pullRequestAnalysis={pullRequestAnalysis}
+      />
     </div>
   );
 }

@@ -8,46 +8,46 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(cuid())
-  firebaseUid    String       @unique
-  email          String       @unique
+  id             String   @id @default(cuid())
+  firebaseUid    String   @unique
+  email          String   @unique
   name           String?
   avatar         String?
   githubUsername String?
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime @default(now())
   githubToken    String?
 
-  repositories   Repository[]
-  activities     Activity[]
+  repositories Repository[]
+  activities   Activity[]
 }
 
 model Repository {
-  id                  String                   @id @default(cuid())
-  githubRepoId        Int                      @unique
-  name                String
-  owner               String
-  description         String?
-  language            String?
-  stars               Int                      @default(0)
-  private             Boolean
-  repoUrl             String
-  defaultBranch       String
-  userId              String
-  createdAt           DateTime                 @default(now())
-  updatedAtGithub     DateTime?
+  id              String    @id @default(cuid())
+  githubRepoId    Int       @unique
+  name            String
+  owner           String
+  description     String?
+  language        String?
+  stars           Int       @default(0)
+  private         Boolean
+  repoUrl         String
+  defaultBranch   String
+  userId          String
+  createdAt       DateTime  @default(now())
+  updatedAtGithub DateTime?
 
   pullRequestAnalyses PullRequestAnalysis[]
-  user                User                     @relation(fields: [userId], references: [id])
+  user                User                  @relation(fields: [userId], references: [id])
 
-  aiReview            RepositoryAIReview?
-  analytics           RepositoryAnalytics?
-  architecture        RepositoryArchitecture?
-  deployment          RepositoryDeployment?
-  health              RepositoryHealth?
-  techStack           RepositoryTechStack?
-  technicalDebt       RepositoryTechnicalDebt?
+  aiReview      RepositoryAIReview?
+  analytics     RepositoryAnalytics?
+  architecture  RepositoryArchitecture?
+  deployment    RepositoryDeployment?
+  health        RepositoryHealth?
+  techStack     RepositoryTechStack?
+  technicalDebt RepositoryTechnicalDebt?
 
-  activities          Activity[]
+  activities Activity[]
 }
 
 model RepositoryAnalytics {
@@ -144,7 +144,7 @@ model RepositoryDeployment {
 }
 
 model PullRequestAnalysis {
-  id                      String     @id @default(cuid())
+  id                      String   @id @default(cuid())
   repositoryId            String
   prNumber                Int
   title                   String
@@ -152,24 +152,44 @@ model PullRequestAnalysis {
   riskLevel               String
   changedFiles            Json
   criticalFiles           Json
-  hasDependencyChanges    Boolean    @default(false)
-  hasConfigurationChanges Boolean    @default(false)
+  hasDependencyChanges    Boolean  @default(false)
+  hasConfigurationChanges Boolean  @default(false)
   recommendations         Json
-  createdAt               DateTime   @default(now())
-  updatedAt               DateTime   @updatedAt
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
   additions               Int
   deletions               Int
   riskBreakdown           Json
   totalChanges            Int
   totalFiles              Int
-  repository              Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  repository   Repository            @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  changeImpact ChangeImpactAnalysis?
 
   @@unique([repositoryId, prNumber])
 }
 
+model ChangeImpactAnalysis {
+  id                    String   @id @default(cuid())
+  pullRequestAnalysisId String   @unique
+  score                 Int
+  level                 String
+  breakdown             Json
+  metrics               Json
+  affectedFiles         Json
+  criticalAffectedFiles Json
+  affectedAreas         Json
+  recommendations       Json
+  unresolvedFiles       Json
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  pullRequestAnalysis PullRequestAnalysis @relation(fields: [pullRequestAnalysisId], references: [id], onDelete: Cascade)
+}
+
 model RepositoryAIReview {
-  id           String   @id @default(cuid())
-  repositoryId String   @unique
+  id           String @id @default(cuid())
+  repositoryId String @unique
 
   review        Json
   modelUsed     String?
@@ -182,22 +202,22 @@ model RepositoryAIReview {
 }
 
 model Activity {
-  id           String   @id @default(cuid())
+  id String @id @default(cuid())
 
   userId       String
   repositoryId String?
 
-  type         ActivityType
+  type ActivityType
 
-  title        String
-  description  String?
+  title       String
+  description String?
 
-  metadata     Json?
+  metadata Json?
 
-  createdAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  repository   Repository? @relation(fields: [repositoryId], references: [id], onDelete: SetNull)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repository Repository? @relation(fields: [repositoryId], references: [id], onDelete: SetNull)
 
   @@index([userId, createdAt(sort: Desc)])
   @@index([repositoryId])

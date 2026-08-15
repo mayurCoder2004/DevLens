@@ -2,6 +2,7 @@ const prisma = require("../config/prisma");
 
 const architectureIntelligenceService = require("../services/architecture/architectureIntelligence.service");
 const repositorySnapshotService = require("../services/repositorySnapshot.service");
+const snapshotComparisonService = require("../services/snapshotComparison.service");
 
 const {
   getRepositories: fetchGithubRepositories,
@@ -44,7 +45,9 @@ const syncRepositories = asyncHandler(async (req, res) => {
         private: repo.private,
         repoUrl: repo.html_url,
         defaultBranch: repo.default_branch,
-        updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
+        updatedAtGithub: repo.updated_at
+          ? new Date(repo.updated_at)
+          : null,
       },
 
       create: {
@@ -58,7 +61,9 @@ const syncRepositories = asyncHandler(async (req, res) => {
         repoUrl: repo.html_url,
         defaultBranch: repo.default_branch,
         userId: user.id,
-        updatedAtGithub: repo.updated_at ? new Date(repo.updated_at) : null,
+        updatedAtGithub: repo.updated_at
+          ? new Date(repo.updated_at)
+          : null,
       },
     });
   }
@@ -138,6 +143,7 @@ const getRepositoryById = asyncHandler(async (req, res) => {
       id: repositoryId,
       userId: req.user.userId,
     },
+
     include: {
       analytics: true,
       health: true,
@@ -145,6 +151,7 @@ const getRepositoryById = asyncHandler(async (req, res) => {
       technicalDebt: true,
       deployment: true,
       techStack: true,
+
       aiReview: {
         select: {
           id: true,
@@ -178,6 +185,7 @@ const getRepositoryArchitecture = asyncHandler(async (req, res) => {
       id: repositoryId,
       userId: req.user.userId,
     },
+
     include: {
       architecture: true,
     },
@@ -191,9 +199,10 @@ const getRepositoryArchitecture = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Architecture analysis not found");
   }
 
-  const intelligence = await architectureIntelligenceService.generate(
-    repository.architecture,
-  );
+  const intelligence =
+    await architectureIntelligenceService.generate(
+      repository.architecture,
+    );
 
   return res.status(200).json({
     success: true,
@@ -214,6 +223,7 @@ const getRepositorySnapshots = asyncHandler(async (req, res) => {
       id: repositoryId,
       userId: req.user.userId,
     },
+
     select: {
       id: true,
     },
@@ -234,10 +244,116 @@ const getRepositorySnapshots = asyncHandler(async (req, res) => {
   });
 });
 
+// ============================
+// Get Repository Changes
+// ============================
+
+const getRepositoryChanges = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  // --------------------------------------------
+  // Verify repository ownership
+  // --------------------------------------------
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+
+    select: {
+      id: true,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  // --------------------------------------------
+  // Get the two latest snapshots
+  // --------------------------------------------
+
+  const snapshots =
+    await repositorySnapshotService.getRepositorySnapshots(
+      repositoryId,
+      2,
+    );
+
+  // getRepositorySnapshots returns ascending order
+  // so the last item is the latest snapshot.
+  const currentSnapshot =
+    snapshots.length > 0
+      ? snapshots[snapshots.length - 1]
+      : null;
+
+  const previousSnapshot =
+    snapshots.length > 1
+      ? snapshots[snapshots.length - 2]
+      : null;
+
+  // --------------------------------------------
+  // No snapshot available
+  // --------------------------------------------
+
+  if (!currentSnapshot) {
+    return res.status(200).json({
+      success: true,
+
+      currentSnapshot: null,
+
+      previousSnapshot: null,
+
+      changes: {
+        hasPreviousSnapshot: false,
+        hasChanges: false,
+
+        changes: [],
+
+        changeEvents: [],
+
+        summary: {
+          improved: 0,
+          declined: 0,
+          unchanged: 0,
+        },
+
+        overallSummary:
+          "No repository snapshot data is available yet.",
+      },
+    });
+  }
+
+  // --------------------------------------------
+  // Compare snapshots
+  // --------------------------------------------
+
+  const comparison =
+    snapshotComparisonService.compareSnapshots(
+      previousSnapshot,
+      currentSnapshot,
+    );
+
+  // --------------------------------------------
+  // Return repository changes
+  // --------------------------------------------
+
+  return res.status(200).json({
+    success: true,
+
+    currentSnapshot,
+
+    previousSnapshot,
+
+    changes: comparison,
+  });
+});
+
 module.exports = {
   syncRepositories,
   getUserRepositories,
   getRepositoryById,
   getRepositoryArchitecture,
   getRepositorySnapshots,
+  getRepositoryChanges,
 };

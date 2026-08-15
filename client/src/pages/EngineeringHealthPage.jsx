@@ -1,11 +1,21 @@
 import { useEffect, useState, useCallback } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
-import { Activity, BadgeCheck, BarChart3, Lightbulb } from "lucide-react";
+import {
+  Activity,
+  BadgeCheck,
+  BarChart3,
+  Lightbulb,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
-import { getEngineeringHealth } from "../services/engineeringHealth";
+import {
+  getEngineeringHealth,
+  getEngineeringHealthSnapshots,
+} from "../services/engineeringHealth";
+
 import RepositoryEngineeringHealth from "../components/repository/workspace/RepositoryEngineeringHealth";
 import EngineeringHealthSkeleton from "../components/repository/engineeringHealth/EngineeringHealthSkeleton";
+import EngineeringHealthTrend from "../components/repository/engineeringHealth/EngineeringHealthTrend";
 import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
 
 export default function EngineeringHealthPage() {
@@ -13,6 +23,8 @@ export default function EngineeringHealthPage() {
   const { repositoryId } = useParams();
 
   const [engineeringHealth, setEngineeringHealth] = useState(null);
+  const [snapshots, setSnapshots] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -23,16 +35,27 @@ export default function EngineeringHealthPage() {
           setLoading(true);
         }
 
-        const response = await getEngineeringHealth(repositoryId);
+        const [healthResponse, snapshotsResponse] = await Promise.all([
+          getEngineeringHealth(repositoryId),
+          getEngineeringHealthSnapshots(repositoryId),
+        ]);
 
-        setEngineeringHealth(response.data.data);
+        setEngineeringHealth(healthResponse.data.data);
+
+        setSnapshots(snapshotsResponse.data.snapshots ?? []);
       } catch (err) {
         if (err.response?.status === 404) {
           setEngineeringHealth(null);
+          setSnapshots([]);
         } else if (!rethrow) {
-          console.error("Failed to load engineering health:", err.message);
+          console.error(
+            "Failed to load engineering health:",
+            err.message,
+          );
+
           toast.error(
-            err.response?.data?.message ?? "Failed to load engineering health.",
+            err.response?.data?.message ??
+              "Failed to load engineering health.",
           );
         }
 
@@ -58,19 +81,34 @@ export default function EngineeringHealthPage() {
     await toast
       .promise(
         (async () => {
-          await loadEngineeringHealth({ silent: true, rethrow: true });
+          await loadEngineeringHealth({
+            silent: true,
+            rethrow: true,
+          });
+
           await refreshRepository();
+
+          // Fetch snapshots again after the repository refresh.
+          const snapshotsResponse =
+            await getEngineeringHealthSnapshots(repositoryId);
+
+          setSnapshots(
+            snapshotsResponse.data.snapshots ?? [],
+          );
         })(),
         {
           loading: "Re-analyzing engineering health...",
-          success: "Engineering health re-analyzed successfully!",
+          success:
+            "Engineering health re-analyzed successfully!",
           error: (err) =>
             err.response?.data?.message ??
             "Failed to refresh engineering health.",
         },
       )
       .catch(() => {})
-      .finally(() => setRefreshing(false));
+      .finally(() => {
+        setRefreshing(false);
+      });
   };
 
   if (loading) {
@@ -102,9 +140,9 @@ export default function EngineeringHealthPage() {
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-slate-400">
-            Engineering health is computed from your workspace analyses. Run
-            Architecture, Technical Debt, and Deployment analyses first to
-            populate this dashboard.
+            Engineering health is computed from your workspace
+            analyses. Run Architecture, Technical Debt, and
+            Deployment analyses first to populate this dashboard.
           </p>
 
           <div className="mx-auto mt-8 grid max-w-xl gap-4 text-left sm:grid-cols-2">
@@ -114,18 +152,21 @@ export default function EngineeringHealthPage() {
               title="Overall Score"
               description="Aggregated engineering health across all dimensions."
             />
+
             <EmptyFeature
               icon={BarChart3}
               iconColor="text-violet-400"
               title="Score Breakdown"
               description="Per-dimension scores for each workspace analysis."
             />
+
             <EmptyFeature
               icon={BadgeCheck}
               iconColor="text-emerald-400"
               title="AI Insights"
               description="Engineering strengths and priority improvement areas."
             />
+
             <EmptyFeature
               icon={Lightbulb}
               iconColor="text-amber-400"
@@ -140,9 +181,13 @@ export default function EngineeringHealthPage() {
             disabled={refreshing}
             className="mt-10 inline-flex w-full items-center justify-center rounded-xl bg-violet-600 px-6 py-3 font-medium text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            {refreshing ? "Re-analyzing..." : "Re-analyze Engineering Health"}
+            {refreshing
+              ? "Re-analyzing..."
+              : "Re-analyze Engineering Health"}
           </button>
         </div>
+
+        <EngineeringHealthTrend snapshots={snapshots} />
       </div>
     );
   }
@@ -161,18 +206,29 @@ export default function EngineeringHealthPage() {
         repository={repository}
         engineeringHealth={engineeringHealth}
       />
+
+      <EngineeringHealthTrend snapshots={snapshots} />
     </div>
   );
 }
 
-function EmptyFeature({ icon: Icon, iconColor, title, description }) {
+function EmptyFeature({
+  icon: Icon,
+  iconColor,
+  title,
+  description,
+}) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
       <div className="mb-2 flex items-center gap-2 text-white">
         <Icon className={`h-4 w-4 ${iconColor}`} />
+
         <h4 className="font-medium">{title}</h4>
       </div>
-      <p className="text-sm text-slate-400">{description}</p>
+
+      <p className="text-sm text-slate-400">
+        {description}
+      </p>
     </div>
   );
 }

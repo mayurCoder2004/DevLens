@@ -53,7 +53,87 @@ const getDirection = (change, higherIsBetter) => {
   return improved ? "improved" : "declined";
 };
 
-const compareSnapshots = (previousSnapshot, currentSnapshot) => {
+const formatChange = (change) => {
+  if (change > 0) {
+    return `+${change}`;
+  }
+
+  return `${change}`;
+};
+
+const generateChangeMessage = ({
+  label,
+  change,
+  direction,
+}) => {
+  if (direction === "unchanged") {
+    return `${label} remained unchanged.`;
+  }
+
+  const absoluteChange = Math.abs(change);
+
+  if (direction === "improved") {
+    return `${label} improved by ${absoluteChange} point${
+      absoluteChange === 1 ? "" : "s"
+    }.`;
+  }
+
+  return `${label} declined by ${absoluteChange} point${
+    absoluteChange === 1 ? "" : "s"
+  }.`;
+};
+
+const generateChangeEvents = (changes = []) => {
+  return changes
+    .filter((change) => change.direction !== "unchanged")
+    .map((change) => ({
+      metric: change.metric,
+      label: change.label,
+      direction: change.direction,
+      previous: change.previous,
+      current: change.current,
+      change: change.change,
+      changeText: formatChange(change.change),
+      message: generateChangeMessage(change),
+    }));
+};
+
+const generateOverallSummary = (summary) => {
+  const {
+    improved = 0,
+    declined = 0,
+    unchanged = 0,
+  } = summary;
+
+  if (improved > 0 && declined === 0) {
+    return `${improved} engineering metric${
+      improved === 1 ? "" : "s"
+    } improved with no declines.`;
+  }
+
+  if (declined > 0 && improved === 0) {
+    return `${declined} engineering metric${
+      declined === 1 ? "" : "s"
+    } declined with no improvements.`;
+  }
+
+  if (improved > 0 && declined > 0) {
+    return `${improved} metric${
+      improved === 1 ? "" : "s"
+    } improved while ${declined} declined.`;
+  }
+
+  if (unchanged > 0) {
+    return "No engineering metrics changed.";
+  }
+
+  return "No snapshot comparison data available.";
+};
+
+const compareSnapshots = (
+  previousSnapshot,
+  currentSnapshot,
+) => {
   if (!currentSnapshot) {
     throw new Error("Current snapshot is required");
   }
@@ -63,11 +143,14 @@ const compareSnapshots = (previousSnapshot, currentSnapshot) => {
       hasPreviousSnapshot: false,
       hasChanges: false,
       changes: [],
+      changeEvents: [],
       summary: {
         improved: 0,
         declined: 0,
         unchanged: 0,
       },
+      overallSummary:
+        "This is the first repository snapshot. No previous state is available for comparison.",
     };
   }
 
@@ -102,17 +185,30 @@ const compareSnapshots = (previousSnapshot, currentSnapshot) => {
     (item) => item.direction === "unchanged",
   ).length;
 
+  const summary = {
+    improved,
+    declined,
+    unchanged,
+  };
+
+  const changeEvents =
+    generateChangeEvents(changes);
+
   return {
     hasPreviousSnapshot: true,
+
     hasChanges: changes.some(
       (item) => item.direction !== "unchanged",
     ),
+
     changes,
-    summary: {
-      improved,
-      declined,
-      unchanged,
-    },
+
+    changeEvents,
+
+    summary,
+
+    overallSummary:
+      generateOverallSummary(summary),
   };
 };
 
@@ -120,5 +216,9 @@ module.exports = {
   METRICS,
   getMetricChange,
   getDirection,
+  formatChange,
+  generateChangeMessage,
+  generateChangeEvents,
+  generateOverallSummary,
   compareSnapshots,
 };

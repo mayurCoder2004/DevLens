@@ -32,16 +32,31 @@ const envSchema = z.object({
   CLIENT_URL: z.string().url("CLIENT_URL must be a valid URL"),
 
   REDIS_URL: z.string().url("REDIS_URL must be a valid URL"),
+
+  // Firebase Admin Configuration
+  FIREBASE_PROJECT_ID: z
+    .string()
+    .min(1, "FIREBASE_PROJECT_ID is required"),
+
+  FIREBASE_CLIENT_EMAIL: z
+    .string()
+    .email("FIREBASE_CLIENT_EMAIL must be a valid email"),
+
+  FIREBASE_PRIVATE_KEY: z
+    .string()
+    .min(1, "FIREBASE_PRIVATE_KEY is required"),
 });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error("❌ Environment validation failed:\n");
+  console.error("Invalid environment variables:");
 
-  parsed.error.issues.forEach((issue) => {
-    console.error(`- ${issue.path.join(".")}: ${issue.message}`);
-  });
+  console.error(
+    parsed.error.issues
+      .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+      .join("\n"),
+  );
 
   process.exit(1);
 }

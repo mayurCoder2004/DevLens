@@ -8,12 +8,21 @@ const {
   savePullRequestAnalysis,
 } = require("../services/pullRequestPersistence.service");
 
+const {
+  analyzeChangeImpact,
+} = require("../services/changeImpact/changeImpact.service");
+
+const {
+  createChangeImpactAnalysis,
+} = require("../services/changeImpact/changeImpactPersistence.service");
+
 const { logActivity } = require("../services/activityLogger.service");
 
 const { Octokit } = require("@octokit/rest");
 
 const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/ApiError");
+
 const {
   listRepositoryPullRequests,
 } = require("../services/pullRequestList.service");
@@ -25,20 +34,30 @@ const {
 const analyzePullRequestController = asyncHandler(async (req, res) => {
   const { repositoryId, prNumber } = req.validatedData.params;
 
+  // --------------------------------------------
+  // Load repository
+  // --------------------------------------------
+
   const repository = await prisma.repository.findFirst({
     where: {
       id: repositoryId,
       userId: req.user.userId,
     },
+
     include: {
       techStack: true,
       user: true,
+      architecture: true,
     },
   });
 
   if (!repository) {
     throw new ApiError(404, "Repository not found");
   }
+
+  // --------------------------------------------
+  // Analyze Pull Request
+  // --------------------------------------------
 
   const technologies = repository.techStack?.technologies || [];
 
@@ -50,12 +69,75 @@ const analyzePullRequestController = asyncHandler(async (req, res) => {
     technologies,
   });
 
-  await savePullRequestAnalysis({
-    repositoryId,
-    prNumber,
-    title: analysis.pullRequest.title,
-    analysis,
-  });
+  // --------------------------------------------
+  // Persist Pull Request Analysis
+  // --------------------------------------------
+
+  const savedPullRequestAnalysis =
+    await savePullRequestAnalysis({
+      repositoryId,
+      prNumber,
+      title: analysis.pullRequest.title,
+      analysis,
+    });
+
+  // --------------------------------------------
+  // Change Impact Analysis
+  // --------------------------------------------
+
+  let changeImpact = null;
+
+  if (repository.architecture?.graph) {
+    try {
+      const graph = repository.architecture.graph;
+
+      const changedFiles = analysis.files.map((file) => ({
+        filename: file.filename,
+        additions: file.additions,
+        deletions: file.deletions,
+        changes: file.changes,
+        status: file.status,
+      }));
+
+      const criticalFiles =
+        analysis.classification.categories.critical || [];
+
+      changeImpact = analyzeChangeImpact({
+        graph,
+        changedFiles,
+        criticalFiles,
+      });
+
+      // ------------------------------------------
+      // Persist Change Impact
+      // ------------------------------------------
+
+      changeImpact =
+        await createChangeImpactAnalysis({
+          pullRequestAnalysisId:
+            savedPullRequestAnalysis.id,
+
+          impact: changeImpact,
+        });
+    } catch (error) {
+      console.error(
+        "Change Impact Analysis Error:",
+        error.message,
+      );
+
+      // Change Impact should not make the
+      // entire PR analysis fail.
+      changeImpact = null;
+    }
+  } else {
+    console.log(
+      `Change Impact skipped: architecture analysis not found for repository ${repositoryId}.`,
+    );
+  }
+
+  // --------------------------------------------
+  // Activity Log
+  // --------------------------------------------
 
   await logActivity({
     repositoryId,
@@ -64,17 +146,49 @@ const analyzePullRequestController = asyncHandler(async (req, res) => {
     description: `Pull request analysis completed for ${repository.owner}/${repository.name}.`,
     metadata: {
       prNumber,
-      riskScore: analysis.riskScore,
+
+      riskScore:
+        analysis.risk?.score ?? null,
+
+      riskLevel:
+        analysis.risk?.level ?? null,
+
+      changeImpactScore:
+        changeImpact?.score ?? null,
+
+      changeImpactLevel:
+        changeImpact?.level ?? null,
+
       summary: analysis.summary,
-      hasDependencyChanges: analysis.hasDependencyChanges,
-      hasConfigurationChanges: analysis.hasConfigurationChanges,
-      criticalFiles: analysis.criticalFiles?.length ?? 0,
+
+      hasDependencyChanges:
+        analysis.classification.summary
+          .dependencyCount > 0,
+
+      hasConfigurationChanges:
+        analysis.classification.summary
+          .infrastructureCount > 0,
+
+      criticalFiles:
+        analysis.classification.categories
+          .critical?.length ?? 0,
     },
   });
 
+  // --------------------------------------------
+  // Response
+  // --------------------------------------------
+
   return res.status(200).json({
     success: true,
-    data: analysis,
+
+    data: {
+      ...analysis,
+
+      persistedAnalysis: savedPullRequestAnalysis,
+
+      changeImpact,
+    },
   });
 });
 
@@ -90,6 +204,7 @@ const getPullRequestAnalysis = asyncHandler(async (req, res) => {
       id: repositoryId,
       userId: req.user.userId,
     },
+
     include: {
       user: true,
     },
@@ -106,6 +221,10 @@ const getPullRequestAnalysis = asyncHandler(async (req, res) => {
         prNumber,
       },
     },
+
+    include: {
+      changeImpact: true,
+    },
   });
 
   if (!analysis) {
@@ -116,16 +235,19 @@ const getPullRequestAnalysis = asyncHandler(async (req, res) => {
     auth: repository.user.githubToken,
   });
 
-  const { data: pullRequest } = await octokit.pulls.get({
-    owner: repository.owner,
-    repo: repository.name,
-    pull_number: prNumber,
-  });
+  const { data: pullRequest } =
+    await octokit.pulls.get({
+      owner: repository.owner,
+      repo: repository.name,
+      pull_number: prNumber,
+    });
 
   return res.status(200).json({
     success: true,
+
     data: {
       ...analysis,
+
       state: pullRequest.state,
       author: pullRequest.user.login,
       authorAvatar: pullRequest.user.avatar_url,
@@ -139,34 +261,48 @@ const getPullRequestAnalysis = asyncHandler(async (req, res) => {
   });
 });
 
-const getRepositoryPullRequests = asyncHandler(async (req, res) => {
-  const { repositoryId } = req.validatedData.params;
+// ============================
+// Get Repository Pull Requests
+// ============================
 
-  const repository = await prisma.repository.findFirst({
-    where: {
-      id: repositoryId,
-      userId: req.user.userId,
-    },
-    include: {
-      user: true,
-    },
-  });
+const getRepositoryPullRequests = asyncHandler(
+  async (req, res) => {
+    const { repositoryId } =
+      req.validatedData.params;
 
-  if (!repository) {
-    throw new ApiError(404, "Repository not found");
-  }
+    const repository =
+      await prisma.repository.findFirst({
+        where: {
+          id: repositoryId,
+          userId: req.user.userId,
+        },
 
-  const pullRequests = await listRepositoryPullRequests({
-    owner: repository.owner,
-    repo: repository.name,
-    githubToken: repository.user.githubToken,
-  });
+        include: {
+          user: true,
+        },
+      });
 
-  return res.status(200).json({
-    success: true,
-    data: pullRequests,
-  });
-});
+    if (!repository) {
+      throw new ApiError(
+        404,
+        "Repository not found",
+      );
+    }
+
+    const pullRequests =
+      await listRepositoryPullRequests({
+        owner: repository.owner,
+        repo: repository.name,
+        githubToken:
+          repository.user.githubToken,
+      });
+
+    return res.status(200).json({
+      success: true,
+      data: pullRequests,
+    });
+  },
+);
 
 module.exports = {
   analyzePullRequestController,

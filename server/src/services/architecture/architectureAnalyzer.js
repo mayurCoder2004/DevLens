@@ -23,13 +23,17 @@ class ArchitectureAnalyzer {
         const imports = importExtractor.extractImports(content);
 
         const resolvedImports = imports
-          .filter((importPath) =>
-            dependencyResolver.isInternalImport(importPath),
-          )
-          .map((importPath) =>
-            dependencyResolver.resolveImport(importPath, files),
-          )
-          .filter(Boolean);
+  .filter((importPath) =>
+    dependencyResolver.isInternalImport(importPath),
+  )
+  .map((importPath) =>
+    dependencyResolver.resolveImport(
+      importPath,
+      file,
+      files,
+    ),
+  )
+  .filter(Boolean);
 
         filesWithImports.push({
           name: file.name,

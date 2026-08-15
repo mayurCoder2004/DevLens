@@ -1,14 +1,24 @@
 class GraphBuilder {
-  buildGraph(filesWithImports) {
+  buildGraph(filesWithImports = []) {
     const nodeSet = new Set();
     const edges = [];
 
     for (const file of filesWithImports) {
-      nodeSet.add(file.name);
+      if (!file?.path) {
+        continue;
+      }
 
-      for (const importedFile of file.imports) {
+      // Use the complete repository-relative path
+      // as the architecture node ID.
+      nodeSet.add(file.path);
+
+      for (const importedFile of file.imports || []) {
+        if (!importedFile) {
+          continue;
+        }
+
         edges.push({
-          source: file.name,
+          source: file.path,
           target: importedFile,
         });
       }
@@ -18,6 +28,7 @@ class GraphBuilder {
       nodes: [...nodeSet].map((node) => ({
         id: node,
       })),
+
       edges,
     };
   }

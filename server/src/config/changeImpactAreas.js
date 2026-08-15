@@ -35,15 +35,20 @@ const IMPACT_AREA_RULES = [
 },
 
   {
-    name: "Frontend",
-    patterns: [
-      /(^|\/)components?(\/|\.|$)/i,
-      /(^|\/)pages?(\/|\.|$)/i,
-      /(^|\/)views?(\/|\.|$)/i,
-      /(^|\/)hooks?(\/|\.|$)/i,
-      /(^|\/)contexts?(\/|\.|$)/i,
-    ],
-  },
+  name: "Frontend",
+  patterns: [
+    /(^|\/)components?(\/|\.|$)/i,
+    /(^|\/)pages?(\/|\.|$)/i,
+    /(^|\/)views?(\/|\.|$)/i,
+    /(^|\/)hooks?(\/|\.|$)/i,
+    /(^|\/)contexts?(\/|\.|$)/i,
+
+    // Common frontend root files
+    /(^|\/)App\.(jsx?|tsx?)$/i,
+    /(^|\/)main\.(jsx?|tsx?)$/i,
+    /(^|\/)index\.(jsx?|tsx?)$/i,
+  ],
+},
 
   {
     name: "Deployment",

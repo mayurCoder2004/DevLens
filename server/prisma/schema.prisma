@@ -159,6 +159,7 @@ model PullRequestAnalysis {
   riskScore               Int
   riskLevel               String
   changedFiles            Json
+  diffIntelligence        Json?
   criticalFiles           Json
   hasDependencyChanges    Boolean  @default(false)
   hasConfigurationChanges Boolean  @default(false)

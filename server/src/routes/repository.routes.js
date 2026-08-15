@@ -12,6 +12,7 @@ const {
   getUserRepositories,
   getRepositoryById,
   getRepositoryArchitecture,
+  getRepositorySnapshots,
 } = require("../controllers/repository.controller");
 
 // ============================
@@ -25,6 +26,17 @@ router.post("/sync", authMiddleware, syncRepositories);
 // ============================
 
 router.get("/", authMiddleware, getUserRepositories);
+
+// ============================
+// Get Repository Snapshot History
+// ============================
+
+router.get(
+  "/:repositoryId/snapshots",
+  authMiddleware,
+  validate(repositoryIdSchema),
+  getRepositorySnapshots,
+);
 
 // ============================
 // Get Repository By ID

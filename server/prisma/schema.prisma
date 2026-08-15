@@ -47,82 +47,89 @@ model Repository {
   techStack     RepositoryTechStack?
   technicalDebt RepositoryTechnicalDebt?
 
+  snapshots RepositorySnapshot[]
+
   activities Activity[]
 }
 
 model RepositoryAnalytics {
-  id              String     @id @default(cuid())
-  repositoryId    String     @unique
-  stars           Int        @default(0)
-  forks           Int        @default(0)
-  watchers        Int        @default(0)
-  openIssues      Int        @default(0)
+  id              String    @id @default(cuid())
+  repositoryId    String    @unique
+  stars           Int       @default(0)
+  forks           Int       @default(0)
+  watchers        Int       @default(0)
+  openIssues      Int       @default(0)
   primaryLanguage String?
   languages       Json?
-  contributors    Int        @default(0)
+  contributors    Int       @default(0)
   lastCommitDate  DateTime?
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  repository      Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model RepositoryTechStack {
-  id           String     @id @default(cuid())
-  repositoryId String     @unique
+  id           String   @id @default(cuid())
+  repositoryId String   @unique
   technologies Json
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  repository   Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model RepositoryHealth {
-  id                 String     @id @default(cuid())
-  repositoryId       String     @unique
+  id                 String   @id @default(cuid())
+  repositoryId       String   @unique
   healthScore        Int
   activityScore      Int
   documentationScore Int
   maintenanceScore   Int
   openSourceScore    Int
   recommendations    Json
-  createdAt          DateTime   @default(now())
-  updatedAt          DateTime   @updatedAt
-  repository         Repository @relation(fields: [repositoryId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id])
 }
 
 model RepositoryArchitecture {
-  id                    String     @id @default(cuid())
-  repositoryId          String     @unique
+  id                    String   @id @default(cuid())
+  repositoryId          String   @unique
   graph                 Json
   nodeCount             Int
   edgeCount             Int
   complexityScore       Int
   hasCircularDependency Boolean
-  createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @updatedAt
-  repository            Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model RepositoryTechnicalDebt {
-  id                       String     @id @default(cuid())
-  repositoryId             String     @unique
+  id                       String   @id @default(cuid())
+  repositoryId             String   @unique
   technicalDebtScore       Int
   maintainabilityScore     Int
-  largeFileCount           Int        @default(0)
-  deadFileCount            Int        @default(0)
-  circularDependencyCount  Int        @default(0)
-  deepDependencyChainCount Int        @default(0)
+  largeFileCount           Int      @default(0)
+  deadFileCount            Int      @default(0)
+  circularDependencyCount  Int      @default(0)
+  deepDependencyChainCount Int      @default(0)
   largeFiles               Json
   deadFiles                Json
   deepDependencyChains     Json
   recommendations          Json
-  createdAt                DateTime   @default(now())
-  updatedAt                DateTime   @updatedAt
-  repository               Repository @relation(fields: [repositoryId], references: [id])
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  repository Repository @relation(fields: [repositoryId], references: [id])
 }
 
 model RepositoryDeployment {
-  id                  String     @id @default(cuid())
-  repositoryId        String     @unique
+  id                  String   @id @default(cuid())
+  repositoryId        String   @unique
   deploymentScore     Int
   infrastructureScore Int
   configurationScore  Int
@@ -132,15 +139,16 @@ model RepositoryDeployment {
   warnings            Json
   criticalIssues      Json
   recommendations     Json
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
   deploymentStatus    String
   dockerQuality       Json?
   lockFiles           Json?
   platforms           Json?
   runtime             Json?
   workflowQuality     Json?
-  repository          Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 }
 
 model PullRequestAnalysis {
@@ -199,6 +207,24 @@ model RepositoryAIReview {
   updatedAt DateTime @updatedAt
 
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+}
+
+model RepositorySnapshot {
+  id           String @id @default(cuid())
+  repositoryId String
+
+  engineeringScore     Int
+  technicalDebtScore   Int
+  architectureScore    Int
+  deploymentScore      Int
+  prRiskScore          Int
+  maintainabilityScore Int
+
+  createdAt DateTime @default(now())
+
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  @@index([repositoryId, createdAt(sort: Desc)])
 }
 
 model Activity {

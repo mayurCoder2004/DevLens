@@ -6,6 +6,8 @@ const technicalDebtService = require("./technicalDebt/technicalDebt.service");
 
 const deploymentService = require("./deployment/deploymentService");
 
+const repositorySnapshotService = require("./repositorySnapshot.service");
+
 class RepositoryAnalysisService {
   async analyzeRepository(repositoryId) {
     console.log("Starting repository analysis...");
@@ -18,13 +20,22 @@ class RepositoryAnalysisService {
     const technicalDebt =
       await technicalDebtService.analyzeAndStore(repositoryId);
 
-    const deployment = await deploymentService.analyzeAndStore(repositoryId);
+    const deployment =
+      await deploymentService.analyzeAndStore(repositoryId);
+
+    // Create a repository health snapshot after
+    // all analysis data has been updated.
+    const snapshot =
+      await repositorySnapshotService.createRepositorySnapshot(
+        repositoryId,
+      );
 
     return {
       analytics,
       architecture,
       technicalDebt,
       deployment,
+      snapshot,
     };
   }
 }

@@ -1,6 +1,7 @@
 const prisma = require("../config/prisma");
 
 const architectureIntelligenceService = require("../services/architecture/architectureIntelligence.service");
+const repositorySnapshotService = require("../services/repositorySnapshot.service");
 
 const {
   getRepositories: fetchGithubRepositories,
@@ -201,9 +202,42 @@ const getRepositoryArchitecture = asyncHandler(async (req, res) => {
   });
 });
 
+// ============================
+// Get Repository Snapshot History
+// ============================
+
+const getRepositorySnapshots = asyncHandler(async (req, res) => {
+  const { repositoryId } = req.validatedData.params;
+
+  const repository = await prisma.repository.findFirst({
+    where: {
+      id: repositoryId,
+      userId: req.user.userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!repository) {
+    throw new ApiError(404, "Repository not found");
+  }
+
+  const snapshots =
+    await repositorySnapshotService.getRepositorySnapshots(
+      repositoryId,
+    );
+
+  return res.status(200).json({
+    success: true,
+    snapshots,
+  });
+});
+
 module.exports = {
   syncRepositories,
   getUserRepositories,
   getRepositoryById,
   getRepositoryArchitecture,
+  getRepositorySnapshots,
 };

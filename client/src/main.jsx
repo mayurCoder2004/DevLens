@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 
 import App from "./App";
 import ScrollToTop from "./components/common/ScrollToTop";
+import AnalyticsTracker from "./components/common/AnalyticsTracker";
 
 import "./index.css";
 
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <ScrollToTop />
+      <AnalyticsTracker />
 
       <App />
 

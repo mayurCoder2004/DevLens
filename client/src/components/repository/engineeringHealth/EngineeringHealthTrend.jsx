@@ -14,6 +14,7 @@ import {
   ArrowUp,
   Minus,
   TrendingUp,
+  Clock3,
 } from "lucide-react";
 
 const METRICS = {
@@ -56,17 +57,35 @@ const METRICS = {
 };
 
 function formatDate(date) {
-  return new Date(date).toLocaleDateString("en-US", {
+  if (!date) return "Unknown";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "Unknown";
+  }
+
+  return parsedDate.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
 }
 
-function formatTooltipDate(date) {
-  return new Date(date).toLocaleDateString("en-US", {
+function formatDateTime(date) {
+  if (!date) return "Unknown";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "Unknown";
+  }
+
+  return parsedDate.toLocaleString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
   });
 }
 
@@ -86,7 +105,11 @@ function getTrend(current, previous) {
   return "neutral";
 }
 
-function TrendIndicator({ current, previous, inverse = false }) {
+function TrendIndicator({
+  current,
+  previous,
+  inverse = false,
+}) {
   const trend = getTrend(current, previous);
 
   if (trend === "neutral") {
@@ -117,7 +140,11 @@ function TrendIndicator({ current, previous, inverse = false }) {
   );
 }
 
-function MetricCard({ snapshot, previous, metricKey }) {
+function MetricCard({
+  snapshot,
+  previous,
+  metricKey,
+}) {
   const metric = METRICS[metricKey];
 
   const current = snapshot?.[metricKey] ?? 0;
@@ -164,7 +191,7 @@ function CustomTooltip({ active, payload }) {
   return (
     <div className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 shadow-xl">
       <p className="text-xs font-medium text-slate-400">
-        {formatTooltipDate(snapshot.createdAt)}
+        {formatDateTime(snapshot.createdAt)}
       </p>
 
       <p className="mt-1 text-lg font-semibold text-white">
@@ -178,6 +205,71 @@ function CustomTooltip({ active, payload }) {
   );
 }
 
+function SnapshotTimeline({
+  latest,
+  previous,
+}) {
+  if (!latest) {
+    return null;
+  }
+
+  return (
+    <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950/40 p-4">
+      <div className="flex items-center gap-2">
+        <Clock3 className="h-4 w-4 text-blue-400" />
+
+        <span className="text-sm font-medium text-white">
+          Snapshot Timeline
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-4">
+          <p className="text-xs uppercase tracking-wide text-slate-500">
+            Current Snapshot
+          </p>
+
+          <p className="mt-2 text-sm font-medium text-white">
+            {formatDateTime(latest.createdAt)}
+          </p>
+
+          <p className="mt-1 text-xs text-slate-500">
+            Latest recorded engineering state
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+          <p className="text-xs uppercase tracking-wide text-slate-500">
+            Previous Snapshot
+          </p>
+
+          {previous ? (
+            <>
+              <p className="mt-2 text-sm font-medium text-white">
+                {formatDateTime(previous.createdAt)}
+              </p>
+
+              <p className="mt-1 text-xs text-slate-500">
+                Used as the comparison baseline
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="mt-2 text-sm font-medium text-slate-400">
+                No previous snapshot
+              </p>
+
+              <p className="mt-1 text-xs text-slate-500">
+                A second analysis is required for comparison.
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function EngineeringHealthTrend({
   snapshots = [],
 }) {
@@ -185,11 +277,20 @@ export default function EngineeringHealthTrend({
     useState("engineeringScore");
 
   const sortedSnapshots = useMemo(() => {
-    return [...snapshots].sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() -
-        new Date(b.createdAt).getTime(),
-    );
+    return [...snapshots]
+      .filter(
+        (snapshot) =>
+          snapshot &&
+          snapshot.createdAt &&
+          !Number.isNaN(
+            new Date(snapshot.createdAt).getTime(),
+          ),
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() -
+          new Date(b.createdAt).getTime(),
+      );
   }, [snapshots]);
 
   const latest = sortedSnapshots.at(-1);
@@ -202,7 +303,8 @@ export default function EngineeringHealthTrend({
     }));
   }, [sortedSnapshots, selectedMetric]);
 
-  const selectedMetricConfig = METRICS[selectedMetric];
+  const selectedMetricConfig =
+    METRICS[selectedMetric];
 
   if (!sortedSnapshots.length) {
     return (
@@ -230,6 +332,7 @@ export default function EngineeringHealthTrend({
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
       {/* Header */}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
@@ -253,29 +356,43 @@ export default function EngineeringHealthTrend({
         </span>
       </div>
 
-      {/* Metric selector */}
-      <div className="mt-6 flex flex-wrap gap-2">
-        {Object.entries(METRICS).map(([key, metric]) => {
-          const active = selectedMetric === key;
+      {/* Snapshot Timeline */}
 
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setSelectedMetric(key)}
-              className={`rounded-lg border px-3 py-2 text-sm transition ${
-                active
-                  ? "border-blue-500/40 bg-blue-500/10 text-white"
-                  : "border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700 hover:text-slate-200"
-              }`}
-            >
-              {metric.label}
-            </button>
-          );
-        })}
+      <SnapshotTimeline
+        latest={latest}
+        previous={previous}
+      />
+
+      {/* Metric selector */}
+
+      <div className="mt-6 flex flex-wrap gap-2">
+        {Object.entries(METRICS).map(
+          ([key, metric]) => {
+            const active =
+              selectedMetric === key;
+
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() =>
+                  setSelectedMetric(key)
+                }
+                className={`rounded-lg border px-3 py-2 text-sm transition ${
+                  active
+                    ? "border-blue-500/40 bg-blue-500/10 text-white"
+                    : "border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                }`}
+              >
+                {metric.label}
+              </button>
+            );
+          },
+        )}
       </div>
 
       {/* Chart */}
+
       <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950/40 p-4">
         <div className="mb-4">
           <h3 className="text-sm font-medium text-white">
@@ -357,16 +474,31 @@ export default function EngineeringHealthTrend({
       </div>
 
       {/* Latest snapshot cards */}
+
       {latest && (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Object.keys(METRICS).map((metricKey) => (
-            <MetricCard
-              key={metricKey}
-              snapshot={latest}
-              previous={previous}
-              metricKey={metricKey}
-            />
-          ))}
+        <div className="mt-6">
+          <div className="mb-3">
+            <h3 className="text-sm font-medium text-white">
+              Latest Snapshot Metrics
+            </h3>
+
+            <p className="mt-1 text-xs text-slate-500">
+              Current scores compared with the previous snapshot.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.keys(METRICS).map(
+              (metricKey) => (
+                <MetricCard
+                  key={metricKey}
+                  snapshot={latest}
+                  previous={previous}
+                  metricKey={metricKey}
+                />
+              ),
+            )}
+          </div>
         </div>
       )}
     </section>

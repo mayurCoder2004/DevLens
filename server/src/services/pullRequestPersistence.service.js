@@ -9,29 +9,67 @@ const savePullRequestAnalysis = async ({
   const analysisData = {
     title: analysis.pullRequest.title,
 
+    // --------------------------------------------
     // Risk Analysis
+    // --------------------------------------------
+
     riskScore: analysis.risk.score,
+
     riskLevel: analysis.risk.level,
+
     riskBreakdown: analysis.risk.breakdown,
 
+    // --------------------------------------------
+    // Diff Intelligence
+    // --------------------------------------------
+
+    diffIntelligence:
+      analysis.diffIntelligence,
+
+    // --------------------------------------------
     // Pull Request Statistics
-    totalFiles: analysis.summary.totalFiles,
-    additions: analysis.summary.additions,
-    deletions: analysis.summary.deletions,
-    totalChanges: analysis.summary.totalChanges,
+    // --------------------------------------------
 
+    totalFiles:
+      analysis.summary.totalFiles,
+
+    additions:
+      analysis.summary.additions,
+
+    deletions:
+      analysis.summary.deletions,
+
+    totalChanges:
+      analysis.summary.totalChanges,
+
+    // --------------------------------------------
     // File Analysis
-    changedFiles: analysis.files,
-    criticalFiles: analysis.classification.categories.critical,
+    // --------------------------------------------
 
+    changedFiles:
+      analysis.files,
+
+    criticalFiles:
+      analysis.classification.categories.critical,
+
+    // --------------------------------------------
     // Flags
-    hasDependencyChanges: analysis.classification.summary.dependencyCount > 0,
+    // --------------------------------------------
+
+    hasDependencyChanges:
+      analysis.classification.summary
+        .dependencyCount > 0,
 
     hasConfigurationChanges:
-      analysis.classification.summary.infrastructureCount > 0,
+      analysis.classification.summary
+        .infrastructureCount > 0,
 
+    // --------------------------------------------
     // Recommendations
-    recommendations: analysis.recommendations,
+    // --------------------------------------------
+
+    recommendations:
+      analysis.recommendations,
   };
 
   return prisma.pullRequestAnalysis.upsert({

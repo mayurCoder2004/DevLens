@@ -14,6 +14,7 @@ import {
 } from "../services/engineeringHealth";
 
 import RepositoryEngineeringHealth from "../components/repository/workspace/RepositoryEngineeringHealth";
+import RepositoryChanges from "../components/repository/changes/RepositoryChanges";
 import EngineeringHealthSkeleton from "../components/repository/engineeringHealth/EngineeringHealthSkeleton";
 import EngineeringHealthTrend from "../components/repository/engineeringHealth/EngineeringHealthTrend";
 import RepositoryPageHeader from "../components/repository/shared/RepositoryPageHeader";
@@ -88,7 +89,6 @@ export default function EngineeringHealthPage() {
 
           await refreshRepository();
 
-          // Fetch snapshots again after the repository refresh.
           const snapshotsResponse =
             await getEngineeringHealthSnapshots(repositoryId);
 
@@ -206,6 +206,8 @@ export default function EngineeringHealthPage() {
         repository={repository}
         engineeringHealth={engineeringHealth}
       />
+
+      <RepositoryChanges repositoryId={repositoryId} />
 
       <EngineeringHealthTrend snapshots={snapshots} />
     </div>

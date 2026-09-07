@@ -368,6 +368,5 @@ module.exports = {
   countPatchLines,
   detectChangeTypes,
   generateObservations,
-  analyzeFileDiff,
   analyzeDiffIntelligence,
 };

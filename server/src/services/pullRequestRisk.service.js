@@ -229,7 +229,6 @@ const generateRecommendations = (classification, riskAnalysis) => {
 
 module.exports = {
   classifyChangedFiles,
-  getDependencyFiles,
   calculateRiskScore,
   generateRecommendations,
 };

@@ -166,5 +166,4 @@ const analyzePullRequest = async ({
 
 module.exports = {
   analyzePullRequest,
-  buildPullRequestSummary,
 };

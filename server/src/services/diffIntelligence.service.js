@@ -365,8 +365,5 @@ const analyzeDiffIntelligence = (files = []) => {
 };
 
 module.exports = {
-  countPatchLines,
-  detectChangeTypes,
-  generateObservations,
   analyzeDiffIntelligence,
 };

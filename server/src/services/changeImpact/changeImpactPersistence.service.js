@@ -75,24 +75,7 @@ const getChangeImpactAnalysis = async (
   });
 };
 
-const deleteChangeImpactAnalysis = async (
-  pullRequestAnalysisId,
-) => {
-  if (!pullRequestAnalysisId) {
-    throw new Error(
-      "pullRequestAnalysisId is required",
-    );
-  }
-
-  return prisma.changeImpactAnalysis.delete({
-    where: {
-      pullRequestAnalysisId,
-    },
-  });
-};
-
 module.exports = {
   createChangeImpactAnalysis,
   getChangeImpactAnalysis,
-  deleteChangeImpactAnalysis,
 };

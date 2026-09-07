@@ -27,42 +27,9 @@ const makeGitHubRequest = async ({
   }
 };
 
-const getRepositories = async (githubToken) => {
-  let page = 1;
-  let repositories = [];
-
-  while (true) {
-    const repos = await makeGitHubRequest({
-      url: "https://api.github.com/user/repos",
-      githubToken,
-      params: {
-        per_page: 100,
-        page,
-      },
-    });
-
-    repositories.push(...repos);
-
-    if (repos.length < 100) {
-      break;
-    }
-
-    page++;
-  }
-
-  return repositories;
-};
-
 const getRepositoryContents = async (owner, repo, githubToken) => {
   return makeGitHubRequest({
     url: `https://api.github.com/repos/${owner}/${repo}/contents`,
-    githubToken,
-  });
-};
-
-const getPullRequests = async (owner, repo, githubToken) => {
-  return makeGitHubRequest({
-    url: `https://api.github.com/repos/${owner}/${repo}/pulls`,
     githubToken,
   });
 };
@@ -111,9 +78,7 @@ const getRepositoryPullRequests = async (owner, repo, githubToken) => {
 };
 
 module.exports = {
-  getRepositories,
   getRepositoryContents,
-  getPullRequests,
   getPullRequestFiles,
   getPullRequest,
   getRepositoryPullRequests,

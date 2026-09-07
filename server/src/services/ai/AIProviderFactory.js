@@ -22,14 +22,8 @@ class AIProviderFactory {
 
     return this.orchestrator;
   }
-
-  /**
-   * Reset the orchestrator (useful for testing)
-   */
-  reset() {
-    this.orchestrator = null;
-  }
 }
 
 // Export singleton instance
 module.exports = new AIProviderFactory();
+

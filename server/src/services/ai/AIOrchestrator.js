@@ -187,18 +187,7 @@ class AIOrchestrator {
       timestamp: new Date().toISOString(),
     });
   }
-
-  /**
-   * Get available providers (for debugging/monitoring)
-   * @returns {Array} List of available providers
-   */
-  getAvailableProviders() {
-    return this.providers.map((p) => ({
-      name: p.name,
-      model: p.model,
-      priority: p.priority,
-    }));
-  }
 }
 
 module.exports = AIOrchestrator;
+

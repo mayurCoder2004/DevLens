@@ -12,6 +12,7 @@ import AIReview from "./pages/AIReview";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import Repositories from "./pages/Repositories";
+import RepositoryGraph from "./pages/RepositoryGraph";
 
 import RepositoryLayout from "./layouts/RepositoryLayout";
 
@@ -37,6 +38,8 @@ function App() {
           </PublicRoute>
         }
       />
+
+      <Route path="/repository-graph" element={<RepositoryGraph />} />
 
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />

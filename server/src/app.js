@@ -12,6 +12,7 @@ const errorHandler = require("./middleware/error.middleware");
 
 const authRoutes = require("./routes/auth.routes");
 const repositoryRoutes = require("./routes/repository.routes");
+const repositoryGraphRoutes = require("./routes/repositoryGraph.routes");
 const analyticsRoutes = require("./routes/analytics.routes");
 const techStackRoutes = require("./routes/techStack.routes");
 const profileRoutes = require("./routes/profile.routes");
@@ -89,6 +90,7 @@ app.use("/api/auth", authLimiter, authRoutes);
 
 // Repository APIs
 app.use("/api/repositories", apiLimiter, repositoryRoutes);
+app.use("/api/repository-graph", apiLimiter, repositoryGraphRoutes);
 app.use("/api/analytics", apiLimiter, analyticsRoutes);
 app.use("/api/tech-stack", apiLimiter, techStackRoutes);
 app.use("/api/profile", apiLimiter, profileRoutes);
@@ -116,3 +118,4 @@ app.use("/api/dashboard", apiLimiter, dashboardRoutes);
 app.use(errorHandler);
 
 module.exports = app;
+

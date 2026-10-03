@@ -5,6 +5,10 @@ const {
   getPublicSourceFiles,
 } = require("../services/publicRepositoryGraph.service");
 
+const {
+  analyzePublicRepositoryDependencies,
+} = require("../services/publicRepositoryDependency.service");
+
 const analyzePublicRepository = async (req, res) => {
   try {
     const { repositoryUrl } = req.body;
@@ -33,6 +37,9 @@ const analyzePublicRepository = async (req, res) => {
       files,
     );
 
+    const dependencyGraph =
+      analyzePublicRepositoryDependencies(sourceContents);
+
     return res.status(200).json({
       success: true,
       repository,
@@ -40,9 +47,16 @@ const analyzePublicRepository = async (req, res) => {
         totalFiles: files.length,
         sourceFiles: sourceFiles.length,
         fetchedSourceFiles: sourceContents.length,
+        graphNodes: dependencyGraph.nodes.length,
+        graphEdges: dependencyGraph.edges.length,
       },
       files,
       sourceFiles: sourceContents,
+      graph: {
+        nodes: dependencyGraph.nodes,
+        edges: dependencyGraph.edges,
+      },
+      dependencies: dependencyGraph.dependencies,
     });
   } catch (error) {
     console.error(
@@ -50,50 +64,38 @@ const analyzePublicRepository = async (req, res) => {
       error.message,
     );
 
-    if (
-      error.message === "Only GitHub repository URLs are supported." ||
-      error.message === "Invalid GitHub repository URL."
-    ) {
+    if (error.message.includes("Invalid GitHub repository URL")) {
       return res.status(400).json({
         success: false,
         message: error.message,
       });
     }
 
-    if (error.message === "Public GitHub repository not found.") {
+    if (error.response?.status === 404) {
       return res.status(404).json({
         success: false,
-        message: error.message,
+        message: "GitHub repository or repository tree not found.",
       });
     }
 
-    if (error.message === "Repository tree could not be found.") {
-      return res.status(404).json({
-        success: false,
-        message: error.message,
-      });
-    }
-
-    if (
-      error.message ===
-      "Repository is too large to analyze completely."
-    ) {
+    if (error.message.includes("too large")) {
       return res.status(413).json({
         success: false,
         message: error.message,
       });
     }
 
-    if (error.message === "GitHub API rate limit exceeded.") {
+    if (error.response?.status === 403) {
       return res.status(429).json({
         success: false,
-        message: error.message,
+        message:
+          "GitHub API rate limit reached. Please try again later.",
       });
     }
 
     return res.status(500).json({
       success: false,
-      message: "Failed to analyze repository.",
+      message: "Failed to analyze public repository.",
     });
   }
 };

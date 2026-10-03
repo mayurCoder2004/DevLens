@@ -1,54 +1,224 @@
-import React from "react";
+import { useState } from "react";
 
-export default function RepositoryGraph() {
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const RepositoryGraph = () => {
+  const [repositoryUrl, setRepositoryUrl] = useState("");
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const analyzeRepository = async (event) => {
+    event.preventDefault();
+
+    if (!repositoryUrl.trim()) {
+      setError("Please enter a GitHub repository URL.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setAnalysis(null);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/repository-graph/analyze`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            repositoryUrl: repositoryUrl.trim(),
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || "Failed to analyze repository.",
+        );
+      }
+
+      setAnalysis(data);
+    } catch (requestError) {
+      setError(
+        requestError.message ||
+          "Something went wrong while analyzing the repository.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 text-sm font-medium uppercase tracking-wider text-blue-400">
-            DevLens Repository Graph
+    <div className="min-h-screen bg-slate-950 px-6 py-12 text-white">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 text-center">
+          <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
+            DevLens
           </p>
 
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Understand any public GitHub repository
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+            Repository Graph
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg">
-            Explore repository structure, dependencies, technologies, and
-            architecture from a single public GitHub URL.
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+            Explore the structure and dependencies of any public
+            GitHub repository.
           </p>
+        </div>
 
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+        <form
+          onSubmit={analyzeRepository}
+          className="mx-auto max-w-3xl"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row">
             <input
               type="url"
+              value={repositoryUrl}
+              onChange={(event) =>
+                setRepositoryUrl(event.target.value)
+              }
               placeholder="https://github.com/owner/repository"
-              className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-blue-500"
+              className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none transition focus:border-cyan-400"
             />
 
             <button
-              type="button"
-              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500"
+              type="submit"
+              disabled={loading}
+              className="rounded-xl bg-cyan-500 px-7 py-4 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Analyze Repository
+              {loading ? "Analyzing..." : "Analyze"}
             </button>
           </div>
-        </div>
+        </form>
 
-        <div className="mt-16 rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-          <div className="text-center">
-            <div className="mb-4 text-4xl">?</div>
-
-            <h2 className="text-xl font-semibold">
-              Repository architecture will appear here
-            </h2>
-
-            <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
-              Paste a public GitHub repository URL above to explore its
-              dependency graph and architecture.
-            </p>
+        {error && (
+          <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-red-300">
+            {error}
           </div>
-        </div>
+        )}
+
+        {analysis && (
+          <div className="mt-12">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+              <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+                <div>
+                  <p className="text-sm text-slate-500">
+                    Repository
+                  </p>
+
+                  <h2 className="mt-1 text-2xl font-semibold">
+                    {analysis.repository.fullName}
+                  </h2>
+
+                  {analysis.repository.description && (
+                    <p className="mt-2 max-w-3xl text-slate-400">
+                      {analysis.repository.description}
+                    </p>
+                  )}
+                </div>
+
+                <a
+                  href={analysis.repository.htmlUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-medium text-cyan-400 hover:text-cyan-300"
+                >
+                  View on GitHub ?
+                </a>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-500">
+                    Repository Files
+                  </p>
+                  <p className="mt-2 text-2xl font-bold">
+                    {analysis.stats.totalFiles}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-500">
+                    Source Files
+                  </p>
+                  <p className="mt-2 text-2xl font-bold">
+                    {analysis.stats.fetchedSourceFiles}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-500">
+                    Graph Nodes
+                  </p>
+                  <p className="mt-2 text-2xl font-bold">
+                    {analysis.stats.graphNodes}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
+                  <p className="text-sm text-slate-500">
+                    Dependencies
+                  </p>
+                  <p className="mt-2 text-2xl font-bold">
+                    {analysis.stats.graphEdges}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+              <h3 className="text-xl font-semibold">
+                Graph Data
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-400">
+                The repository dependency graph has been generated
+                successfully. Interactive visualization will be
+                connected in the next step.
+              </p>
+
+              <div className="mt-6 max-h-96 overflow-auto rounded-xl bg-slate-950 p-4">
+                {analysis.graph.edges.length === 0 ? (
+                  <p className="text-sm text-slate-500">
+                    No local dependencies were detected.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {analysis.graph.edges
+                      .slice(0, 50)
+                      .map((edge) => (
+                        <div
+                          key={edge.id}
+                          className="rounded-lg border border-slate-800 px-4 py-3 text-sm"
+                        >
+                          <span className="text-slate-300">
+                            {edge.source}
+                          </span>
+
+                          <span className="mx-2 text-cyan-400">
+                            ?
+                          </span>
+
+                          <span className="text-slate-300">
+                            {edge.target}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default RepositoryGraph;

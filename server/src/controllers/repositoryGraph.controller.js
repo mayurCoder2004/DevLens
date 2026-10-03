@@ -1,13 +1,17 @@
 const {
   getPublicRepository,
   getPublicRepositoryTree,
-  getSourceFiles,
-  getPublicSourceFiles,
+  getPublicFileContent,
 } = require("../services/publicRepositoryGraph.service");
 
 const {
+  expandDependencyFiles,
   analyzePublicRepositoryDependencies,
 } = require("../services/publicRepositoryDependency.service");
+
+const {
+  buildPublicRepositoryGraph,
+} = require("../services/publicRepositoryGraphBuilder.service");
 
 const analyzePublicRepository = async (req, res) => {
   try {
@@ -20,43 +24,54 @@ const analyzePublicRepository = async (req, res) => {
       });
     }
 
+    // 1. Fetch repository metadata
     const repository = await getPublicRepository(repositoryUrl);
 
+    // 2. Fetch the complete repository tree
     const files = await getPublicRepositoryTree(
       repository.owner,
       repository.name,
       repository.defaultBranch,
     );
 
-    const sourceFiles = getSourceFiles(files);
-
-    const sourceContents = await getPublicSourceFiles(
-      repository.owner,
-      repository.name,
-      repository.defaultBranch,
+    // 3. Fetch source files based on dependency discovery
+    const sourceFiles = await expandDependencyFiles({
+      owner: repository.owner,
+      repo: repository.name,
+      defaultBranch: repository.defaultBranch,
       files,
-    );
+      getFileContent: getPublicFileContent,
+    });
 
-    const dependencyGraph =
-      analyzePublicRepositoryDependencies(sourceContents);
+    // 4. Analyze imports and resolve local dependencies
+    const dependencyAnalysis =
+      analyzePublicRepositoryDependencies(sourceFiles);
+
+    // 5. Convert dependency analysis into graph data
+    const graph = buildPublicRepositoryGraph(
+      dependencyAnalysis,
+    );
 
     return res.status(200).json({
       success: true,
+
       repository,
+
       stats: {
         totalFiles: files.length,
-        sourceFiles: sourceFiles.length,
-        fetchedSourceFiles: sourceContents.length,
-        graphNodes: dependencyGraph.nodes.length,
-        graphEdges: dependencyGraph.edges.length,
+        fetchedSourceFiles: sourceFiles.length,
+        graphNodes: graph.nodes.length,
+        graphEdges: graph.edges.length,
       },
+
       files,
-      sourceFiles: sourceContents,
-      graph: {
-        nodes: dependencyGraph.nodes,
-        edges: dependencyGraph.edges,
-      },
-      dependencies: dependencyGraph.dependencies,
+
+      sourceFiles,
+
+      graph,
+
+      dependencies:
+        dependencyAnalysis.dependencies,
     });
   } catch (error) {
     console.error(
@@ -64,7 +79,11 @@ const analyzePublicRepository = async (req, res) => {
       error.message,
     );
 
-    if (error.message.includes("Invalid GitHub repository URL")) {
+    if (
+      error.message.includes(
+        "Invalid GitHub repository URL",
+      )
+    ) {
       return res.status(400).json({
         success: false,
         message: error.message,
@@ -74,7 +93,8 @@ const analyzePublicRepository = async (req, res) => {
     if (error.response?.status === 404) {
       return res.status(404).json({
         success: false,
-        message: "GitHub repository or repository tree not found.",
+        message:
+          "GitHub repository or repository tree not found.",
       });
     }
 

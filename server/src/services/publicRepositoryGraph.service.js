@@ -25,24 +25,20 @@ const parseGitHubRepositoryUrl = (repositoryUrl) => {
       throw new Error("Only GitHub repository URLs are supported.");
     }
 
-    const segments = url.pathname
+    const parts = url.pathname
       .split("/")
       .filter(Boolean);
 
-    if (segments.length < 2) {
+    if (parts.length < 2) {
       throw new Error("Invalid GitHub repository URL.");
     }
 
-    const owner = segments[0];
-    const repo = segments[1].replace(/\.git$/, "");
-
     return {
-      owner,
-      repo,
+      owner: parts[0],
+      repo: parts[1].replace(/\.git$/, ""),
     };
   } catch (error) {
-    if (error.message === "Only GitHub repository URLs are supported." ||
-        error.message === "Invalid GitHub repository URL.") {
+    if (error.message.includes("GitHub repository URL")) {
       throw error;
     }
 
@@ -51,46 +47,31 @@ const parseGitHubRepositoryUrl = (repositoryUrl) => {
 };
 
 const getPublicRepository = async (repositoryUrl) => {
-  const { owner, repo } = parseGitHubRepositoryUrl(repositoryUrl);
+  const { owner, repo } =
+    parseGitHubRepositoryUrl(repositoryUrl);
 
-  try {
-    const response = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}`,
-      {
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-        timeout: 10000,
+  const response = await axios.get(
+    `https://api.github.com/repos/${owner}/${repo}`,
+    {
+      headers: {
+        Accept: "application/vnd.github+json",
       },
-    );
+      timeout: 10000,
+    },
+  );
 
-    return {
-      owner: response.data.owner.login,
-      name: response.data.name,
-      fullName: response.data.full_name,
-      description: response.data.description,
-      defaultBranch: response.data.default_branch,
-      language: response.data.language,
-      stars: response.data.stargazers_count,
-      forks: response.data.forks_count,
-      url: response.data.html_url,
-    };
-  } catch (error) {
-    console.error(
-      "GitHub repository metadata error:",
-      error.response?.data || error.message,
-    );
-
-    if (error.response?.status === 404) {
-      throw new Error("Repository not found.");
-    }
-
-    if (error.response?.status === 403) {
-      throw new Error("GitHub API rate limit exceeded.");
-    }
-
-    throw new Error("Failed to fetch public repository.");
-  }
+  return {
+    owner,
+    name: repo,
+    fullName: response.data.full_name,
+    defaultBranch: response.data.default_branch,
+    description: response.data.description,
+    language: response.data.language,
+    stars: response.data.stargazers_count,
+    forks: response.data.forks_count,
+    isPrivate: response.data.private,
+    htmlUrl: response.data.html_url,
+  };
 };
 
 const getPublicRepositoryTree = async (
@@ -98,121 +79,95 @@ const getPublicRepositoryTree = async (
   repo,
   defaultBranch,
 ) => {
-  try {
-    const response = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(defaultBranch)}`,
-      {
-        params: {
-          recursive: true,
-        },
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-        timeout: 15000,
+  const response = await axios.get(
+    `https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(defaultBranch)}`,
+    {
+      params: {
+        recursive: "1",
       },
+      headers: {
+        Accept: "application/vnd.github+json",
+      },
+      timeout: 15000,
+    },
+  );
+
+  if (response.data.truncated) {
+    throw new Error(
+      "Repository tree is too large to analyze safely.",
     );
-
-    if (response.data.truncated) {
-      throw new Error(
-        "Repository tree is too large to analyze safely.",
-      );
-    }
-
-    return response.data.tree || [];
-  } catch (error) {
-    console.error(
-      "GitHub repository tree error:",
-      error.response?.data || error.message,
-    );
-
-    if (error.message === "Repository tree is too large to analyze safely.") {
-      throw error;
-    }
-
-    if (error.response?.status === 404) {
-      throw new Error("Repository tree not found.");
-    }
-
-    if (error.response?.status === 403) {
-      throw new Error("GitHub API rate limit exceeded.");
-    }
-
-    throw new Error("Failed to fetch repository tree.");
   }
+
+  return response.data.tree || [];
 };
 
 const isSourceFile = (filePath) => {
-  if (typeof filePath !== "string") {
-    return false;
-  }
-
   const normalizedPath = filePath.toLowerCase();
 
-  const isIgnored = IGNORED_DIRECTORIES.some((directory) =>
-    normalizedPath.includes(directory),
-  );
-
-  if (isIgnored) {
+  if (
+    !SOURCE_EXTENSIONS.some((extension) =>
+      normalizedPath.endsWith(extension),
+    )
+  ) {
     return false;
   }
 
-  return SOURCE_EXTENSIONS.some((extension) =>
-    normalizedPath.endsWith(extension),
+  return !IGNORED_DIRECTORIES.some((directory) =>
+    normalizedPath.includes(directory),
   );
 };
 
 const getSourceFiles = (files = []) => {
-  const sourceFiles = files.filter((file) => {
-    if (!file || typeof file.path !== "string") {
-      return false;
-    }
-
-    if (file.type !== "blob") {
-      return false;
-    }
-
-    return isSourceFile(file.path);
-  });
-
-  return sourceFiles
-    .filter((file) => {
-      return (
-        typeof file.size !== "number" ||
-        file.size <= MAX_SOURCE_FILE_SIZE
-      );
-    })
+  return files
+    .filter(
+      (file) =>
+        file &&
+        file.type === "blob" &&
+        typeof file.path === "string" &&
+        isSourceFile(file.path),
+    )
     .slice(0, MAX_SOURCE_FILES);
 };
 
 const getPublicFileContent = async (
   owner,
   repo,
-  path,
   defaultBranch,
+  filePath,
 ) => {
+  const rawUrl =
+    `https://raw.githubusercontent.com/` +
+    `${owner}/${repo}/${encodeURIComponent(defaultBranch)}/` +
+    filePath
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/");
+
   try {
-    const response = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${path
-        .split("/")
-        .map(encodeURIComponent)
-        .join("/")}`,
-      {
-        params: {
-          ref: defaultBranch,
-        },
-        headers: {
-          Accept: "application/vnd.github.raw+json",
-        },
-        timeout: 10000,
-        maxContentLength: MAX_SOURCE_FILE_SIZE,
-        maxBodyLength: MAX_SOURCE_FILE_SIZE,
-      },
-    );
+    const response = await axios.get(rawUrl, {
+      responseType: "text",
+      timeout: 10000,
+      maxContentLength: MAX_SOURCE_FILE_SIZE,
+      maxBodyLength: MAX_SOURCE_FILE_SIZE,
+      validateStatus: (status) =>
+        status >= 200 && status < 300,
+    });
+
+    if (typeof response.data !== "string") {
+      return null;
+    }
+
+    if (
+      Buffer.byteLength(response.data, "utf8") >
+      MAX_SOURCE_FILE_SIZE
+    ) {
+      return null;
+    }
 
     return response.data;
   } catch (error) {
     console.error(
-      `GitHub file content error for ${path}:`,
+      `GitHub raw file error for ${filePath}:`,
       error.response?.data || error.message,
     );
 
@@ -227,26 +182,29 @@ const getPublicSourceFiles = async (
   files,
 ) => {
   const sourceFiles = getSourceFiles(files);
-  const sourceContents = [];
+
+  const results = [];
 
   for (const file of sourceFiles) {
     const content = await getPublicFileContent(
       owner,
       repo,
-      file.path,
       defaultBranch,
+      file.path,
     );
 
-    if (typeof content === "string") {
-      sourceContents.push({
-        path: file.path,
-        size: file.size,
-        content,
-      });
+    if (content === null) {
+      continue;
     }
+
+    results.push({
+      name: file.path.split("/").pop(),
+      path: file.path,
+      content,
+    });
   }
 
-  return sourceContents;
+  return results;
 };
 
 module.exports = {

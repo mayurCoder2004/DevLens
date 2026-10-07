@@ -142,6 +142,9 @@ const RepositoryGraph = () => {
                   <p className="mt-2 text-2xl font-bold">
                     {analysis.stats.totalFiles}
                   </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    All files in the repository
+                  </p>
                 </div>
 
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
@@ -150,6 +153,9 @@ const RepositoryGraph = () => {
                   </p>
                   <p className="mt-2 text-2xl font-bold">
                     {analysis.stats.fetchedSourceFiles}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Source files analyzed
                   </p>
                 </div>
 
@@ -160,6 +166,9 @@ const RepositoryGraph = () => {
                   <p className="mt-2 text-2xl font-bold">
                     {analysis.stats.graphNodes}
                   </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Files shown in the graph
+                  </p>
                 </div>
 
                 <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
@@ -168,6 +177,9 @@ const RepositoryGraph = () => {
                   </p>
                   <p className="mt-2 text-2xl font-bold">
                     {analysis.stats.graphEdges}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Detected file-to-file dependencies
                   </p>
                 </div>
               </div>
@@ -197,3 +209,5 @@ const RepositoryGraph = () => {
 };
 
 export default RepositoryGraph;
+
+

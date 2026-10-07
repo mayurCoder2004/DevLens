@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PublicRepositoryGraph from "../components/repository/architecture/PublicRepositoryGraph";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -23,7 +24,7 @@ const RepositoryGraph = () => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/repository-graph/analyze`,
+        `${API_BASE_URL}/repository-graph/analyze`,
         {
           method: "POST",
           headers: {
@@ -56,7 +57,7 @@ const RepositoryGraph = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 px-6 py-12 text-white">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-10 text-center">
           <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
             DevLens
@@ -172,46 +173,20 @@ const RepositoryGraph = () => {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
-              <h3 className="text-xl font-semibold">
-                Graph Data
-              </h3>
+            <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+              <div className="border-b border-slate-800 p-4 sm:p-6">
+                <h2 className="text-xl font-semibold text-white">
+                  Repository Dependency Graph
+                </h2>
 
-              <p className="mt-2 text-sm text-slate-400">
-                The repository dependency graph has been generated
-                successfully. Interactive visualization will be
-                connected in the next step.
-              </p>
+                <p className="mt-1 text-sm text-slate-400">
+                  Explore how files in this repository depend on
+                  each other.
+                </p>
+              </div>
 
-              <div className="mt-6 max-h-96 overflow-auto rounded-xl bg-slate-950 p-4">
-                {analysis.graph.edges.length === 0 ? (
-                  <p className="text-sm text-slate-500">
-                    No local dependencies were detected.
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {analysis.graph.edges
-                      .slice(0, 50)
-                      .map((edge) => (
-                        <div
-                          key={edge.id}
-                          className="rounded-lg border border-slate-800 px-4 py-3 text-sm"
-                        >
-                          <span className="text-slate-300">
-                            {edge.source}
-                          </span>
-
-                          <span className="mx-2 text-cyan-400">
-                            ?
-                          </span>
-
-                          <span className="text-slate-300">
-                            {edge.target}
-                          </span>
-                        </div>
-                      ))}
-                  </div>
-                )}
+              <div className="h-[600px] bg-slate-950">
+                <PublicRepositoryGraph graph={analysis.graph} />
               </div>
             </div>
           </div>

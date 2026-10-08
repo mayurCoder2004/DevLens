@@ -28,7 +28,22 @@ const defaultEdgeOptions = {
   },
 };
 
+function getFileType(filePath) {
+  const extension = filePath.split(".").pop()?.toLowerCase();
+
+  const types = {
+    js: "JavaScript",
+    jsx: "React JSX",
+    ts: "TypeScript",
+    tsx: "React TSX",
+  };
+
+  return types[extension] || "Source File";
+}
+
 export default function PublicRepositoryGraph({ graph }) {
+  const [selectedNode, setSelectedNode] = useState(null);
+
   const rawNodes = useMemo(() => {
     if (!graph?.nodes) return [];
 
@@ -79,6 +94,7 @@ export default function PublicRepositoryGraph({ graph }) {
     if (!rawNodes.length) {
       setNodes([]);
       setEdges([]);
+      setSelectedNode(null);
       return;
     }
 
@@ -113,8 +129,16 @@ export default function PublicRepositoryGraph({ graph }) {
     );
   }
 
+  const handleNodeClick = (_, node) => {
+    setSelectedNode(node);
+  };
+
+  const closeDetails = () => {
+    setSelectedNode(null);
+  };
+
   return (
-    <>
+    <div className="relative h-full">
       <style>{`
         .public-repository-graph .react-flow__edges {
           width: 100% !important;
@@ -134,6 +158,8 @@ export default function PublicRepositoryGraph({ graph }) {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodeClick={handleNodeClick}
+        onPaneClick={closeDetails}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         fitView
@@ -182,6 +208,63 @@ export default function PublicRepositoryGraph({ graph }) {
           }}
         />
       </ReactFlow>
-    </>
+
+      {selectedNode && (
+        <div className="absolute right-4 top-4 z-10 w-80 rounded-2xl border border-slate-700 bg-slate-900/95 p-5 shadow-2xl backdrop-blur">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-medium uppercase tracking-wider text-blue-400">
+                File Details
+              </p>
+
+              <h3 className="mt-2 break-all text-sm font-semibold text-slate-100">
+                {selectedNode.data.label}
+              </h3>
+            </div>
+
+            <button
+              type="button"
+              onClick={closeDetails}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-400 transition hover:bg-slate-700 hover:text-white"
+              aria-label="Close file details"
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="mt-5 space-y-3">
+            <div className="flex items-center justify-between rounded-lg bg-slate-800/70 px-3 py-2">
+              <span className="text-sm text-slate-400">File Type</span>
+              <span className="text-sm font-medium text-slate-200">
+                {getFileType(selectedNode.data.label)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg bg-slate-800/70 px-3 py-2">
+              <span className="text-sm text-slate-400">Imports</span>
+              <span className="text-sm font-semibold text-slate-100">
+                {selectedNode.data.imports}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg bg-slate-800/70 px-3 py-2">
+              <span className="text-sm text-slate-400">Imported By</span>
+              <span className="text-sm font-semibold text-slate-100">
+                {selectedNode.data.importedBy}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg bg-slate-800/70 px-3 py-2">
+              <span className="text-sm text-slate-400">
+                Total Connections
+              </span>
+              <span className="text-sm font-semibold text-blue-400">
+                {selectedNode.data.totalConnections}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
